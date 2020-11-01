@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Smart Home Simulator</title>
+</head>
+<body>
+​
+	<button onclick="myFunction()">Change Outside temperature</button>
+​
+	<p id="newtemp"></p>
+​
+	<script>
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		var myObj = JSON.parse(this.responseText);
+		temp = myObj.outside.temperature;
+		document.getElementById("newtemp").innerHTML = temp;
+		}
+	xmlhttp.open("GET", "layout.json", true);
+	xmlhttp.send();
+​
+	function myFunction() {
+	  var newtemp = prompt("Please enter the temperature");
+	  if (newtemp != null) {
+	    alert("The new temperature is " + newtemp);
+	  }
+		var myObj = JSON.parse(this.responseText);
+		temp = myObj.outside.temperature;
+		temp = newtemp;
+	}
+	</script>
+​
+</body>
+</html>
+
+
+
+

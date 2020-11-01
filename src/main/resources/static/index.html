@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="function.js"></script>
+    <title>Smart Home Simulator</title>
+    <!-- Custom styles for this template -->
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<header>
+
+</header>
+
+<body onload="refreshTime()">
+    <div class="layout-container">
+        <div class="sidebar">
+            <fieldset id="simulationTab">
+                <legend id="simlegend">Simulation</legend>
+
+                <!-- On/off switch-->
+                <div class="row justify-content-center">
+                    <label class="switch">
+                        <input type="checkbox" id="slider">
+                        <span class="slider round">ON</span>
+                    </label>
+                </div>
+                <!-- /On/off switch-->
+
+                <!-- edit icon-->
+                <div class="row justify-content-center">
+                    <a href="#"> <img src="edit.png" alt="edit" id="editIcon" onclick="openForm()"></a>
+                </div>
+                <!-- /edit icon-->
+
+                <!-- Profile picture-->
+                <div class="row justify-content-center" id="profilePic">
+
+                </div>
+                <!-- /Profile picture-->
+
+                <!-- User-->
+                <div class="row justify-content-center">
+                    <a href="#" style="text-decoration:underline;" id="userDisplay">No user logged in</a>
+                </div>
+                <!-- /User-->
+
+                <!-- Location-->
+                <div class="row justify-content-center" style="font-weight:600;">
+                    Location:
+                </div>
+
+                <div class="row justify-content-center">
+                    <a href="#" style="text-decoration:underline;">Kitchen</a>
+                </div>
+                <!-- /Location-->
+
+                <!--Temperature -->
+                <div class="row justify-content-center" style="font-weight:700;">
+                    Outside Temp. 15 &#730;C
+                </div>
+                <!--/Temperature -->
+                <div class="row justify-content-center" id="time" style="font-weight:700;">
+                </div>
+                <a href="#" onclick="newTime()">Edit time</a>
+
+            </fieldset>
+
+        </div>
+        <div class="tab-items">
+            <div class="tabs">
+                <button class="tabLink" onclick="changeTabs(event, 'SHSystem')" id="defaultOpen">SHS</button>
+                <button class="tabLink" onclick="changeTabs(event, 'SHCore')">SHC</button>
+                <button class="tabLink" onclick="changeTabs(event, 'SHProtection')">SHP</button>
+                <button class="tabLink" onclick="changeTabs(event, 'SHHeating')">SHH</button>
+            </div>
+
+            <div id="SHSystem" class="tabcontent">
+                Smart Home System Components
+                <h2>User Management</h2>
+
+                <!--Add a user profile-->
+                <div name="createForm">
+                    <p>Add a new role:</p>
+                    <select name="roles" id="roleSelect">
+                        <option value="Parent">Parent</option>
+                        <option value="Child">Child</option>
+                        <option value="Guest">Guest</option>
+                        <option value="Stranger">Stranger</option>
+                    </select>
+                    <input type="button" onclick="onAddUserSubmit()" value="Add user">
+                </div>
+
+                <br>
+                <br>
+
+                <!--Edit a user profile-->
+                <div name="editForm">
+                    <div>Current Registered Users</div>
+                    <div id="availableUsers">
+                        <select id="currentUsersList"></select>
+                    </div>
+                    <br>
+                    <div>Select a new role for the user:
+                        <select id="newRole">
+                            <option value="Parent">Parent</option>
+                            <option value="Child">Child</option>
+                            <option value="Guest">Guest</option>
+                            <option value="Stranger">Stranger</option>
+                        </select>
+                    </div>
+
+                    <br>
+                    <input type="button" value="Edit Selected User" onclick="onSubmitEditForm()">
+                    <input type="button" value="Delete Selected User" onclick="onSubmitDeleteUser()">
+                    <input input type="button" value="Login Selected User" onclick="onLoginSubmit()">
+                </div>
+
+                <!--Delete a user profile-->
+                <div id="deleteForm">
+
+                </div>
+                <br>
+            </div>
+
+            <div id="SHCore" class="tabcontent">
+                Smart Home Core Components
+            </div>
+
+            <div id="SHProtection" class="tabcontent">
+                Smart Home Protection Components
+            </div>
+
+            <div id="SHHeating" class="tabcontent">
+                Smart Home Heating Components
+            </div>
+
+        </div>
+        <div class="house-diagram">
+            <button onclick="renderLayout()">Click to render the layout</button>
+
+            <canvas id="myCanvas" width="500" height="400" style="border:1px solid black;">
+                Your browser does not support the canvas element.
+            </canvas>
+            <h3>Controlling: </h3>
+            <select name="" id="control_option">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+            <h4>Use arrow button to move </h4>
+        </div>
+        <!-- Popup form -->
+        <button class="open-button" onclick="openForm()">Open Form</button>
+
+        <div class="form-popup" id="myForm">
+            <form action="" class="form-container">
+                <h2>Place users into rooms</h2>
+                <div id="availableUsers2">
+                    <select id="currentUsersList2"></select>
+                </div>
+                <select name="availableRooms" id="availableRooms">
+                    <option value="living_room">Living Room</option>
+                    <option value="kitchen">Kitchen</option>
+                    <option value="outdoor">Outdoor</option>
+                </select>
+                <button type="button" class="btn" onclick="placeUser()">Place</button>
+                <h2>Add obstacle</h2>
+                <div id="showCreatedUsers"></div>
+                <div id="addObstacles"></div>
+                <label for="email"><b>X: </b></label>
+                <input type="number" id="xAxis" placeholder="Try 50" name="email" required>
+                <br>
+                <label for="psw"><b>Y: </b></label>
+                <input type="number" id="yAxis" placeholder="Try 200" name="psw" required>
+                <br>
+                <button type="button" class="btn" onclick="onCoordinatesSubmit()">Add obstacle</button>
+                <button type="button" class="btn" onclick="resetCoordinates()">Reset obstacle</button>
+                <button type="button" class="btn cancel" onclick="closeForm()">Hide</button>
+            </form>
+        </div>
+        <!-- Popup form -->
+        <div class="console">Console Here</div>
+        =======
+
+    </div>
+
+    <script>
+        /**
+        *Header 
+        *@return a layout
+        */
+        document.getElementById("defaultOpen").click(); //choose SHS on load
+        var myGameArea = {
+            canvas: document.getElementById("myCanvas"),
+            start: function () {
+                this.context = this.canvas.getContext("2d");
+                this.interval;
+                updateGameArea();
+                window.addEventListener('keydown', function (e) {
+                    isOn = document.getElementById("slider").checked;
+                    myGameArea.key = e.keyCode;
+                    if (isOn) this.interval = setInterval(updateGameArea, 20);
+                })
+                window.addEventListener('keyup', function (e) {
+                    myGameArea.key = false;
+                    clearInterval(this.interval);//let's try
+                })
+            },
+            clear: function () {
+                door_array.forEach(a_door => {
+                    if (a_door.move_mode == "horizontal") this.context.clearRect((a_door.x - 40), a_door.y, 60, 5);
+                    if (a_door.move_mode == "vertical") this.context.clearRect(a_door.x, (a_door.y - 40), 5, 60);
+                });
+            }
+        }
+
+    </script>
+
+
+
+
+</body>
+
+</html>
