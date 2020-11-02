@@ -9,8 +9,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <script src="function.js"></script>
     <script src="coreFunctions.js"> </script>
+    <script src="function.js"></script>
     <title>Smart Home Simulator</title>
     <!-- Custom styles for this template -->
     <link href="style.css" rel="stylesheet">
@@ -78,7 +78,7 @@
         <div class="tab-items" style="width: 450px;">
             <div class="tabs">
                 <button class="tabLink" onclick="changeTabs(event, 'SHSystem')" id="defaultOpen">SHS</button>
-                <button class="tabLink" onclick="changeTabs(event, 'SHCore'); loadRoomLights()">SHC</button>
+                <button class="tabLink" onclick="changeTabs(event, 'SHCore')">SHC</button>
                 <button class="tabLink" onclick="changeTabs(event, 'SHProtection')">SHP</button>
                 <button class="tabLink" onclick="changeTabs(event, 'SHHeating')">SHH</button>
             </div>
@@ -130,8 +130,8 @@
                 <br>
             </div>
 
-            <div id="SHCore" class="tabcontent">
-               
+            <div id="SHCore" class="tabcontent" onclick=" loadRoomLights()">
+                Smart Home Core Components
             </div>
 
             <div id="SHProtection" class="tabcontent">

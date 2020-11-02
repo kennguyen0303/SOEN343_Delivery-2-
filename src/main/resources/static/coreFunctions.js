@@ -9,8 +9,8 @@ function loadRoomLights()
             {
                 for (var key2 of Object.keys(myObj[key1])){
                     if(key2=="name"){
-                        //console.log(myObj[key1][key2][0]);
-                        loadedText = loadedText.concat(myObj[key1][key2][0], " ");
+                        console.log(myObj[key1][key2][0]);
+                        //loadedText = loadedText.concat(myObj[key1][key2][0], " ");
                     }
                 }
             }
@@ -19,6 +19,6 @@ function loadRoomLights()
     xmlhttp.open("GET", "layout.json", true);
     xmlhttp.send();
 
-    document.getElementById('SHCore').innerHTML = loadedText;
-    console.log(loadedText);
+    //document.getElementById('SHCore').innerHTML = "loadedText";
+    //console.log(loadedText);
 }
