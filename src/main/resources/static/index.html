@@ -10,6 +10,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="function.js"></script>
+    <script src="coreFunctions.js"> </script>
     <title>Smart Home Simulator</title>
     <!-- Custom styles for this template -->
     <link href="style.css" rel="stylesheet">
@@ -74,16 +75,15 @@
             </fieldset>
 
         </div>
-        <div class="tab-items">
+        <div class="tab-items" style="width: 450px;">
             <div class="tabs">
                 <button class="tabLink" onclick="changeTabs(event, 'SHSystem')" id="defaultOpen">SHS</button>
-                <button class="tabLink" onclick="changeTabs(event, 'SHCore')">SHC</button>
+                <button class="tabLink" onclick="changeTabs(event, 'SHCore'); loadRoomLights()">SHC</button>
                 <button class="tabLink" onclick="changeTabs(event, 'SHProtection')">SHP</button>
                 <button class="tabLink" onclick="changeTabs(event, 'SHHeating')">SHH</button>
             </div>
 
             <div id="SHSystem" class="tabcontent">
-                Smart Home System Components
                 <h2>User Management</h2>
 
                 <!--Add a user profile-->
@@ -131,7 +131,7 @@
             </div>
 
             <div id="SHCore" class="tabcontent">
-                Smart Home Core Components
+               
             </div>
 
             <div id="SHProtection" class="tabcontent">
@@ -144,11 +144,12 @@
 
         </div>
         <div class="house-diagram">
-            <button onclick="renderLayout()">Click to render the layout</button>
-
+            
             <canvas id="myCanvas" width="500" height="400" style="border:1px solid black;">
                 Your browser does not support the canvas element.
             </canvas>
+        </br>
+            <button onclick="renderLayout()">Click to render the layout</button>
             <h3>Controlling: </h3>
             <select name="" id="control_option">
                 <option value="1">1</option>
@@ -189,8 +190,7 @@
         </div>
         <!-- Popup form -->
         <div class="console">Console Here</div>
-        =======
-
+        
     </div>
 
     <script>
