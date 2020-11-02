@@ -141,7 +141,6 @@ input:checked + .slider:before {
 .console{
   grid-column-start: 2;
   grid-column-end: 8;
-
 }
 
 .house-diagram{
