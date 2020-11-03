@@ -162,9 +162,12 @@ input:checked + .slider:before {
 /* Style for Tabbed items */
 
 .tabLink{
-  border-color: #2196F3; 
-  border-width: 3px;
-  border-radius: 0px 0px 5px 5px;
+  background-color: green; 
+  font-weight: bold;
+  min-width: 65px;
+  min-height: 25px;
+  border-width: 0px;
+  border-radius: 5px 5px 5px 5px;
 }
 
 .tabStyle {
