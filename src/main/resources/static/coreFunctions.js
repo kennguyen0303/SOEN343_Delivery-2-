@@ -9,8 +9,8 @@ function loadRoomLights()
             {
                 for (var key2 of Object.keys(myObj[key1])){
                     if(key2=="name"){
-                        console.log(myObj[key1][key2][0].toString());
-                        loadedText += " " + myObj[key1][key2][0].toString();
+                        var roomName = myObj[key1][key2][0].toString()
+                        loadedText += "<input type='checkbox' onclick='lightAction("+ '"' + roomName + '"'+")' ></input> " +roomName + " </br>   " ;
                     }
                 }
             }
@@ -21,4 +21,9 @@ function loadRoomLights()
     xmlhttp.send();
 
     console.log(loadedText);
+}
+
+function lightAction(debugText)
+{
+    console.log(debugText);
 }
