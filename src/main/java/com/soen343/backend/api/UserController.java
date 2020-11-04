@@ -57,7 +57,7 @@ public class UserController {
     }
 
     /**
-     * Request to remove the specified user from the databse list
+     * Request to remove the specified user from the database list
      * @param id unique id passed in the request mapping to identify the user to remove
      */
     @DeleteMapping(value = "api/user/userRemoval/{id}")
@@ -76,7 +76,7 @@ public class UserController {
     }
 
     /**
-     * Logs in the user specified in teh path
+     * Logs in the user specified in the path
      * @param id unique id passed in the request mapping to identify the user to log in
      */
     @PutMapping(value = "api/user/logIn/{id}")
