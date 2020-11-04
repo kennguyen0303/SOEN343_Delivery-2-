@@ -104,7 +104,7 @@ public class UserPermissions {
     }
 
     /**
-     * Setter for restricted lights permissions
+     * Getter for restricted windows permissions
      * @param canUseRestrictedLights boolean if user has access to open/close lights in same room
      */
     public void setCanUseRestrictedLights(boolean canUseRestrictedLights) {
