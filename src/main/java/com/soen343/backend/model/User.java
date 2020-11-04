@@ -19,6 +19,8 @@ public class User {
 
     private UserPermissions userPermissions;
 
+    private boolean isInsideHouse;
+
     @NotBlank
     private final String role;
 
@@ -90,5 +92,21 @@ public class User {
      */
     public String getLocation() {
         return location;
+    }
+
+    /**
+     * Getter for if User is away or inside the house
+     * @return boolean that is true if the user is inside and false if the user is away
+     */
+    public boolean isInsideHouse() {
+        return isInsideHouse;
+    }
+
+    /**
+     * Setter for if User is away or inside the house
+     * @param insideHouse boolean that is true if the user is inside and false if the user is away
+     */
+    public void setInsideHouse(boolean insideHouse) {
+        isInsideHouse = insideHouse;
     }
 }

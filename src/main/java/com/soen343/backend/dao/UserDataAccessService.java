@@ -1,5 +1,6 @@
 package com.soen343.backend.dao;
 
+import com.soen343.backend.factory.UserTypeFactory;
 import com.soen343.backend.model.User;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,7 @@ import java.util.UUID;
 public class UserDataAccessService implements UserDAO {
 
     private List<User> DB = new ArrayList<>();
+    private UserTypeFactory userTypeFactory = new UserTypeFactory();
 
     /**
      * Adds a new User to the database list
@@ -24,7 +26,10 @@ public class UserDataAccessService implements UserDAO {
      */
     @Override
     public int insertUser(UUID id, User user) {
-        DB.add(new User(id, user.getRole()));
+
+        String roleType = user.getRole();
+
+        DB.add(userTypeFactory.getUser(id, roleType));
         return 1;
     }
 
