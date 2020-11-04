@@ -1,6 +1,7 @@
 package com.soen343.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.soen343.backend.utilities.UserPermissions;
 
 import java.util.UUID;
 import javax.validation.constraints.NotBlank;
@@ -11,8 +12,13 @@ import javax.validation.constraints.NotBlank;
 public class User {
 
     private String location;
+
     private final UUID id;
+
     private boolean isLoggedUser;
+
+    private UserPermissions userPermissions;
+
     @NotBlank
     private final String role;
 
@@ -33,6 +39,8 @@ public class User {
         this.role = role;
         this.isLoggedUser = false;
         this.location = "none";
+
+        this.userPermissions = new UserPermissions();
     }
 
     /**
