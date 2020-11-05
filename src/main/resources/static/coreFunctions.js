@@ -102,17 +102,68 @@ function showLightController(){
     };
     element.appendChild(button);
 }
-
+/**
+ * Function for switching on/off light
+ */
 function switchLight(){
     alert("switching light")
 }
+
+/**
+ * function for controlling doors
+ */
 function controlDoor(){
-    var value=document.getElementById("doorController").value;
-    var temp = "reading value door: "+value;
-    alert(temp);
+    myGameArea.clear(); 
+    door_array.forEach(a_door => {
+        a_door.speedX=0;
+        a_door.speedY=0;
+    });
+    var option=document.getElementById("doorController").value -1;
+    alert("current value: "+option);
+    //move left
+    if(door_array[option].move_mode=="horizontal")
+        if(door_array[option].x>door_array[option].boundary[0]) door_array[option].speedX = -door_array[option].width;
+    if(door_array[option].move_mode=="vertical") 
+        if(door_array[option].y>door_array[option].boundary[0]) door_array[option].speedY = -door_array[option].heigth;
+ //move right
+    if(door_array[option].move_mode=="horizontal") 
+        if(door_array[option].x<door_array[option].boundary[1]) door_array[option].speedX = door_array[option].width;
+ //move down
+    if(door_array[option].move_mode=="vertical") 
+        if(door_array[option].y<door_array[option].boundary[1]) door_array[option].speedY = door_array[option].heigth;
+    //update new position
+    door_array.forEach(a_door => {
+        a_door.newPos();    
+        a_door.update();
+    });
 }
-function controlWindow(){
-    alert("closing window")
+/**
+ * function for controlling windows
+ */
+function controlWindow(){ // ERROR - DEBUG
+    myGameArea.clear(); 
+    window_array.forEach(a_window => {
+        a_window.speedX=0;
+        a_window.speedY=0;
+    });
+    var option=document.getElementById("windowController").value -1;
+    alert("current value: "+option);
+    //move left
+    if(window_array[option].move_mode=="horizontal")
+        if(window_array[option].x>window_array[option].boundary[0]) window_array[option].speedX = -window_array[option].width;
+    if(window_array[option].move_mode=="vertical") 
+        if(window_array[option].y>window_array[option].boundary[0]) window_array[option].speedY = -20;
+ //move right
+    if(window_array[option].move_mode=="horizontal") 
+        if(window_array[option].x<window_array[option].boundary[1]) window_array[option].speedX = 20;
+ //move down
+    if(window_array[option].move_mode=="vertical") 
+        if(window_array[option].y<window_array[option].boundary[1]) window_array[option].speedY = 20;
+    //update new position
+    window_array.forEach(a_window => {
+        a_window.newPos();    
+        a_window.update();
+    });
 }
 
 
