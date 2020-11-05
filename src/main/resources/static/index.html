@@ -218,7 +218,7 @@
             clear: function () {
                 door_array.forEach(a_door => {
                     if (a_door.move_mode == "horizontal") this.context.clearRect((a_door.x - 40), a_door.y, 60, 5);
-                    if (a_door.move_mode == "vertical") this.context.clearRect(a_door.x, (a_door.y - 40), 5, 60);
+                    if (a_door.move_mode == "vertical") this.context.clearRect(a_door.x, (a_door.y - 30), 5, 60);
                 });
             }
         }
