@@ -20,7 +20,7 @@
 
 </header>
 
-<body onload="refreshTime(); loadRoomLights()">
+<body onload="refreshTime()">
     <div class="layout-container">
         <div class="sidebar">
             <fieldset id="simulationTab">
@@ -131,7 +131,12 @@
             </div>
 
             <div id="SHCore" class="tabcontent">
-                Smart Home Core Components
+                Click the button to select controller: 
+                <button onclick="showWindowController()">Windows</button>
+                <button onclick="showDoorController()">Doors</button>
+                <button onclick="showLightController()">Lights</button>
+                <br>
+                
             </div>
 
             <div id="SHProtection" class="tabcontent">
@@ -222,7 +227,7 @@
                 });
             }
         }
-
+        
     </script>
 
 
