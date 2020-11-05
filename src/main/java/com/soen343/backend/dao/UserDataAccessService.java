@@ -85,7 +85,7 @@ public class UserDataAccessService implements UserDAO {
                     int indexOfUserToUpdate = DB.lastIndexOf(user);
                     if(indexOfUserToUpdate >= 0) // we have found a person
                     {
-                        DB.set(indexOfUserToUpdate,  new User(id, updateUser.getRole())); // set contents of the person to new person that was just received
+                        DB.set(indexOfUserToUpdate, userTypeFactory.getUser(id, updateUser.getRole())); // set contents of the person to new person that was just received
                         return 1;
                     }
                     return 0;
