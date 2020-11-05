@@ -1,6 +1,7 @@
 package com.soen343.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.soen343.backend.strategy.PermissionsBehaviour;
 import com.soen343.backend.utilities.UserPermissions;
 
 import java.util.UUID;
@@ -21,6 +22,8 @@ public class User {
 
     private boolean isInsideHouse;
 
+    private PermissionsBehaviour permissionsBehaviour;
+
     @NotBlank
     private final String role;
 
@@ -36,13 +39,14 @@ public class User {
      * @param id a unique id which is generated for the user
      * @param role a String that qualifies the user's role in the simulation
      */
-    public User(@JsonProperty("id") UUID id, @JsonProperty("role") String role) {
+    public User(@JsonProperty("id") UUID id, @JsonProperty("role") String role, PermissionsBehaviour permissionsBehaviour) {
         this.id = id;
         this.role = role;
         this.isLoggedUser = false;
         this.location = "none";
 
         this.userPermissions = new UserPermissions();
+        setPermissionsBehaviour(permissionsBehaviour);
     }
 
     /**
@@ -108,5 +112,10 @@ public class User {
      */
     public void setInsideHouse(boolean insideHouse) {
         isInsideHouse = insideHouse;
+    }
+
+    public void setPermissionsBehaviour(PermissionsBehaviour permissionsBehaviour)
+    {
+        this.permissionsBehaviour = permissionsBehaviour;
     }
 }

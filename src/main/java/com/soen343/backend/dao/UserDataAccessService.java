@@ -16,7 +16,7 @@ import java.util.UUID;
 public class UserDataAccessService implements UserDAO {
 
     private List<User> DB = new ArrayList<>();
-    private UserTypeFactory userTypeFactory = new UserTypeFactory();
+    final private UserTypeFactory userTypeFactory = new UserTypeFactory();
 
     /**
      * Adds a new User to the database list

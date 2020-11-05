@@ -4,6 +4,9 @@ import com.soen343.backend.model.*;
 
 import java.util.UUID;
 
+/**
+ * Factory to create a user object based on their role
+ */
 public class UserTypeFactory {
 
     public User getUser(UUID id, String roleType)
