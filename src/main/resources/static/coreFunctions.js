@@ -281,7 +281,7 @@ function controlAllDoor(option){
             if(window_array[i].status=="open")
                 controlWindow(i);
     }
-    if(option="open"){
+    if(option=="open"){
         for(var i=0;i<door_array.length;i++)
             if(door_array[i].status=="closed")
                 controlDoor(i);
