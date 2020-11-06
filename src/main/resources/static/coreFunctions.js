@@ -174,28 +174,59 @@ function controlDoor(){
  * function for controlling windows
  */
 function controlWindow(){ // ERROR - DEBUG
-    myGameArea.clear("window"); 
-    window_array.forEach(a_window => {
-        a_window.speedX=0;
-        a_window.speedY=0;
-    });
     var option=document.getElementById("windowController").value -1;
-    alert("current value: "+option);
-    //move left
-    if(window_array[option].move_mode=="horizontal")
-        if(window_array[option].x>window_array[option].boundary[0]) window_array[option].speedX = -window_array[option].width;
-    if(window_array[option].move_mode=="vertical") 
-        if(window_array[option].y>window_array[option].boundary[0]) window_array[option].speedY = -window_array[option].height;
- //move right
-    if(window_array[option].move_mode=="horizontal") 
-        if(window_array[option].x<window_array[option].boundary[1]) window_array[option].speedX = window_array[option].width;
- //move down
-    if(window_array[option].move_mode=="vertical") 
-        if(window_array[option].y<window_array[option].boundary[1]) window_array[option].speedY = window_array[option].height;
-    //update new position
-    window_array.forEach(a_window => {
-        a_window.newPos();    
-        a_window.update();
-    });
+    var id = setInterval(moveWindow, 10);
+    function moveWindow(){
+        myGameArea.clear("window"); 
+        window_array.forEach(a_door => {
+            a_door.speedX=0;
+            a_door.speedY=0;
+        });
+        if(window_array[option].status=="closed"){//we need to open it
+            //move right
+            if(window_array[option].move_mode=="horizontal") 
+                if(window_array[option].x<window_array[option].boundary[1]) {
+                    window_array[option].speedX = 1;
+                    if(window_array[option].x==window_array[option].boundary[1]-1) {
+                        clearInterval(id);
+                        window_array[option].status="open";//update status, finish opening
+                    }
+            }
+        //move down
+            if(window_array[option].move_mode=="vertical") 
+                if(window_array[option].y<window_array[option].boundary[1]) {
+                    window_array[option].speedY = 1;
+                    if(window_array[option].y==window_array[option].boundary[1]-1){
+                        clearInterval(id);
+                        window_array[option].status="open";//update status, finish opening   
+                    }
+            }
+        }
+        else{// need to close
+             //move left
+            if(window_array[option].move_mode=="horizontal")
+                if(window_array[option].x>window_array[option].boundary[0]) {
+                    window_array[option].speedX = -1;
+                    if(window_array[option].x==window_array[option].boundary[0]+1){
+                        clearInterval(id);//this is the last movement to open
+                        window_array[option].status="closed";//update status, finish opening  
+                    }
+            }
+
+            if(window_array[option].move_mode=="vertical") 
+                if(window_array[option].y>window_array[option].boundary[0]) {
+                    window_array[option].speedY = -1;
+                    if(window_array[option].y==window_array[option].boundary[0]+1){
+                        clearInterval(id);//this is the last movement to open
+                        window_array[option].status="closed";//update status, finish opening  
+                    }
+            }
+        }
+        //update new position
+        window_array.forEach(a_door => {
+            a_door.newPos();    
+            a_door.update();
+        });
+    }
 }
 
