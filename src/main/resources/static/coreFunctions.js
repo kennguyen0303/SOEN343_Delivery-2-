@@ -27,7 +27,9 @@ function lightAction(debugText)
 {
     console.log(debugText);
 }
-
+/**
+ * Showing the control for the door
+ */
 function showDoorController(){
     var door_name_array=["bathroom","bedroom","backyard", "kitchen","garage_inside","entrance","garage_outside"];
     var element = document.getElementById("SHCore");
@@ -52,7 +54,9 @@ function showDoorController(){
     element.appendChild(button)
 }
 
-
+/**
+ * Showing the control for windows
+ */
 function showWindowController(){
     var window_name_array=["bedroom","kitchen"];
     var element = document.getElementById("SHCore");
@@ -78,7 +82,9 @@ function showWindowController(){
     element.appendChild(button);
 }
 
-
+/**
+ * Showing the control for the light
+ */
 function showLightController(){
     var light_name_array=["entrance","backyard","hallway 1","hallway 2", "garage","kitchen","bedroom","bathroom"];
     var element = document.getElementById("SHCore");
@@ -104,6 +110,8 @@ function showLightController(){
 }
 /**
  * Function for switching on/off light
+ * Can take an integer (Using as an API) or take the value from the control
+ * The integer is a value referencing the index in the light_array
  */
 function switchLight(val){
     var option;
@@ -128,6 +136,8 @@ function switchLight(val){
 
 /**
  * function for controlling doors
+ *  Can take an integer (Using as an API) or take the value from the control
+ * The integer is a value referencing the index in the door_array
  */
 function controlDoor(val){
     var option;
@@ -150,6 +160,7 @@ function controlDoor(val){
                     if(door_array[option].x==door_array[option].boundary[1]-1) {
                         clearInterval(id);
                         door_array[option].status="open";//update status, finish opening
+                        if([2,4,5,6].includes(option)) setTimeout(controlDoor,5000,option);//auto close door after 5s
                     }
             }
         //move down
@@ -158,7 +169,8 @@ function controlDoor(val){
                     door_array[option].speedY = 1;
                     if(door_array[option].y==door_array[option].boundary[1]-1){
                         clearInterval(id);
-                        door_array[option].status="open";//update status, finish opening   
+                        door_array[option].status="open";//update status, finish opening
+                        if([2,4,5,6].includes(option)) setTimeout(controlDoor,5000,option);//auto close door after 5s       
                     }
             }
         }
@@ -192,6 +204,8 @@ function controlDoor(val){
 
 /**
  * function for controlling windows
+ *  Can take an integer (Using as an API) or take the value from the control
+ * The integer is a value referencing the index in the window_array
  */
 function controlWindow(val){ 
     var option;
@@ -256,7 +270,7 @@ function controlWindow(val){
 
 /**
  * Controlling all doors and windows for Security part
- * @param {*} option 
+ * @param {*} option : This param decide the action for the function
  */
 function controlAllDoor(option){
     if(option=="close"){
