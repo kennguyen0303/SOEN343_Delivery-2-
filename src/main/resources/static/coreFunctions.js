@@ -112,9 +112,12 @@ function switchLight(){
 /**
  * function for controlling doors
  */
-function controlDoor(){
-    var option=document.getElementById("doorController").value -1;
-    alert("current value: "+option);
+function controlDoor(val){
+    var option;
+    if(val==null){
+        option =document.getElementById("doorController").value -1;
+    }
+    else option = val;
     var id = setInterval(moveDoor, 10);
     function moveDoor(){
         myGameArea.clear("door"); 
@@ -173,8 +176,12 @@ function controlDoor(){
 /**
  * function for controlling windows
  */
-function controlWindow(){ // ERROR - DEBUG
-    var option=document.getElementById("windowController").value -1;
+function controlWindow(val){ 
+    var option;
+    if(val==null){
+        option =document.getElementById("windowController").value -1;
+    }
+    else option = val;
     var id = setInterval(moveWindow, 10);
     function moveWindow(){
         myGameArea.clear("window"); 
@@ -230,3 +237,22 @@ function controlWindow(){ // ERROR - DEBUG
     }
 }
 
+
+function controlAllDoor(option){
+    if(option=="close"){
+        for(var i=0;i<door_array.length;i++)
+            if(door_array[i].status=="open")
+                controlDoor(i);
+        for(var i=0;i<window_array.length;i++)
+            if(window_array[i].status=="open")
+                controlWindow(i);
+    }
+    if(option="open"){
+        for(var i=0;i<door_array.length;i++)
+            if(door_array[i].status=="closed")
+                controlDoor(i);
+        for(var i=0;i<window_array.length;i++)
+            if(window_array[i].status=="closed")
+                controlWindow(i);
+    }
+}
