@@ -291,6 +291,7 @@ function door(width, height, color, x, y,move_mode) {//in case of human-stick, c
     this.speedY = 0;    
     this.x = x;
     this.y = y;
+    this.status = "closed";
     if (move_mode == "image") {
         this.image = new Image();
         this.image.src = "human_stick.png";

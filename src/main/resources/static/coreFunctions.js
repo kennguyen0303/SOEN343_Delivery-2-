@@ -113,30 +113,63 @@ function switchLight(){
  * function for controlling doors
  */
 function controlDoor(){
-    myGameArea.clear("door"); 
-    door_array.forEach(a_door => {
-        a_door.speedX=0;
-        a_door.speedY=0;
-    });
     var option=document.getElementById("doorController").value -1;
     alert("current value: "+option);
-    //move left
-    if(door_array[option].move_mode=="horizontal")
-        if(door_array[option].x>door_array[option].boundary[0]) door_array[option].speedX = -door_array[option].width;
-    if(door_array[option].move_mode=="vertical") 
-        if(door_array[option].y>door_array[option].boundary[0]) door_array[option].speedY = -door_array[option].heigth;
- //move right
-    if(door_array[option].move_mode=="horizontal") 
-        if(door_array[option].x<door_array[option].boundary[1]) door_array[option].speedX = door_array[option].width;
- //move down
-    if(door_array[option].move_mode=="vertical") 
-        if(door_array[option].y<door_array[option].boundary[1]) door_array[option].speedY = door_array[option].heigth;
-    //update new position
-    door_array.forEach(a_door => {
-        a_door.newPos();    
-        a_door.update();
-    });
+    var id = setInterval(moveDoor, 10);
+    function moveDoor(){
+        myGameArea.clear("door"); 
+        door_array.forEach(a_door => {
+            a_door.speedX=0;
+            a_door.speedY=0;
+        });
+        if(door_array[option].status=="closed"){//we need to open it
+            //move right
+            if(door_array[option].move_mode=="horizontal") 
+                if(door_array[option].x<door_array[option].boundary[1]) {
+                    door_array[option].speedX = 1;
+                    if(door_array[option].x==door_array[option].boundary[1]-1) {
+                        clearInterval(id);
+                        door_array[option].status="open";//update status, finish opening
+                    }
+            }
+        //move down
+            if(door_array[option].move_mode=="vertical") 
+                if(door_array[option].y<door_array[option].boundary[1]) {
+                    door_array[option].speedY = 1;
+                    if(door_array[option].y==door_array[option].boundary[1]-1){
+                        clearInterval(id);
+                        door_array[option].status="open";//update status, finish opening   
+                    }
+            }
+        }
+        else{// need to close
+             //move left
+            if(door_array[option].move_mode=="horizontal")
+                if(door_array[option].x>door_array[option].boundary[0]) {
+                    door_array[option].speedX = -1;
+                    if(door_array[option].x==door_array[option].boundary[0]+1){
+                        clearInterval(id);//this is the last movement to open
+                        door_array[option].status="closed";//update status, finish opening  
+                    }
+            }
+
+            if(door_array[option].move_mode=="vertical") 
+                if(door_array[option].y>door_array[option].boundary[0]) {
+                    door_array[option].speedY = -1;
+                    if(door_array[option].y==door_array[option].boundary[0]+1){
+                        clearInterval(id);//this is the last movement to open
+                        door_array[option].status="closed";//update status, finish opening  
+                    }
+            }
+        }
+        //update new position
+        door_array.forEach(a_door => {
+            a_door.newPos();    
+            a_door.update();
+        });
+    }
 }
+
 /**
  * function for controlling windows
  */
@@ -165,11 +198,4 @@ function controlWindow(){ // ERROR - DEBUG
         a_window.update();
     });
 }
-
-function closeAll(){
-    myGameArea.clear("window"); 
-    myGameArea.clear("door"); 
-    
-}
-
 
