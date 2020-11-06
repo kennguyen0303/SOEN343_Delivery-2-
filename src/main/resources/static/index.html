@@ -209,7 +209,7 @@
             start: function () {
                 this.context = this.canvas.getContext("2d");
                 this.interval;
-                updateGameArea();
+                updateGameArea("light");
                 window.addEventListener('keydown', function (e) {
                     isOn = document.getElementById("slider").checked;
                     myGameArea.key = e.keyCode;
@@ -220,11 +220,25 @@
                     clearInterval(this.interval);//let's try
                 })
             },
-            clear: function () {
-                door_array.forEach(a_door => {
+            clear: function (name) {
+                if(name=="door"){
+                    door_array.forEach(a_door => {
                     if (a_door.move_mode == "horizontal") this.context.clearRect((a_door.x - 40), a_door.y, 60, 5);
                     if (a_door.move_mode == "vertical") this.context.clearRect(a_door.x, (a_door.y - 30), 5, 60);
-                });
+                    });
+                }
+                else if (name=="window"){
+                    window_array.forEach(a_window => {
+                    if (a_window.move_mode == "horizontal") this.context.clearRect((a_window.x - 40), a_window.y, 60, 5);
+                    if (a_window.move_mode == "vertical") this.context.clearRect(a_window.x, (a_window.y - 30), 5, 60);
+                    });
+                }
+                else if (name == "light"){
+                    light_array.forEach(a_light => {
+                        //do something to remove the old light ? 
+                        alert("switching light");
+                    });
+                }
             }
         }
         

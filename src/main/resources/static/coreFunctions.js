@@ -106,14 +106,14 @@ function showLightController(){
  * Function for switching on/off light
  */
 function switchLight(){
-    alert("switching light")
+    myGameArea.clear("light"); 
 }
 
 /**
  * function for controlling doors
  */
 function controlDoor(){
-    myGameArea.clear(); 
+    myGameArea.clear("door"); 
     door_array.forEach(a_door => {
         a_door.speedX=0;
         a_door.speedY=0;
@@ -141,7 +141,7 @@ function controlDoor(){
  * function for controlling windows
  */
 function controlWindow(){ // ERROR - DEBUG
-    myGameArea.clear(); 
+    myGameArea.clear("window"); 
     window_array.forEach(a_window => {
         a_window.speedX=0;
         a_window.speedY=0;
@@ -152,18 +152,24 @@ function controlWindow(){ // ERROR - DEBUG
     if(window_array[option].move_mode=="horizontal")
         if(window_array[option].x>window_array[option].boundary[0]) window_array[option].speedX = -window_array[option].width;
     if(window_array[option].move_mode=="vertical") 
-        if(window_array[option].y>window_array[option].boundary[0]) window_array[option].speedY = -20;
+        if(window_array[option].y>window_array[option].boundary[0]) window_array[option].speedY = -window_array[option].height;
  //move right
     if(window_array[option].move_mode=="horizontal") 
-        if(window_array[option].x<window_array[option].boundary[1]) window_array[option].speedX = 20;
+        if(window_array[option].x<window_array[option].boundary[1]) window_array[option].speedX = window_array[option].width;
  //move down
     if(window_array[option].move_mode=="vertical") 
-        if(window_array[option].y<window_array[option].boundary[1]) window_array[option].speedY = 20;
+        if(window_array[option].y<window_array[option].boundary[1]) window_array[option].speedY = window_array[option].height;
     //update new position
     window_array.forEach(a_window => {
         a_window.newPos();    
         a_window.update();
     });
+}
+
+function closeAll(){
+    myGameArea.clear("window"); 
+    myGameArea.clear("door"); 
+    
 }
 
 
