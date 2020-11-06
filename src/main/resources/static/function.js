@@ -301,6 +301,12 @@ function door(width, height, color, x, y,move_mode) {//in case of human-stick, c
         this.image = new Image();
         this.image.src = "off_bulb.png";
         this.name=color;//set the name
+        this.image.onload=()=>{
+            ctx.drawImage(this.image, 
+                this.x, 
+                this.y,
+                this.width, this.height);
+        }
     }
     if(this.move_mode=="horizontal"){//make a boundary for movement
         this.boundary=[this.x,(this.x+this.width)];//inital point + width
@@ -310,7 +316,7 @@ function door(width, height, color, x, y,move_mode) {//in case of human-stick, c
     }        
     this.update = function() {
         ctx = myGameArea.canvas.getContext("2d");
-        if (move_mode == "image" || move_mode == "light") {
+        if (move_mode == "light") {
             //display the human stick
             ctx.drawImage(this.image, 
                 this.x, 
@@ -330,36 +336,41 @@ function door(width, height, color, x, y,move_mode) {//in case of human-stick, c
 }
 
 function updateGameArea() {
-    myGameArea.clear(); 
-    door_array.forEach(a_door => {
-        a_door.speedX=0;
-        a_door.speedY=0;
-    });
-    window_array.forEach(a_window => {
-        a_window.speedX=0;
-        a_window.speedY=0;
-    });
-    var option = document.getElementById("control_option").value - 1;//minus 1 since array start from 0
-    if (myGameArea.key && myGameArea.key == 37) {//move left
-        if(door_array[option].move_mode=="horizontal")
-            if(door_array[option].x>door_array[option].boundary[0]) door_array[option].speedX = -1;
-         }
-    if (myGameArea.key && myGameArea.key == 38) {//move up
-        if(door_array[option].move_mode=="vertical") 
-        if(door_array[option].y>door_array[option].boundary[0]) door_array[option].speedY = -1;
-        }  
-    if (myGameArea.key && myGameArea.key == 39) {//move right
-        if(door_array[option].move_mode=="horizontal") 
-        if(door_array[option].x<door_array[option].boundary[1]) door_array[option].speedX = 1;
-    }
-    if (myGameArea.key && myGameArea.key == 40) {//move down
-        if(door_array[option].move_mode=="vertical") 
-        if(door_array[option].y<door_array[option].boundary[1]) door_array[option].speedY = 1;
+    // myGameArea.clear("window"); 
+    // myGameArea.clear("door"); 
+    // myGameArea.clear("light"); 
+    // door_array.forEach(a_door => {
+    //     a_door.speedX=0;
+    //     a_door.speedY=0;
+    // });
+    // window_array.forEach(a_window => {
+    //     a_window.speedX=0;
+    //     a_window.speedY=0;
+    // });
+    // var option = document.getElementById("control_option").value - 1;//minus 1 since array start from 0
+    // if (myGameArea.key && myGameArea.key == 37) {//move left
+    //     if(door_array[option].move_mode=="horizontal")
+    //         if(door_array[option].x>door_array[option].boundary[0]) door_array[option].speedX = -1;
+    //      }
+    // if (myGameArea.key && myGameArea.key == 38) {//move up
+    //     if(door_array[option].move_mode=="vertical") 
+    //     if(door_array[option].y>door_array[option].boundary[0]) door_array[option].speedY = -1;
+    //     }  
+    // if (myGameArea.key && myGameArea.key == 39) {//move right
+    //     if(door_array[option].move_mode=="horizontal") 
+    //     if(door_array[option].x<door_array[option].boundary[1]) door_array[option].speedX = 1;
+    // }
+    // if (myGameArea.key && myGameArea.key == 40) {//move down
+    //     if(door_array[option].move_mode=="vertical") 
+    //     if(door_array[option].y<door_array[option].boundary[1]) door_array[option].speedY = 1;
     
-    }
+    // }
         
     //key in control is the update function
     //update the now position for every door, otherwise it will not be shown
+    light_array.forEach(a_light => {   
+        a_light.update();
+    });
     door_array.forEach(a_door => {
         a_door.newPos();    
         a_door.update();
@@ -367,10 +378,6 @@ function updateGameArea() {
     window_array.forEach(a_window => {
         a_window.newPos();    
         a_window.update();
-    });
-    light_array.forEach(a_light => {
-        a_light.newPos();    
-        a_light.update();
     });
 }
 

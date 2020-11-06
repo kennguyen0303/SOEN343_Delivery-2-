@@ -105,8 +105,25 @@ function showLightController(){
 /**
  * Function for switching on/off light
  */
-function switchLight(){
-    myGameArea.clear("light"); 
+function switchLight(val){
+    var option;
+    if(val==null){
+        option =document.getElementById("lightController").value -1;
+    }
+    else option = val;
+    //myGameArea.clear("light"); //clear the old light bulbs
+    if(light_array[option].status=="closed"){
+        light_array[option].image.src = "on_bulb.png";//switch on
+        light_array[option].status="open";
+    }
+    else {
+        light_array[option].status="closed";
+        light_array[option].image.src = "off_bulb.png";//switch off
+    }
+    //update the new pictures
+    light_array.forEach(a_light => {
+        a_light.update();
+    });
 }
 
 /**
@@ -237,7 +254,10 @@ function controlWindow(val){
     }
 }
 
-
+/**
+ * Controlling all doors and windows for Security part
+ * @param {*} option 
+ */
 function controlAllDoor(option){
     if(option=="close"){
         for(var i=0;i<door_array.length;i++)

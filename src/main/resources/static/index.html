@@ -215,9 +215,7 @@
             start: function () {
                 this.context = this.canvas.getContext("2d");
                 this.interval;
-                updateGameArea("light");
-                updateGameArea("door");
-                updateGameArea("window");
+                updateGameArea();//need to review this function
                 window.addEventListener('keydown', function (e) {
                     isOn = document.getElementById("slider").checked;
                     myGameArea.key = e.keyCode;
@@ -244,7 +242,7 @@
                 else if (name == "light"){
                     light_array.forEach(a_light => {
                         //do something to remove the old light ? 
-                        alert("switching light");
+                        this.context.clearRect((a_light.x), a_light.y, 20, 20);
                     });
                 }
             }
