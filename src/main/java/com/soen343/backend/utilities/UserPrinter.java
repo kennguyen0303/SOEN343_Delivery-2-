@@ -17,8 +17,9 @@ public class UserPrinter {
         {
             FileOutputStream fos = new FileOutputStream("UserProfiles.txt",false);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-
-            for (User user: userDB) {
+            System.out.print(userDB.size());
+            for (int i=0; i < userDB.size(); i++) {
+                User user = userDB.get(i);
                 bw.write(user.getRole());
                 bw.newLine();
                 bw.write(user.getId().toString());
