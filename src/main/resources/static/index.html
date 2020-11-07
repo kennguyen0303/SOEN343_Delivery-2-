@@ -12,6 +12,7 @@
     <script src="coreFunctions.js"> </script>
     <script src="SHP_functions.js"></script>
     <script src="function.js"></script>
+    <script src="users.js"> </script>
     <script src="classes.js"></script>
     <title>Smart Home Simulator</title>
     <!-- Custom styles for this template -->
@@ -122,7 +123,7 @@
                     <br>
                     <input type="button" value="Edit Selected User" onclick="onSubmitEditForm()">
                     <input type="button" value="Delete Selected User" onclick="onSubmitDeleteUser()">
-                    <input input type="button" value="Login Selected User" onclick="onLoginSubmit()">
+                    <input type="button" value="Login Selected User" onclick="onLoginSubmit()">
                 </div>
 
                 <!--Delete a user profile-->
@@ -132,6 +133,26 @@
                 <br>
                 Enter how long before the authorities are alerted (in seconds): 
                 <input type="number" id="authoritiesTime" value="30">
+                <div id="GrantPermissions">
+                    <select id="currentUsersList3"></select>
+                    <br>
+                    <select id="permissionName">
+                        <option value="openAllWindows">Open/Close All Windows</option>
+                        <option value="lockDoors">Lock/Unlock Doors</option>
+                        <option value="useAllLights">Open/Close All Lights</option>
+                        <option value="restrictedWindow">Use Windows in Same Room</option>
+                        <option value="restrictedLights">Use Lights in Same Room</option>
+                     </select>
+                    <select id="permissionValue">
+                        <option value="true">Enabled</option>
+                        <option value="false">Disabled</option>
+                    </select>
+                    <input type="button" value="Update Permission" onclick="grantPermissions()">
+                </div>
+                <div id="Save and Load UserProfiles">
+                    <input type="button" value="Save Profiles" onclick="saveProfiles()">
+                    <input type="button" value="Load Profiles" onclick="loadProfiles()">
+                </div>
             </div>
 
             <div id="SHCore" class="tabcontent">

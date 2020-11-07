@@ -1,6 +1,8 @@
 package com.soen343.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.soen343.backend.strategy.PermissionsBehaviour;
+import com.soen343.backend.utilities.UserPermissions;
 
 import java.util.UUID;
 import javax.validation.constraints.NotBlank;
@@ -11,8 +13,17 @@ import javax.validation.constraints.NotBlank;
 public class User {
 
     private String location;
+
     private final UUID id;
+
     private boolean isLoggedUser;
+
+    private UserPermissions userPermissions;
+
+    private boolean isInsideHouse;
+
+    private PermissionsBehaviour permissionsBehaviour;
+
     @NotBlank
     private final String role;
 
@@ -21,11 +32,14 @@ public class User {
      * @param id a unique id which is generated for the user
      * @param role a String that qualifies the user's role in the simulation
      */
-    public User(@JsonProperty("id") UUID id, @JsonProperty("role") String role) {
+    public User(@JsonProperty("id") UUID id, @JsonProperty("role") String role, PermissionsBehaviour permissionsBehaviour) {
         this.id = id;
         this.role = role;
         this.isLoggedUser = false;
         this.location = "none";
+
+        this.userPermissions = new UserPermissions();
+        setPermissionsBehaviour(permissionsBehaviour);
     }
 
     /**
@@ -75,5 +89,59 @@ public class User {
      */
     public String getLocation() {
         return location;
+    }
+
+    /**
+     * Getter for if User is away or inside the house
+     * @return boolean that is true if the user is inside and false if the user is away
+     */
+    public boolean isInsideHouse() {
+        return isInsideHouse;
+    }
+
+    /**
+     * Setter for if User is away or inside the house
+     * @param insideHouse boolean that is true if the user is inside and false if the user is away
+     */
+    public void setInsideHouse(boolean insideHouse) {
+        isInsideHouse = insideHouse;
+    }
+
+    /**
+     * Set concrete strategy of the permission behaviour
+     * @param permissionsBehaviour Concrete strategy according to user role
+     */
+    public void setPermissionsBehaviour(PermissionsBehaviour permissionsBehaviour)
+    {
+        this.permissionsBehaviour = permissionsBehaviour;
+    }
+
+    /**
+     * Getter for structure containing all user permissions
+     * @return
+     */
+    public UserPermissions getUserPermissions() {
+        return userPermissions;
+    }
+
+    /**
+     * Setter for user permissions
+     * @param userPermissions
+     */
+    public void setUserPermissions(UserPermissions userPermissions)
+    {
+        this.userPermissions = userPermissions;
+    }
+
+    /**
+     * Method to grant user permissions to other users
+     * @param user User to change
+     * @param permission String for permission targeted
+     * @param value boolean: true if enabled and false if disabled
+     * @return true if operation changed a user and false if not allowed
+     */
+    public boolean grantPermissions(User user, String permission, boolean value)
+    {
+        return permissionsBehaviour.changePermissions(user, permission, value);
     }
 }
