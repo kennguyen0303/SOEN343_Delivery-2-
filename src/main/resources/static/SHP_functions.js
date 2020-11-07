@@ -118,7 +118,6 @@ class CurrentTime{
 function setAwayMode(){
 
     var userDB;
-
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
@@ -148,11 +147,8 @@ function setAwayMode(){
                 document.getElementById('awayModeButton').innerHTML = 'OFF';
             }
         }
-        
     }
 
     xhttp.open("GET", "http://localhost:8080/api/user/allUserRetrieval", true);
     xhttp.send();
-
-    
 }
