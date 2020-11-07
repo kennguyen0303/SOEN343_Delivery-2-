@@ -1,6 +1,8 @@
 package com.soen343.backend.dao;
 
+import com.soen343.backend.factory.UserTypeFactory;
 import com.soen343.backend.model.User;
+import com.soen343.backend.utilities.UserPermissions;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.UUID;
 public class UserDataAccessService implements UserDAO {
 
     private List<User> DB = new ArrayList<>();
+    final private UserTypeFactory userTypeFactory = new UserTypeFactory();
 
     /**
      * Adds a new User to the database list
@@ -24,7 +27,10 @@ public class UserDataAccessService implements UserDAO {
      */
     @Override
     public int insertUser(UUID id, User user) {
-        DB.add(new User(id, user.getRole()));
+
+        String roleType = user.getRole();
+
+        DB.add(userTypeFactory.getUser(id, roleType));
         return 1;
     }
 
@@ -80,7 +86,7 @@ public class UserDataAccessService implements UserDAO {
                     int indexOfUserToUpdate = DB.lastIndexOf(user);
                     if(indexOfUserToUpdate >= 0) // we have found a person
                     {
-                        DB.set(indexOfUserToUpdate,  new User(id, updateUser.getRole())); // set contents of the person to new person that was just received
+                        DB.set(indexOfUserToUpdate, userTypeFactory.getUser(id, updateUser.getRole())); // set contents of the person to new person that was just received
                         return 1;
                     }
                     return 0;
@@ -120,7 +126,8 @@ public class UserDataAccessService implements UserDAO {
      * Finds the User such that their current logged in status is true
      * @return an Optional User if it is found, if any user is logged in
      */
-    private Optional<User> findCurrentLoggedInUser() {
+    @Override
+    public Optional<User> findCurrentLoggedInUser() {
         return DB.stream()
                 .filter(user -> user.getIsLoggedUser() == true)
                 .findFirst();
@@ -144,5 +151,46 @@ public class UserDataAccessService implements UserDAO {
 
         user.get().setLocation(location);
         return 1;
+    }
+
+    /**
+     * Change the permissions of a given user
+     * @param id Unique Id to identify the user to update
+     * @param permission String value of the setting that needs new permissions
+     * @param value boolean: true if enabled, false if disabled
+     * @return int 1 if successful and 0 if failed or no change
+     */
+    @Override
+    public int grantUserPermissions(UUID id, String permission, boolean value)
+    {
+        Optional<User> user = findCurrentLoggedInUser();
+        Optional<User> userToGetPermissions = selectUserById(id);
+        if(user.isEmpty() || userToGetPermissions.isEmpty())
+        {
+            return 0;
+        }
+
+        if(user.get().grantPermissions(userToGetPermissions.get(), permission, value))
+        {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public UserPermissions getUserPermissions(UUID id) {
+        UserPermissions userPermissions = null;
+        Optional<User> user = selectUserById(id);
+        if(!user.isEmpty())
+        {
+            userPermissions = user.get().getUserPermissions();
+        }
+        return userPermissions;
     }
 }

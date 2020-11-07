@@ -33,24 +33,24 @@ xhttp.send();
 }
 
 function removeAllChildNodes(element) {
-while(element.firstChild) {
-element.removeChild(element.lastChild);
-}
+  while(element.firstChild) {
+    element.removeChild(element.lastChild);
+  }
 }
 
 function getUserById(id) {
-var xhttp;
-var user;
-xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
-if (this.readyState == 4 && this.status == 200) {
-    return user = JSON.parse(this.responseText);
-}
-};
+    var xhttp;
+    var user;
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        return user = JSON.parse(this.responseText);
+    }
+    };
 
-xhttp.open("GET", "http://localhost:8080/api/user/userRetrieval/" + id, true);
-xhttp.setRequestHeader("Content-type", "application/json");
-xhttp.send();
+    xhttp.open("GET", "http://localhost:8080/api/user/userRetrieval/" + id, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
 }
 
 // Retrieves users from backend as they are added and displays them in a dropdown list
@@ -65,10 +65,14 @@ function getUsers() {
 
             var select = document.getElementById("currentUsersList");
             removeAllChildNodes(select);
+
             //alex attempt
             var select2 = document.getElementById("currentUsersList2");
             removeAllChildNodes(select2);
             //end
+
+            var select3 = document.getElementById("currentUsersList3");
+            removeAllChildNodes(select3);
 
             for( var i=0; i< userArray.length; i++) {
                 var option = document.createElement("option");
@@ -85,6 +89,13 @@ function getUsers() {
                 select2.appendChild(option);
             }//end
 
+           for( var i=0; i< userArray.length; i++) {
+              var option = document.createElement("option");
+                option.value = userArray[i].id;
+                option.innerHTML = userArray[i].role;
+                select3.appendChild(option);
+              }
+
             var item = document.getElementById("availableUsers");
 
             removeAllChildNodes(item);
@@ -95,6 +106,10 @@ function getUsers() {
             removeAllChildNodes(item2);
             item2.appendChild(select2);
             //attempt end
+
+            var item3 = document.getElementById("availableUsers3");
+            removeAllChildNodes(item3);
+            item3.appendChild(select3);
         }
     };
 
@@ -528,6 +543,7 @@ function tikTok() {
     document.getElementById('time').innerHTML = currentTime.toLocaleString("en-US");
 }
 
+// CONFLICT RESOLVED !
 
 //user should be able to set the time to pass before sending notification
 var eclipsedTime = 0;

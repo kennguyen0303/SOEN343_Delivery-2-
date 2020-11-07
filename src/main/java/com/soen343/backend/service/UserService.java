@@ -2,6 +2,7 @@ package com.soen343.backend.service;
 
 import com.soen343.backend.dao.UserDAO;
 import com.soen343.backend.model.User;
+import com.soen343.backend.utilities.UserPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -92,5 +93,32 @@ public class UserService {
      */
     public int setUserLocation(UUID id, String location) {
         return userDAO.setUserLocation(id, location);
+    }
+
+    /**
+     * Function to find User that is currently logged in, if they exist
+     * @return An Optional User if there is a user current logged in
+     */
+    public Optional<User> findCurrentLoggedInUser() {
+        return userDAO.findCurrentLoggedInUser();
+    }
+
+    /**
+     *
+     * @param id unique UUID associate to the user to update
+     * @param permission String representing the permission to update
+     * @param value boolean: true if enabled and false if disabled
+     */
+    public void grantPermissions(UUID id, String permission, boolean value) {
+        userDAO.grantUserPermissions(id, permission, value);
+    }
+
+    /**
+     *
+     * @param id unique UUID associate to the user
+     * @return UserPermissions associated to this user
+     */
+    public UserPermissions getUserPermissions(UUID id) {
+        return userDAO.getUserPermissions(id);
     }
 }
