@@ -269,20 +269,25 @@ var room_array=[];//array for the rooms
                             //each [key2] is an object of a door
                             var temp_door = new door(myObj[key1][key2][0], myObj[key1][key2][1], myObj[key1][key2][2], myObj[key1][key2][3], myObj[key1][key2][4],myObj[key1][key2][5]);
                             light_array.push(temp_door);
+                            room_array.forEach(a_room => {
+                                var room_name=a_room.getName();
+                                if(key2.includes(room_name))
+                                    a_room.add_light(light_array.length-1);//take the index of the door
+                            });
                             continue;
                         }
                         //draw the wall for a room
                         for(var i=0;i<myObj[key1][key2].length;i=i+4){
                             //store the height and width of a room
                             if(key2=="top"){
-                                temp_room.set_min_height=myObj[key1][key2][0];//the first point
-                                temp_room.set_min_width=myObj[key1][key2][0];//the first point
+                                temp_room.set_min_height(myObj[key1][key2][1]);//the first point
+                                temp_room.set_min_width(myObj[key1][key2][0]);//the first point
                                 var last_index=myObj[key1][key2].length-1;
-                                temp_room.set_max_width=myObj[key1][key2][last_index];
+                                temp_room.set_max_width(myObj[key1][key2][last_index-1]);//consult the layout.json to know why -1
                             }
                             if(key2=="left"){
                                 var last_index=myObj[key1][key2].length-1;
-                                temp_room.set_max_height=myObj[key1][key2][last_index];
+                                temp_room.set_max_height(myObj[key1][key2][last_index]);
                             }
                             ctx.moveTo(myObj[key1][key2][i],myObj[key1][key2][i+1]);
                             ctx.lineTo(myObj[key1][key2][i+2],myObj[key1][key2][i+3]);
@@ -358,6 +363,19 @@ function updateGameArea() {
         user.newPos();    
         user.update();
         //update location ?
+        room_array.forEach(a_room => {
+            if(a_room.insideRoom(user)){//if the user is inside a room
+                // //turn on light in the room
+                a_room.light_index_array.forEach(an_index => {
+                    console.log(an_index);
+                    switchLight(an_index);
+                });
+                user.location=a_room.getName();//update the location
+                console.log("Current location: "+user.location);
+            }
+
+        });
+        
     });
 }
 

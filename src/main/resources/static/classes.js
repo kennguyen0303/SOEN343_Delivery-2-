@@ -81,6 +81,8 @@ function room(){
     this.max_height;
     this.door_index_array=[];
     this.window_index_array=[];
+    this.light_index_array=[];
+    this.numberOfPeopleInside=0;
     //methods 
     //check if a person is inside the room
     this.inside=(a_person)=>{
@@ -122,12 +124,25 @@ function room(){
         this.door_index_array.push(index);
         return index;
     }
+    this.add_light=(index)=>{
+        this.light_index_array.push(index);
+        return this.light_index_array.length;
+    }
+    this.insideRoom = (a_person)=>{
+        console.log("user x: "+a_person.x);
+        console.log("user y: "+a_person.y);
+        console.log(this.name);
+        console.log(this.min_width);
+        console.log(this.max_width);
+        console.log(this.min_height);
+        console.log(this.max_height);
+        if(a_person.x>this.min_width&&a_person.x<this.max_width&&a_person.y<this.max_height&&
+            a_person.y>this.min_height){
+                return true;
+            } 
+        return false;
+        //wait need to turn on the light and update location    
+    }
+    
 
 } 
-/**
- * 
- * @param {*} a_person : a human stick
- */
-function locateRoom(a_person){
-    if(a_person.x) true;
-}
