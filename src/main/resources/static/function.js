@@ -27,15 +27,18 @@ function getProfile() {
   };
   }
   xhttp.open("GET", "http://localhost:8080/api/user", true);
-xhttp.setRequestHeader("Content-type", "application/json");
-xhttp.send();
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send();
 
 }
 
 function removeAllChildNodes(element) {
-  while(element.firstChild) {
-    element.removeChild(element.lastChild);
-  }
+if(element){
+while(element.firstChild) {
+     element.removeChild(element.lastChild);
+   }
+}
+
 }
 
 function getUserById(id) {
