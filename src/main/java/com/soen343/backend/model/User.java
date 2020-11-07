@@ -114,20 +114,39 @@ public class User {
         isInsideHouse = insideHouse;
     }
 
+    /**
+     * Set concrete strategy of the permission behaviour
+     * @param permissionsBehaviour Concrete strategy according to user role
+     */
     public void setPermissionsBehaviour(PermissionsBehaviour permissionsBehaviour)
     {
         this.permissionsBehaviour = permissionsBehaviour;
     }
 
+    /**
+     * Getter for structure containing all user permissions
+     * @return
+     */
     public UserPermissions getUserPermissions() {
         return userPermissions;
     }
 
+    /**
+     * Setter for user permissions
+     * @param userPermissions
+     */
     public void setUserPermissions(UserPermissions userPermissions)
     {
         this.userPermissions = userPermissions;
     }
 
+    /**
+     * Method to grant user permissions to other users
+     * @param user User to change
+     * @param permission String for permission targeted
+     * @param value boolean: true if enabled and false if disabled
+     * @return true if operation changed a user and false if not allowed
+     */
     public boolean grantPermissions(User user, String permission, boolean value)
     {
         return permissionsBehaviour.changePermissions(user, permission, value);

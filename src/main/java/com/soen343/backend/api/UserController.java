@@ -96,12 +96,21 @@ public class UserController {
         userService.setUserLocation(id, location);
     }
 
+    /**
+     * Request to change the permissions of a given user
+     * @param id unique id passed in the request mapping to identify the user to change permissions of
+     * @param permission string value of the permission to change
+     * @param value boolean: true if enabled and false if disabled
+     */
     @PutMapping(value = "api/user/updateUserPermissions/{id}/{permission}/{value}")
     public void grantUserPermission(@PathVariable("id") UUID id,@PathVariable("permission") String permission,@PathVariable("value") boolean value)
     {
        userService.grantPermissions(id, permission, value);
     }
 
+    /**
+     * Request to save all user profiles
+     */
     @PostMapping(value = "api/user/userSaving")
     public void saveUsers()
     {
@@ -109,6 +118,9 @@ public class UserController {
         userPrinter.saveUsers(userService.getAllUsers());
     }
 
+    /**
+     * Request to load user profiles from file into database
+     */
     @PostMapping(value = "api/user/userLoading")
     public void loadUsers()
     {

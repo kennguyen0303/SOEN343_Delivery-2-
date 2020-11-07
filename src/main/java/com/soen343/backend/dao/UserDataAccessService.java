@@ -153,11 +153,11 @@ public class UserDataAccessService implements UserDAO {
     }
 
     /**
-     *
-     * @param id
-     * @param permission
-     * @param value
-     * @return
+     * Change the permissions of a given user
+     * @param id Unique Id to identify the user to update
+     * @param permission String value of the setting that needs new permissions
+     * @param value boolean: true if enabled, false if disabled
+     * @return int 1 if successful and 0 if failed or no change
      */
     @Override
     public int grantUserPermissions(UUID id, String permission, boolean value)

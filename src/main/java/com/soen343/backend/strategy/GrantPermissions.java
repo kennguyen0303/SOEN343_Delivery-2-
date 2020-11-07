@@ -8,6 +8,13 @@ import com.soen343.backend.utilities.UserPermissions;
  */
 public class GrantPermissions implements PermissionsBehaviour {
 
+    /**
+     *
+     * @param user user that needs permissions changed
+     * @param permission String representing the permission to change
+     * @param value boolean: true if enabled and false if disabled
+     * @return true to show that settings were modified
+     */
     public boolean changePermissions(User user, String permission, boolean value)
     {
        UserPermissions userPermissions =  user.getUserPermissions();
