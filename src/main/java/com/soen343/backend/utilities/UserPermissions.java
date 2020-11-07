@@ -5,6 +5,8 @@ package com.soen343.backend.utilities;
  */
 public class UserPermissions {
 
+
+
     // Access to open/close all windows
     private  boolean canOpenAllWindows;
 
@@ -29,6 +31,22 @@ public class UserPermissions {
         canUseLights = false;
         canOpenRestrictedWindow = false;
         canUseRestrictedLights = false;
+    }
+
+    /**
+     * Constructor for specific user permission settings
+     * @param canOpenAllWindows
+     * @param canLockDoors
+     * @param canUseLights
+     * @param canOpenRestrictedWindow
+     * @param canUseRestrictedLights
+     */
+    public UserPermissions(boolean canOpenAllWindows, boolean canLockDoors, boolean canUseLights, boolean canOpenRestrictedWindow, boolean canUseRestrictedLights) {
+        this.canOpenAllWindows = canOpenAllWindows;
+        this.canLockDoors = canLockDoors;
+        this.canUseLights = canUseLights;
+        this.canOpenRestrictedWindow = canOpenRestrictedWindow;
+        this.canUseRestrictedLights = canUseRestrictedLights;
     }
 
     /**

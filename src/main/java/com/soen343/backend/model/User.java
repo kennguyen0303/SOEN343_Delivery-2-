@@ -119,13 +119,18 @@ public class User {
         this.permissionsBehaviour = permissionsBehaviour;
     }
 
+    public UserPermissions getUserPermissions() {
+        return userPermissions;
+    }
+
+    public void setUserPermissions(UserPermissions userPermissions)
+    {
+        this.userPermissions = userPermissions;
+    }
+
     public boolean grantPermissions(UUID id, String permission, boolean value)
     {
         //permissionsBehaviour.grantPermissions();
         return false;
-    }
-
-    public UserPermissions getUserPermissions() {
-        return userPermissions;
     }
 }
