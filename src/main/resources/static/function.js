@@ -368,7 +368,7 @@ function updateGameArea() {
                 // //turn on light in the room
                 a_room.light_index_array.forEach(an_index => {
                     console.log(an_index);
-                    switchLight(an_index);
+                    turnOnLight(an_index);
                 });
                 user.location=a_room.getName();//update the location
                 console.log("Current location: "+user.location);
@@ -378,7 +378,7 @@ function updateGameArea() {
         
     });
 }
-
+//--------------------------------------
 //alex functions
 function showContext() {
     document.getElementById('SHSystem').style.display = 'none';

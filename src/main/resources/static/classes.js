@@ -129,13 +129,6 @@ function room(){
         return this.light_index_array.length;
     }
     this.insideRoom = (a_person)=>{
-        console.log("user x: "+a_person.x);
-        console.log("user y: "+a_person.y);
-        console.log(this.name);
-        console.log(this.min_width);
-        console.log(this.max_width);
-        console.log(this.min_height);
-        console.log(this.max_height);
         if(a_person.x>this.min_width&&a_person.x<this.max_width&&a_person.y<this.max_height&&
             a_person.y>this.min_height){
                 return true;
