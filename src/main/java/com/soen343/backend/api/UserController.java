@@ -2,6 +2,7 @@ package com.soen343.backend.api;
 
 import com.soen343.backend.model.User;
 import com.soen343.backend.service.UserService;
+import com.soen343.backend.utilities.UserPermissions;
 import com.soen343.backend.utilities.UserPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -126,5 +127,11 @@ public class UserController {
     {
         UserPrinter userPrinter = new UserPrinter();
         userPrinter.loadUsers(userService.getAllUsers());
+    }
+
+    @GetMapping(value="api/user/userPermissions/{id}")
+    public UserPermissions getUserPermissions(@PathVariable("id") UUID id)
+    {
+        return userService.getUserPermissions(id);
     }
 }

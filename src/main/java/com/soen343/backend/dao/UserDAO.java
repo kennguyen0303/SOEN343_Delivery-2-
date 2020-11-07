@@ -1,6 +1,7 @@
 package com.soen343.backend.dao;
 
 import com.soen343.backend.model.User;
+import com.soen343.backend.utilities.UserPermissions;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,10 @@ public interface UserDAO {
 
     Optional<User> selectUserById(UUID id);
 
+    Optional<User> findCurrentLoggedInUser();
+
+    UserPermissions getUserPermissions(UUID id);
+
     int deleteUserById(UUID id);
 
     int updateUserById(UUID id, User user);
@@ -34,8 +39,6 @@ public interface UserDAO {
     int loginUser(UUID id);
 
     int setUserLocation(UUID id, String location);
-
-    Optional<User> findCurrentLoggedInUser();
 
     int grantUserPermissions(UUID id, String permission, boolean value);
 }

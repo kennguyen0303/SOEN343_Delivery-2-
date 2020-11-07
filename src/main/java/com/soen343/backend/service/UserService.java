@@ -2,6 +2,7 @@ package com.soen343.backend.service;
 
 import com.soen343.backend.dao.UserDAO;
 import com.soen343.backend.model.User;
+import com.soen343.backend.utilities.UserPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -110,5 +111,14 @@ public class UserService {
      */
     public void grantPermissions(UUID id, String permission, boolean value) {
         userDAO.grantUserPermissions(id, permission, value);
+    }
+
+    /**
+     *
+     * @param id unique UUID associate to the user
+     * @return UserPermissions associated to this user
+     */
+    public UserPermissions getUserPermissions(UUID id) {
+        return userDAO.getUserPermissions(id);
     }
 }

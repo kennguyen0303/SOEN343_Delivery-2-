@@ -2,6 +2,7 @@ package com.soen343.backend.dao;
 
 import com.soen343.backend.factory.UserTypeFactory;
 import com.soen343.backend.model.User;
+import com.soen343.backend.utilities.UserPermissions;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -177,4 +178,19 @@ public class UserDataAccessService implements UserDAO {
         return 0;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public UserPermissions getUserPermissions(UUID id) {
+        UserPermissions userPermissions = null;
+        Optional<User> user = selectUserById(id);
+        if(!user.isEmpty())
+        {
+            userPermissions = user.get().getUserPermissions();
+        }
+        return userPermissions;
+    }
 }
