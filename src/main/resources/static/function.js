@@ -419,34 +419,47 @@ function resetCoordinates() {
 function placeUser(){
     //obtain the user
     var userIndex = document.getElementById('currentUsersList2').selectedIndex;
-    var userName = document.getElementById('currentUsersList2').options[userIndex].text;
+    var userID = document.getElementById('currentUsersList2').options[userIndex].value;
     
     //obtain the room
     var roomName = document.getElementById('availableRooms').value;
 
     //determine the coordinates of the user for each room
-    var positionX = 0;
-    var positionY = 0
-    if(roomName == "living_room") {
-        positionX = 35;
-        positionY = 75;
-    } 
-    if(roomName == "kitchen") {
-        positionX = 185;
-        positionY = 75;
-    }
-    if(roomName == "outdoor") {
-        positionX = 385;
-        positionY = 225;
-    }
+    // var positionX = 0;
+    // var positionY = 0
+    // if(roomName == "living_room") {
+    //     positionX = 35;
+    //     positionY = 75;
+    // } 
+    // if(roomName == "kitchen") {
+    //     positionX = 185;
+    //     positionY = 75;
+    // }
+    // if(roomName == "outdoor") {
+    //     positionX = 385;
+    //     positionY = 225;
+    // }
 
-    //place img in the layout
-    var selectedUser = new door(30, 50, "", positionX, positionY, "image")
-    selectedUser.update();
+    // //place img in the layout
+    // var selectedUser = new door(30, 50, "", positionX, positionY, "image")
+    // selectedUser.update();
 
-    if (document.getElementById('awayModeButton').innerHTML == 'ON'){
+    //store user location into backend
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            getUsers();
+        }
+    };
+    xhttp.open("PUT", "http://localhost:8080/api/user/updateUserLocation/" + userID + "/" + roomName, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
+
+    //observe the location
+    if (document.getElementById('awayModeButton').innerHTML == 'ON') {
         UserObserver.update();
     }
+    
 }
 
 var currentTime = new Date();
@@ -480,14 +493,15 @@ function setEclipseTime(){
 
 //obversers classes here
 class UserObserver {
-    constructor(eclipsedTime){
-        this.eclipsedTime = eclipsedTime;
+    constructor(){
+        // this.eclipsedTime = eclipsedTime;
     }
 
     static update(){
 
         var currentTime = new Date();
         var timeInfo = currentTime.toUTCString();
+        console.log(timeInfo);
 
         //obtain the users
         var xhttp = new XMLHttpRequest();
