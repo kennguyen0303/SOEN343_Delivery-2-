@@ -227,6 +227,7 @@ function changeTabs(evt, SmartHomeTab) {
 var door_array=[];//the array for doors !
 var light_array=[];//array for lights
 var window_array=[];//array for window
+var room_array=[];//array for the rooms
    function renderLayout()//a function for rendering the layout of the house
    {
         var xmlhttp = new XMLHttpRequest();//creating a request for AJAX to load the layout
@@ -240,8 +241,11 @@ var window_array=[];//array for window
                     for (var key2 of Object.keys(myObj[key1])) {//loop over each element of a room
                         //print room_name p/s: hardcode name position need to fix later
                         if(key2=="name"){//if the element is "name", need to print out
+                            var temp_room=new room();//initialize a room
+                            temp_room.setName(myObj[key1][key2][0]);//set the name for the room
                             ctx.font = "15px Arial";//set the font
                             ctx.fillText(myObj[key1][key2][0],myObj[key1][key2][1],myObj[key1][key2][2]);//format: [0]=room name, [1]: width, [2]: height
+                            continue;//move on the other keys
                         }
                         //print the door
                         if(key1=="door"){
@@ -260,11 +264,27 @@ var window_array=[];//array for window
                         }
                         //draw the wall for a room
                         for(var i=0;i<myObj[key1][key2].length;i=i+4){
+                            //store the height and width of a room
+                            if(key2=="top"){
+                                temp_room.set_min_height=myObj[key1][key2][0];//the first point
+                                temp_room.set_min_width=myObj[key1][key2][0];//the first point
+                                var last_index=myObj[key1][key2].length-1;
+                                temp_room.set_max_width=myObj[key1][key2][last_index];
+                            }
+                            if(key2=="left"){
+                                var last_index=myObj[key1][key2].length-1;
+                                temp_room.set_max_height=myObj[key1][key2][last_index];
+                            }
                             ctx.moveTo(myObj[key1][key2][i],myObj[key1][key2][i+1]);
                             ctx.lineTo(myObj[key1][key2][i+2],myObj[key1][key2][i+3]);
                             ctx.stroke();
+                            
                         }
                     };//finish rendering a room
+                    if(key1!=="door"&&key1!=="light") {
+                        room_array.push(temp_room);//test !
+                        alert(room_array.length);
+                    }
                 };
                 startGame();//start the movement, challenge: Need to click to render door
             }
@@ -280,60 +300,6 @@ function startGame() {
     myGameArea.start();
 }
 
-
-//a constructor
-function door(width, height, color, x, y,move_mode) {//in case of human-stick, color=name
-    this.gamearea = document.getElementById("myCanvas");
-    this.move_mode=move_mode;
-    this.width = width;
-    this.height = height;
-    this.speedX = 0;
-    this.speedY = 0;    
-    this.x = x;
-    this.y = y;
-    this.status = "closed";
-    if (move_mode == "image") {
-        this.image = new Image();
-        this.image.src = "human_stick.png";
-        this.name=color;//set the name
-    }
-    if (move_mode == "light") {
-        this.image = new Image();
-        this.image.src = "off_bulb.png";
-        this.name=color;//set the name
-        this.image.onload=()=>{
-            ctx.drawImage(this.image, 
-                this.x, 
-                this.y,
-                this.width, this.height);
-        }
-    }
-    if(this.move_mode=="horizontal"){//make a boundary for movement
-        this.boundary=[this.x,(this.x+this.width)];//inital point + width
-    }
-    if(this.move_mode=="vertical"){//make a boundary for movement
-        this.boundary=[this.y,(this.y+this.height)]
-    }        
-    this.update = function() {
-        ctx = myGameArea.canvas.getContext("2d");
-        if (move_mode == "light") {
-            //display the human stick
-            ctx.drawImage(this.image, 
-                this.x, 
-                this.y,
-                this.width, this.height);
-            //display the name or role
-            //ctx.fillText(color,this.x+15,this.y+50);//format: [0]=room name, [1]: width, [2]: height
-        } else {
-            ctx.fillStyle = color;
-            ctx.fillRect(this.x, this.y, this.width, this.height);
-        }
-    }
-    this.newPos = function() {
-        this.x += this.speedX;
-        this.y += this.speedY;        
-    }
-}
 
 function updateGameArea() {
     // myGameArea.clear("window"); 
