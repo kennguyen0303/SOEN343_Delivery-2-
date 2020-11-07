@@ -477,15 +477,15 @@ function placeUser(){
     //place img in the layout
     var selectedUser = new door(30, 50, "", positionX, positionY, "image")
     selectedUser.update();
+
+    if (document.getElementById('awayModeButton').innerHTML == 'ON'){
+        UserObserver.update();
+    }
 }
 
 var currentTime = new Date();
-// function startTime() {
-// 	currentTime = new Date();
-// }
 
 function refreshTime() {
-    // currentTime = new Date();
     setInterval(() => {
         //currentTime + 1
         tikTok();
@@ -501,4 +501,60 @@ function tikTok() {
     var second = currentTime.getSeconds() + 1;
     currentTime.setSeconds(second);
     document.getElementById('time').innerHTML = currentTime.toLocaleString("en-US");
+}
+
+
+//user should be able to set the time to pass before sending notification
+var eclipsedTime = 0;
+function setEclipseTime(){
+    eclipsedTime = document.getElementById('eclipseTime').value;
+}
+
+
+
+//obversers classes here
+class UserObserver {
+    constructor(eclipsedTime){
+        this.eclipsedTime = eclipsedTime;
+    }
+
+    static update(){
+
+        var currentTime = new Date();
+        var timeInfo = currentTime.toUTCString();
+
+        //obtain the users
+        var xhttp = new XMLHttpRequest();
+        var userDB;
+
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                userDB = JSON.parse(this.responseText);
+                
+                for (let i = 0; i < userDB.length; i++) {
+                    if (userDB[i].location != "none" && userDB[i].location != "outdoor") {
+                        //generate information
+                        var info = timeInfo + "\t" + userDB[i].role + " is in the house's " + userDB[i].location;
+
+                        //TODO obtain user eclipsed time
+                        while(new Date() - currentTime < 2000);
+
+                        //notify the user
+                        alert(info);
+
+                        //append info to output console
+                        var outputConsole = document.getElementById('outputConsole');
+                        var pTag = document.createElement('P');
+                        var contents = document.createTextNode(info);
+                        pTag.appendChild(contents);
+                        outputConsole.appendChild(pTag);
+                        
+                    }
+                }
+            }
+        }
+
+        xhttp.open("GET", "http://localhost:8080/api/user/allUserRetrieval", true);
+        xhttp.send();
+    }
 }

@@ -36,6 +36,7 @@ function setLightSchedule(){
     console.log(lightSchedule);
 }
 
+
 //clear all information about light schedule
 function resetLightSchedule(){
 
@@ -113,6 +114,7 @@ class CurrentTime{
 
 }
 
+//
 function setAwayMode(){
 
     if (document.getElementById('awayModeButton').innerHTML == 'OFF') {
