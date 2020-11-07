@@ -125,7 +125,7 @@ public class UserDataAccessService implements UserDAO {
      * Finds the User such that their current logged in status is true
      * @return an Optional User if it is found, if any user is logged in
      */
-    private Optional<User> findCurrentLoggedInUser() {
+    public Optional<User> findCurrentLoggedInUser() {
         return DB.stream()
                 .filter(user -> user.getIsLoggedUser() == true)
                 .findFirst();

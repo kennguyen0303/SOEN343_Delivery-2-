@@ -8,7 +8,6 @@ public class Guest extends User {
 
     public Guest(UUID id, String roleType)
     {
-
         new User(id, roleType, new DenyPermissions());
     }
 }

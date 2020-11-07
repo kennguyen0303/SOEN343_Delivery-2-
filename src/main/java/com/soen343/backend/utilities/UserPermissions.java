@@ -35,7 +35,7 @@ public class UserPermissions {
      * Getter for all window permissions
      * @return boolean if user has access to open/close all windows
      */
-    public boolean isCanOpenAllWindows() {
+    public boolean getCanOpenAllWindows() {
         return canOpenAllWindows;
     }
 
@@ -51,7 +51,7 @@ public class UserPermissions {
      * Getter for all door permissions
      * @return boolean if user has access to open/close all doors
      */
-    public boolean isCanLockDoors() {
+    public boolean getCanLockDoors() {
         return canLockDoors;
     }
 
@@ -67,7 +67,7 @@ public class UserPermissions {
      * Getter for all light permissions
      * @return boolean if user has access to open/close all lights
      */
-    public boolean isCanUseLights() {
+    public boolean getCanUseLights() {
         return canUseLights;
     }
 
@@ -83,7 +83,7 @@ public class UserPermissions {
      * Getter for restricted windows permissions
      * @return boolean if user has access to open/close windows in same room
      */
-    public boolean isCanOpenRestrictedWindow() {
+    public boolean getCanOpenRestrictedWindow() {
         return canOpenRestrictedWindow;
     }
 
@@ -99,7 +99,7 @@ public class UserPermissions {
      * Getter for restricted lights permissions
      * @return boolean if user has access to open/close lights in same room
      */
-    public boolean isCanUseRestrictedLights() {
+    public boolean getCanUseRestrictedLights() {
         return canUseRestrictedLights;
     }
 
@@ -110,4 +110,5 @@ public class UserPermissions {
     public void setCanUseRestrictedLights(boolean canUseRestrictedLights) {
         this.canUseRestrictedLights = canUseRestrictedLights;
     }
+
 }

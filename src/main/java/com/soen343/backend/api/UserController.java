@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -92,5 +93,20 @@ public class UserController {
     @PutMapping(value = "api/user/updateUserLocation/{id}/{location}")
     public void setUserLocation(@PathVariable("id") UUID id, @PathVariable("location") String location) {
         userService.setUserLocation(id, location);
+    }
+
+    public void grantUserPermission()
+    {
+       Optional<User> user =  userService.findCurrentLoggedInUser();
+    }
+
+    public void saveUsers()
+    {
+        //TODO
+    }
+
+    public void loadUsers()
+    {
+
     }
 }

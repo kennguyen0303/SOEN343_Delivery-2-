@@ -1,5 +1,7 @@
 package com.soen343.backend.strategy;
 
+import com.soen343.backend.model.User;
+
 import java.util.UUID;
 
 /**
@@ -10,7 +12,7 @@ public class DenyPermissions implements PermissionsBehaviour {
     /**
      * Method to allow Users to edit permissions of other Users
      */
-    public void changePermissions(UUID id)
+    public void changePermissions(User user, String permission, boolean value)
     {
         // deny access to changing permissions -  do nothing
     }

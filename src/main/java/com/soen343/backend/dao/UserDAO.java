@@ -34,4 +34,6 @@ public interface UserDAO {
     int loginUser(UUID id);
 
     int setUserLocation(UUID id, String location);
+
+    Optional<User> findCurrentLoggedInUser();
 }

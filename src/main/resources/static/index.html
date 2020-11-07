@@ -120,7 +120,7 @@
                     <br>
                     <input type="button" value="Edit Selected User" onclick="onSubmitEditForm()">
                     <input type="button" value="Delete Selected User" onclick="onSubmitDeleteUser()">
-                    <input input type="button" value="Login Selected User" onclick="onLoginSubmit()">
+                    <input type="button" value="Login Selected User" onclick="onLoginSubmit()">
                 </div>
 
                 <!--Delete a user profile-->
@@ -128,6 +128,22 @@
 
                 </div>
                 <br>
+                <div id="GrantPermissions">
+                    <select id="currentUsersList3"></select>
+                    <br>
+                    <<select id="permissionName">
+                        <option value="openAllWindows">Open/Close All Windows</option>
+                        <option value="lockDoors">Lock/Unlock Doors</option>
+                        <option value="useAllLights">Open/Close All Lights</option>
+                        <option value="restrictedWindow">Use Windows in Same Room</option>
+                        <option value="restrictedLights">Use Lights in Same Room</option>
+                     </select>
+                    <select id="permissionValue">
+                        <option value="true">Enabled</option>
+                        <option value="false">Disabled</option>
+                    </select>
+                    <input type="button" value="Grant Permissions" onclick="grantPermissions()">
+                </div>
             </div>
 
             <div id="SHCore" class="tabcontent">

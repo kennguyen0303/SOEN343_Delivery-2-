@@ -1,5 +1,7 @@
 package com.soen343.backend.strategy;
 
+import com.soen343.backend.model.User;
+
 import java.util.UUID;
 
 /**
@@ -7,5 +9,5 @@ import java.util.UUID;
  */
 public interface PermissionsBehaviour {
 
-    void changePermissions(UUID id);
+    void changePermissions(User user, String permission, boolean value);
 }

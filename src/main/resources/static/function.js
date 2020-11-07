@@ -65,10 +65,14 @@ function getUsers() {
 
             var select = document.getElementById("currentUsersList");
             removeAllChildNodes(select);
+
             //alex attempt
             var select2 = document.getElementById("currentUsersList2");
             removeAllChildNodes(select2);
             //end
+
+            var select3 = document.getElementById("currentUsersList3");
+            removeAllChildNodes(select3);
 
             for( var i=0; i< userArray.length; i++) {
                 var option = document.createElement("option");
@@ -85,6 +89,13 @@ function getUsers() {
                 select2.appendChild(option);
             }//end
 
+           for( var i=0; i< userArray.length; i++) {
+              var option = document.createElement("option");
+                option.value = userArray[i].id;
+                option.innerHTML = userArray[i].role;
+                select3.appendChild(option);
+              }
+
             var item = document.getElementById("availableUsers");
 
             removeAllChildNodes(item);
@@ -95,6 +106,10 @@ function getUsers() {
             removeAllChildNodes(item2);
             item2.appendChild(select2);
             //attempt end
+
+            var item3 = document.getElementById("availableUsers3");
+            removeAllChildNodes(item3);
+            item3.appendChild(select3);
         }
     };
 
@@ -466,4 +481,32 @@ function tikTok() {
     var second = currentTime.getSeconds() + 1;
     currentTime.setSeconds(second);
     document.getElementById('time').innerHTML = currentTime.toLocaleString("en-US");
+}
+
+// DANIELA MOVE TO ANOTHER FILE PLZ THANKS
+function grantPermissions()
+{
+    if(true/*currentUserIsParent*/)
+    {
+        var permissionDropDown = document.getElementById("permissionName");
+        var permissionName = permissionDropDown.options[permissionDropDown.selectedIndex].value;
+
+        var permissionValueDropDown = document.getElementById("permissionValue");
+        var permissionValue = permissionValueDropDown.options[permissionValueDropDown.selectedIndex].value;
+
+        var userSelect = document.getElementById("currentUsersList");
+        var userId = userSelect.options[userSelect.selectedIndex].value;
+
+          var xhttp;
+            xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("userDisplay").innerHTML = role ;
+                }
+            };
+
+            xhttp.open("PUT", "http://localhost:8080/api/user/logIn/" + id, true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.send();
+    }
 }

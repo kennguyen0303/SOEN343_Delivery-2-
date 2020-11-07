@@ -93,4 +93,19 @@ public class UserService {
     public int setUserLocation(UUID id, String location) {
         return userDAO.setUserLocation(id, location);
     }
+
+    /**
+     *
+     * @return An Optional User if there is a user current logged in
+     */
+    public Optional<User> findCurrentLoggedInUser() { return userDAO.findCurrentLoggedInUser(); }
+
+    public void grantPermissions(UUID id, String permission, boolean value)
+    {
+        Optional<User> user = findCurrentLoggedInUser();
+        if(user.isEmpty()){
+            return;
+        }
+        user.get();
+    }
 }
