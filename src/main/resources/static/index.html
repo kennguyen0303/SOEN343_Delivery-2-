@@ -10,6 +10,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="coreFunctions.js"> </script>
+    <script src="SHP_functions.js"></script>
     <script src="function.js"></script>
     <title>Smart Home Simulator</title>
     <!-- Custom styles for this template -->
@@ -131,7 +132,7 @@
             </div>
 
             <div id="SHCore" class="tabcontent">
-                Click the button to select controller: 
+                Click the button to select controller:
                 <button onclick="showWindowController()">Windows</button>
                 <br>
                 <button onclick="showDoorController()">Doors</button>
@@ -142,11 +143,79 @@
                 <br>
                 <button onclick="controlAllDoor('open')">Open All !</button>
                 <br>
-                
+
             </div>
 
             <div id="SHProtection" class="tabcontent">
-                Smart Home Protection Components
+                <br>
+                <h2>Away Mode</h2>
+                <button type="button" onclick="setAwayMode()" id="awayModeButton">OFF</button>
+                <br><br>
+
+                <!--accept user setting for eclipse time-->
+                <div>
+                    <label>The eclipse time</label>
+                    <input type="number" id="eclipseTime">
+                    <label>ms</label><br>
+                    <button type="submit" onclick="setEclipseTime()">SUBMIT</button>
+                </div>
+                <br><br>
+                <div>
+                    <h4>Please choose the schedule for the lights</h4>
+                    <!--entrance-->
+                    <label>Entrance: from</label>
+                    <input id="entrance1" type="time">
+                    <label> to </label>
+                    <input id="entrance2" type="time">
+                    <br>
+
+                    <!--hallway-->
+                    <label>Hallway: from</label>
+                    <input id="hallway1" type="time">
+                    <label> to </label>
+                    <input id="hallway2" type="time">
+                    <br>
+
+                    <!--kitchen-->
+                    <label>Kitchen: from</label>
+                    <input id="kitchen1" type="time">
+                    <label> to </label>
+                    <input id="kitchen2" type="time">
+                    <br>
+
+                    <!--bedroom-->
+                    <label>Bedroom: from</label>
+                    <input id="bedroom1" type="time">
+                    <label> to </label>
+                    <input id="bedroom2" type="time">
+                    <br>
+
+                    <!--bathroom-->
+                    <label>Bathroom: from</label>
+                    <input id="bathroom1" type="time">
+                    <label> to </label>
+                    <input id="bathroom2" type="time">
+                    <br>
+
+                    <!--garage-->
+                    <label>Garage: from</label>
+                    <input id="garage1" type="time">
+                    <label> to </label>
+                    <input id="garage2" type="time">
+                    <br>
+
+                    <!--backyard-->
+                    <label>Backyard: from</label>
+                    <input id="backyard1" type="time">
+                    <label> to </label>
+                    <input id="backyard2" type="time">
+                    <br>
+
+                    <!--submit all-->
+                    <button type="submit" onclick="setLightSchedule()">SUBMIT</button>
+                    <button type="reset" onclick="resetLightSchedule()">RESET</button>
+
+                </div>
             </div>
 
             <div id="SHHeating" class="tabcontent">
@@ -155,11 +224,11 @@
 
         </div>
         <div class="house-diagram">
-            
+
             <canvas id="myCanvas" width="500" height="400" style="border:1px solid black;">
                 Your browser does not support the canvas element.
             </canvas>
-        </br>
+            </br>
             <button onclick="renderLayout()">Click to render the layout</button>
             <h3>Controlling: </h3>
             <select name="" id="control_option">
@@ -201,7 +270,7 @@
         </div>
         <!-- Popup form -->
         <div class="console">Console Here</div>
-        
+
     </div>
 
     <script>
@@ -227,19 +296,19 @@
                 })
             },
             clear: function (name) {
-                if(name=="door"){
+                if (name == "door") {
                     door_array.forEach(a_door => {
-                    if (a_door.move_mode == "horizontal") this.context.clearRect((a_door.x - 40), a_door.y, 60, 5);
-                    if (a_door.move_mode == "vertical") this.context.clearRect(a_door.x, (a_door.y - 30), 5, 60);
+                        if (a_door.move_mode == "horizontal") this.context.clearRect((a_door.x - 40), a_door.y, 60, 5);
+                        if (a_door.move_mode == "vertical") this.context.clearRect(a_door.x, (a_door.y - 30), 5, 60);
                     });
                 }
-                else if (name=="window"){
+                else if (name == "window") {
                     window_array.forEach(a_window => {
-                    if (a_window.move_mode == "horizontal") this.context.clearRect((a_window.x - 40), a_window.y, 60, 5);
-                    if (a_window.move_mode == "vertical") this.context.clearRect(a_window.x, (a_window.y - 30), 5, 60);
+                        if (a_window.move_mode == "horizontal") this.context.clearRect((a_window.x - 40), a_window.y, 60, 5);
+                        if (a_window.move_mode == "vertical") this.context.clearRect(a_window.x, (a_window.y - 30), 5, 60);
                     });
                 }
-                else if (name == "light"){
+                else if (name == "light") {
                     light_array.forEach(a_light => {
                         //do something to remove the old light ? 
                         this.context.clearRect((a_light.x), a_light.y, 20, 20);
@@ -247,7 +316,7 @@
                 }
             }
         }
-        
+
     </script>
 
 
