@@ -501,11 +501,11 @@ function grantPermissions()
             xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById("userDisplay").innerHTML = role ;
+                    console.log(this.response);
                 }
             };
 
-            xhttp.open("PUT", "http://localhost:8080/api/user/logIn/" + id, true);
+            xhttp.open("PUT", "http://localhost:8080/api/user/updateUserPermissions/"+userId +"/"+ permissionName +"/"+  permissionValue, true);
             xhttp.setRequestHeader("Content-type", "application/json");
             xhttp.send();
     }
