@@ -251,8 +251,17 @@ var room_array=[];//array for the rooms
                         if(key1=="door"){
                             //each [key2] is an object of a door
                             var temp_door = new door(myObj[key1][key2][0], myObj[key1][key2][1], myObj[key1][key2][2], myObj[key1][key2][3], myObj[key1][key2][4],myObj[key1][key2][5]);
-                            if( myObj[key1][key2][2]=="red") door_array.push(temp_door);//add door
-                            if( myObj[key1][key2][2]=="blue") window_array.push(temp_door);//add window 
+                            if( myObj[key1][key2][2]=="red") {
+                                door_array.push(temp_door);//add door
+                                room_array.forEach(a_room => {
+                                    var room_name=a_room.getName();
+                                    if(key2.includes(room_name))
+                                        a_room.add_door(door_array.length-1);//take the index of the door
+                                });
+                            }
+                            if( myObj[key1][key2][2]=="blue") {
+                                window_array.push(temp_door);//add window 
+                            }
                             continue;
                         }
                         //print the door
@@ -282,8 +291,7 @@ var room_array=[];//array for the rooms
                         }
                     };//finish rendering a room
                     if(key1!=="door"&&key1!=="light") {
-                        room_array.push(temp_room);//test !
-                        alert(room_array.length);
+                        room_array.push(temp_room);//add the room to the array
                     }
                 };
                 startGame();//start the movement, challenge: Need to click to render door
@@ -302,18 +310,30 @@ function startGame() {
 
 
 function updateGameArea() {
-    // myGameArea.clear("window"); 
+    myGameArea.clear("image"); 
     // myGameArea.clear("door"); 
     // myGameArea.clear("light"); 
-    // door_array.forEach(a_door => {
-    //     a_door.speedX=0;
-    //     a_door.speedY=0;
-    // });
+    user_array.forEach(user => {
+        user.speedX=0;
+        user.speedY=0;
+    });
     // window_array.forEach(a_window => {
     //     a_window.speedX=0;
     //     a_window.speedY=0;
     // });
-    // var option = document.getElementById("control_option").value - 1;//minus 1 since array start from 0
+    var option = document.getElementById("control_option").value - 1;//minus 1 since array start from 0
+    if (myGameArea.key && myGameArea.key == 37) {//move left
+        user_array[option].speedX = -1;
+    }
+    if (myGameArea.key && myGameArea.key == 38) {//move up
+        user_array[option].speedY = -1;
+    }
+    if (myGameArea.key && myGameArea.key == 39) {//move right
+        user_array[option].speedX = 1;
+    }
+    if (myGameArea.key && myGameArea.key == 40) {//move down
+        user_array[option].speedY = 1;
+    }
     // if (myGameArea.key && myGameArea.key == 37) {//move left
     //     if(door_array[option].move_mode=="horizontal")
     //         if(door_array[option].x>door_array[option].boundary[0]) door_array[option].speedX = -1;
@@ -334,16 +354,10 @@ function updateGameArea() {
         
     //key in control is the update function
     //update the now position for every door, otherwise it will not be shown
-    light_array.forEach(a_light => {   
-        a_light.update();
-    });
-    door_array.forEach(a_door => {
-        a_door.newPos();    
-        a_door.update();
-    });
-    window_array.forEach(a_window => {
-        a_window.newPos();    
-        a_window.update();
+    user_array.forEach(user => {
+        user.newPos();    
+        user.update();
+        //update location ?
     });
 }
 
@@ -416,6 +430,7 @@ function resetCoordinates() {
     renderLayout();
 }
 
+var user_array=[];//an array for controlling the user in the house
 function placeUser(){
     //obtain the user
     var userIndex = document.getElementById('currentUsersList2').selectedIndex;
@@ -426,7 +441,8 @@ function placeUser(){
 
     //determine the coordinates of the user for each room
     var positionX = 0;
-    var positionY = 0
+    var positionY = 0;
+    //NEED TO UPDATE FOR THE NEW LAYOUT !
     if(roomName == "living_room") {
         positionX = 35;
         positionY = 75;
@@ -441,7 +457,13 @@ function placeUser(){
     }
 
     //place img in the layout
-    var selectedUser = new door(30, 50, "", positionX, positionY, "image")
+    var selectedUser = new door(15, 20, "", positionX, positionY, "image");
+    user_array.push(selectedUser);//push into the array
+    var temp_element=document.createElement("option");
+    var element = document.getElementById("control_option");//access the dropdown box
+    temp_element.value=user_array.length;
+    temp_element.innerHTML=userName;
+    element.appendChild(temp_element);//add to the dropdown
     selectedUser.update();
 }
 

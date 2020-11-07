@@ -49,7 +49,17 @@ function door(width, height, color, x, y,move_mode) {//in case of human-stick, c
                 this.width, this.height);
             //display the name or role
             //ctx.fillText(color,this.x+15,this.y+50);//format: [0]=room name, [1]: width, [2]: height
-        } else {
+        }
+        else if(move_mode=="image"){
+                //display the human stick
+                ctx.drawImage(this.image, 
+                    this.x, 
+                    this.y,
+                    this.width, this.height);
+                //display the name or role
+                //ctx.fillText(color,this.x+15,this.y+50);//format: [0]=room name, [1]: width, [2]: height
+        }
+        else {
             ctx.fillStyle = color;
             ctx.fillRect(this.x, this.y, this.width, this.height);
         }
@@ -69,6 +79,8 @@ function room(){
     this.max_width;
     this.min_height;
     this.max_height;
+    this.door_index_array=[];
+    this.window_index_array=[];
     //methods 
     //check if a person is inside the room
     this.inside=(a_person)=>{
@@ -101,6 +113,14 @@ function room(){
     this.set_max_height=(max_height)=>{
         this.max_height=max_height;
         return 1;
+    }
+    this.add_window=(index)=>{
+        this.window_index_array.push(index);
+        return index;
+    }
+    this.add_door=(index)=>{
+        this.door_index_array.push(index);
+        return index;
     }
 
 } 
