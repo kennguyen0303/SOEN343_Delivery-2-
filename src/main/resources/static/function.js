@@ -283,7 +283,7 @@ var room_array=[];//array for the rooms
                     };//finish rendering a room
                     if(key1!=="door"&&key1!=="light") {
                         room_array.push(temp_room);//test !
-                        alert(room_array.length);
+                        // alert(room_array.length);
                     }
                 };
                 startGame();//start the movement, challenge: Need to click to render door
@@ -499,9 +499,8 @@ class UserObserver {
 
     static update(){
 
-        var currentTime = new Date();
+        const currentTime = new Date();
         var timeInfo = currentTime.toUTCString();
-        console.log(timeInfo);
 
         //obtain the users
         var xhttp = new XMLHttpRequest();
@@ -517,7 +516,7 @@ class UserObserver {
                         var info = timeInfo + "\t" + userDB[i].role + " is in the house's " + userDB[i].location;
 
                         //TODO obtain user eclipsed time
-                        while(new Date() - currentTime < 2000);
+                        while(new Date() - currentTime < eclipsedTime);
 
                         //notify the user
                         alert(info);
