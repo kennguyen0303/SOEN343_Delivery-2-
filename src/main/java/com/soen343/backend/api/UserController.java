@@ -104,7 +104,7 @@ public class UserController {
      * @param value boolean: true if enabled and false if disabled
      */
     @PutMapping(value = "api/user/updateUserPermissions/{id}/{permission}/{value}")
-    public void grantUserPermission(@PathVariable("id") UUID id,@PathVariable("permission") String permission,@PathVariable("value") boolean value)
+    public void grantUserPermission(@PathVariable("id") UUID id, @PathVariable("permission") String permission,@PathVariable("value") boolean value)
     {
        userService.grantPermissions(id, permission, value);
     }
@@ -129,6 +129,11 @@ public class UserController {
         userPrinter.loadUsers(userService.getAllUsers());
     }
 
+    /**
+     *
+     * @param id User id from which we want the permissions
+     * @return UserPermission object
+     */
     @GetMapping(value="api/user/userPermissions/{id}")
     public UserPermissions getUserPermissions(@PathVariable("id") UUID id)
     {
