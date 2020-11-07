@@ -8,6 +8,6 @@ public class Parent extends User {
 
     public Parent(UUID id, String roleType)
     {
-        new User(id, roleType, new GrantPermissions());
+        super(id, roleType, new GrantPermissions());
     }
 }

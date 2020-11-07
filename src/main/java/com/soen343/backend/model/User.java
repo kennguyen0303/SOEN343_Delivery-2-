@@ -27,13 +27,6 @@ public class User {
     @NotBlank
     private final String role;
 
-    // temporary
-    public User()
-    {
-        this.role = "";
-        this.id = null;
-    }
-
     /**
      *Constructor for a user in which they start off with no location and not logged in
      * @param id a unique id which is generated for the user

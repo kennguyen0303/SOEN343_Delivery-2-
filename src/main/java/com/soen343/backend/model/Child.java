@@ -6,8 +6,7 @@ import java.util.UUID;
 
 public class Child extends User{
 
-    public Child(UUID id, String roleType)
-    {
-        new User(id, roleType, new DenyPermissions());
+    public Child(UUID id, String roleType) {
+        super(id, roleType, new DenyPermissions());
     }
 }
