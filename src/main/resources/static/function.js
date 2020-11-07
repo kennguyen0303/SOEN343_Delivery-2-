@@ -425,24 +425,24 @@ function placeUser(){
     var roomName = document.getElementById('availableRooms').value;
 
     //determine the coordinates of the user for each room
-    // var positionX = 0;
-    // var positionY = 0
-    // if(roomName == "living_room") {
-    //     positionX = 35;
-    //     positionY = 75;
-    // } 
-    // if(roomName == "kitchen") {
-    //     positionX = 185;
-    //     positionY = 75;
-    // }
-    // if(roomName == "outdoor") {
-    //     positionX = 385;
-    //     positionY = 225;
-    // }
+    var positionX = 0;
+    var positionY = 0
+    if(roomName == "living_room") {
+        positionX = 35;
+        positionY = 75;
+    } 
+    if(roomName == "kitchen") {
+        positionX = 185;
+        positionY = 75;
+    }
+    if(roomName == "outdoor") {
+        positionX = 385;
+        positionY = 225;
+    }
 
-    // //place img in the layout
-    // var selectedUser = new door(30, 50, "", positionX, positionY, "image")
-    // selectedUser.update();
+    //place img in the layout
+    var selectedUser = new door(30, 50, "", positionX, positionY, "image")
+    selectedUser.update();
 
     //store user location into backend
     var xhttp = new XMLHttpRequest();
