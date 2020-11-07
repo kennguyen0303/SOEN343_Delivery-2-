@@ -12,8 +12,9 @@ public class DenyPermissions implements PermissionsBehaviour {
     /**
      * Method to allow Users to edit permissions of other Users
      */
-    public void changePermissions(User user, String permission, boolean value)
+    public boolean changePermissions(User user, String permission, boolean value)
     {
         // deny access to changing permissions -  do nothing
+        return false;
     }
 }

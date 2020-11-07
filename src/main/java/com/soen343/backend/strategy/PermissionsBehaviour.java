@@ -9,5 +9,5 @@ import java.util.UUID;
  */
 public interface PermissionsBehaviour {
 
-    void changePermissions(User user, String permission, boolean value);
+    boolean changePermissions(User user, String permission, boolean value);
 }

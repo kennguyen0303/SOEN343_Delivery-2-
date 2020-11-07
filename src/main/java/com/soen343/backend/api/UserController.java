@@ -96,9 +96,10 @@ public class UserController {
         userService.setUserLocation(id, location);
     }
 
-    public void grantUserPermission()
+    @PutMapping(value = "api/user/updateUserPermissions/{id}/{permission}/{value}")
+    public void grantUserPermission(@PathVariable("id") UUID id,@PathVariable("permission") String permission,@PathVariable("value") boolean value)
     {
-       Optional<User> user =  userService.findCurrentLoggedInUser();
+       userService.grantPermissions(id, permission, value);
     }
 
     @PostMapping(value = "api/user/userSaving")

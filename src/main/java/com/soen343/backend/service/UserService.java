@@ -102,10 +102,6 @@ public class UserService {
 
     public void grantPermissions(UUID id, String permission, boolean value)
     {
-        Optional<User> user = findCurrentLoggedInUser();
-        if(user.isEmpty()){
-            return;
-        }
-        user.get();
+        userDAO.grantUserPermissions(id, permission, value);
     }
 }

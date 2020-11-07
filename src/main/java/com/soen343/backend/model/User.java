@@ -128,9 +128,8 @@ public class User {
         this.userPermissions = userPermissions;
     }
 
-    public boolean grantPermissions(UUID id, String permission, boolean value)
+    public boolean grantPermissions(User user, String permission, boolean value)
     {
-        //permissionsBehaviour.grantPermissions();
-        return false;
+        return permissionsBehaviour.changePermissions(user, permission, value);
     }
 }

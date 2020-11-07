@@ -36,4 +36,6 @@ public interface UserDAO {
     int setUserLocation(UUID id, String location);
 
     Optional<User> findCurrentLoggedInUser();
+
+    int grantUserPermissions(UUID id, String permission, boolean value);
 }

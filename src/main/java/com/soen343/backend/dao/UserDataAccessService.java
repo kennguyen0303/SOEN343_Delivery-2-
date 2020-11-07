@@ -125,6 +125,7 @@ public class UserDataAccessService implements UserDAO {
      * Finds the User such that their current logged in status is true
      * @return an Optional User if it is found, if any user is logged in
      */
+    @Override
     public Optional<User> findCurrentLoggedInUser() {
         return DB.stream()
                 .filter(user -> user.getIsLoggedUser() == true)
@@ -150,4 +151,30 @@ public class UserDataAccessService implements UserDAO {
         user.get().setLocation(location);
         return 1;
     }
+
+    /**
+     *
+     * @param id
+     * @param permission
+     * @param value
+     * @return
+     */
+    @Override
+    public int grantUserPermissions(UUID id, String permission, boolean value)
+    {
+        Optional<User> user = findCurrentLoggedInUser();
+        Optional<User> userToGetPermissions = selectUserById(id);
+        if(user.isEmpty() || userToGetPermissions.isEmpty())
+        {
+            return 0;
+        }
+
+        if(user.get().grantPermissions(userToGetPermissions.get(), permission, value))
+        {
+            return 1;
+        }
+
+        return 0;
+    }
+
 }
