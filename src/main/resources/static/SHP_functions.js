@@ -126,3 +126,17 @@ function setAwayMode(){
         document.getElementById('awayModeButton').innerHTML = 'OFF';
     }
 }
+
+function alertConsole(AlertType, timeOfAlert)
+{
+
+    if(AlertType == "Sec")
+    {
+        
+        var alertText = timeOfAlert +  " An unidentified user has been logged as entering the house. authorities will be notified in " + document.getElementById("authoritiesTime").value + " seconds.";
+    }
+    var consoleNode = document.createElement("p");
+    var consoleText = document.createTextNode(alertText);
+    consoleNode.appendChild(consoleText);
+    document.getElementById("outputConsole").appendChild(consoleNode);
+}
