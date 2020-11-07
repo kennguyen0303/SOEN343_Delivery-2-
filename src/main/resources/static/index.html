@@ -136,9 +136,9 @@
                 Click the button to select controller:
                 <br>
                 <button onclick="showWindowController()">Windows</button>
-                
+
                 <button onclick="showDoorController()">Doors</button>
-                
+
                 <button onclick="showLightController()">Lights</button>
                 <br>
                 <button onclick="controlAllDoor('close')">Close All !</button>
@@ -234,7 +234,7 @@
             <button onclick="renderLayout()">Click to render the layout</button>
             <h3>Controlling: </h3>
             <select name="" id="control_option">
-               
+
             </select>
             <h4>Use arrow button to move </h4>
         </div>
@@ -284,15 +284,15 @@
                 this.context = this.canvas.getContext("2d");
                 this.interval;
                 //load all element once
-                light_array.forEach(a_light => {   
+                light_array.forEach(a_light => {
                     a_light.update();
                 });
                 door_array.forEach(a_door => {
-                    a_door.newPos();    
+                    a_door.newPos();
                     a_door.update();
                 });
                 window_array.forEach(a_window => {
-                    a_window.newPos();    
+                    a_window.newPos();
                     a_window.update();
                 });
                 window.addEventListener('keydown', function (e) {
@@ -324,7 +324,7 @@
                         this.context.clearRect((a_light.x), a_light.y, 20, 20);
                     });
                 }
-                else if (name == "image"){
+                else if (name == "image") {
                     //clear human stick
                     user_array.forEach(user => {
                         this.context.clearRect(user.x, user.y, 15, 20);

@@ -456,6 +456,7 @@ function placeUser(){
     //obtain the user
     var userIndex = document.getElementById('currentUsersList2').selectedIndex;
     var userID = document.getElementById('currentUsersList2').options[userIndex].value;
+    var userName = document.getElementById('currentUsersList2').options[userIndex].innerHTML;
     
     //obtain the room
     var roomName = document.getElementById('availableRooms').value;
@@ -480,6 +481,8 @@ function placeUser(){
     //place img in the layout
     var selectedUser = new door(15, 20, "", positionX, positionY, "image");
     user_array.push(selectedUser);//push into the array
+
+    
     var temp_element=document.createElement("option");
     var element = document.getElementById("control_option");//access the dropdown box
     temp_element.value=user_array.length;
