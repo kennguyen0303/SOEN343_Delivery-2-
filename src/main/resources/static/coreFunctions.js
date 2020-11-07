@@ -134,6 +134,28 @@ function switchLight(val){
     });
 }
 
+function turnOnLight(index){
+    if(light_array[index].status=="closed"){
+        light_array[index].image.src = "on_bulb.png";//switch on
+        light_array[index].status="open";
+        //update the new pictures
+    light_array.forEach(a_light => {
+        a_light.update();
+    });
+    }
+}
+
+function turnOffLight(index){
+    if(light_array[index].status=="open"){
+        light_array[index].image.src = "off_bulb.png";//switch on
+        light_array[index].status="closed";
+        //update the new pictures
+    light_array.forEach(a_light => {
+        a_light.update();
+    });
+    }
+}
+
 /**
  * function for controlling doors
  *  Can take an integer (Using as an API) or take the value from the control
