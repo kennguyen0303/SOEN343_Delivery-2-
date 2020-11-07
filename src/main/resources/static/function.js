@@ -296,7 +296,10 @@ var room_array=[];//array for the rooms
                         }
                     };//finish rendering a room
                     if(key1!=="door"&&key1!=="light") {
+
                         room_array.push(temp_room);//add the room to the array
+                       
+
                     }
                 };
                 startGame();//start the movement, challenge: Need to click to render door
@@ -452,7 +455,7 @@ var user_array=[];//an array for controlling the user in the house
 function placeUser(){
     //obtain the user
     var userIndex = document.getElementById('currentUsersList2').selectedIndex;
-    var userName = document.getElementById('currentUsersList2').options[userIndex].text;
+    var userID = document.getElementById('currentUsersList2').options[userIndex].value;
     
     //obtain the room
     var roomName = document.getElementById('availableRooms').value;
@@ -483,15 +486,28 @@ function placeUser(){
     temp_element.innerHTML=userName;
     element.appendChild(temp_element);//add to the dropdown
     selectedUser.update();
+
+    //store user location into backend
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            getUsers();
+        }
+    };
+    xhttp.open("PUT", "http://localhost:8080/api/user/updateUserLocation/" + userID + "/" + roomName, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
+
+    //observe the location
+    if (document.getElementById('awayModeButton').innerHTML == 'ON') {
+        UserObserver.update();
+    }
+    
 }
 
 var currentTime = new Date();
-// function startTime() {
-// 	currentTime = new Date();
-// }
 
 function refreshTime() {
-    // currentTime = new Date();
     setInterval(() => {
         //currentTime + 1
         tikTok();
@@ -507,4 +523,60 @@ function tikTok() {
     var second = currentTime.getSeconds() + 1;
     currentTime.setSeconds(second);
     document.getElementById('time').innerHTML = currentTime.toLocaleString("en-US");
+}
+
+
+//user should be able to set the time to pass before sending notification
+var eclipsedTime = 0;
+function setEclipseTime(){
+    eclipsedTime = document.getElementById('eclipseTime').value;
+}
+
+
+
+//obversers classes here
+class UserObserver {
+    constructor(){
+        // this.eclipsedTime = eclipsedTime;
+    }
+
+    static update(){
+
+        const currentTime = new Date();
+        var timeInfo = currentTime.toUTCString();
+
+        //obtain the users
+        var xhttp = new XMLHttpRequest();
+        var userDB;
+
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                userDB = JSON.parse(this.responseText);
+                
+                for (let i = 0; i < userDB.length; i++) {
+                    if (userDB[i].location != "none" && userDB[i].location != "outdoor") {
+                        //generate information
+                        var info = timeInfo + "\t" + userDB[i].role + " is in the house's " + userDB[i].location;
+
+                        //TODO obtain user eclipsed time
+                        while(new Date() - currentTime < eclipsedTime);
+
+                        //notify the user
+                        alert(info);
+
+                        //append info to output console
+                        var outputConsole = document.getElementById('outputConsole');
+                        var pTag = document.createElement('P');
+                        var contents = document.createTextNode(info);
+                        pTag.appendChild(contents);
+                        outputConsole.appendChild(pTag);
+                        
+                    }
+                }
+            }
+        }
+
+        xhttp.open("GET", "http://localhost:8080/api/user/allUserRetrieval", true);
+        xhttp.send();
+    }
 }

@@ -36,6 +36,7 @@ function setLightSchedule(){
     console.log(lightSchedule);
 }
 
+
 //clear all information about light schedule
 function resetLightSchedule(){
 
@@ -113,15 +114,15 @@ class CurrentTime{
 
 }
 
+//
 function setAwayMode(){
 
     if (document.getElementById('awayModeButton').innerHTML == 'OFF') {
         document.getElementById('awayModeButton').innerHTML = 'ON';
-        console.log(document.getElementById('awayModeButton').innerHTML);
         controlAllDoor('close');
+        UserObserver.update();
     }
     else if (document.getElementById('awayModeButton').innerHTML == 'ON') {
         document.getElementById('awayModeButton').innerHTML = 'OFF';
-        console.log(document.getElementById('awayModeButton').innerHTML);
     }
 }
