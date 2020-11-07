@@ -1,25 +1,30 @@
 package com.soen343.backend.utilities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Utility class to organize permissions by user
  */
 public class UserPermissions {
 
-
-
     // Access to open/close all windows
+    @JsonProperty("openAllWindows")
     private  boolean canOpenAllWindows;
 
     // Access to lock/unlock all doors
+    @JsonProperty("lockDoors")
     private boolean canLockDoors;
 
     // Access to open/close all lights
+    @JsonProperty("useAllLights")
     private boolean canUseLights;
 
     // Access to open/close windows in same room
+    @JsonProperty("useRestrictedWindows")
     private boolean canOpenRestrictedWindow;
 
     // // Access to open/close lights in same room
+    @JsonProperty("useRestrictedLights")
     private boolean canUseRestrictedLights;
 
     /**
