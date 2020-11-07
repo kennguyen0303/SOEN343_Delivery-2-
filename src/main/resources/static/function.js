@@ -573,7 +573,7 @@ class UserObserver {
                 userDB = JSON.parse(this.responseText);
                 
                 for (let i = 0; i < userDB.length; i++) {
-                    if (userDB[i].location != "none" && userDB[i].location != "outdoor") {
+                    if (userDB[i].location != "none" && userDB[i].location != "entrance" && userDB[i].location != "backyard") {
                         //generate information
                         var info = timeInfo + "\t" + userDB[i].role + " is in the house's " + userDB[i].location;
 

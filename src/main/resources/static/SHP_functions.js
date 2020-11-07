@@ -117,12 +117,42 @@ class CurrentTime{
 //
 function setAwayMode(){
 
-    if (document.getElementById('awayModeButton').innerHTML == 'OFF') {
-        document.getElementById('awayModeButton').innerHTML = 'ON';
-        controlAllDoor('close');
-        UserObserver.update();
+    var userDB;
+
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var userAtHome = 'nobody';
+            userDB = JSON.parse(this.responseText);
+
+            for (let i = 0; i < userDB.length; i++) {
+                var userLocation = userDB[i].location;
+                if (userLocation != 'none' && userLocation != 'entrance' && userLocation != 'backyard') {
+                    userAtHome = userDB[i].role;
+                } 
+            }//end of for loop
+
+            if (userAtHome != 'nobody') {
+                alert(userAtHome + ' is at home, the away mode can not be activated');
+            }
+    
+            else if (document.getElementById('awayModeButton').innerHTML == 'OFF') {
+    
+                document.getElementById('awayModeButton').innerHTML = 'ON';
+                controlAllDoor('close');
+                UserObserver.update();
+            }
+    
+            else if (document.getElementById('awayModeButton').innerHTML == 'ON') {
+                document.getElementById('awayModeButton').innerHTML = 'OFF';
+            }
+        }
+        
     }
-    else if (document.getElementById('awayModeButton').innerHTML == 'ON') {
-        document.getElementById('awayModeButton').innerHTML = 'OFF';
-    }
+
+    xhttp.open("GET", "http://localhost:8080/api/user/allUserRetrieval", true);
+    xhttp.send();
+
+    
 }
