@@ -2,6 +2,7 @@ package com.soen343.backend.api;
 
 import com.soen343.backend.model.User;
 import com.soen343.backend.service.UserService;
+import com.soen343.backend.utilities.UserPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
@@ -100,13 +101,17 @@ public class UserController {
        Optional<User> user =  userService.findCurrentLoggedInUser();
     }
 
+    @PostMapping(value = "api/user/userSaving")
     public void saveUsers()
     {
-        //TODO
+        UserPrinter userPrinter = new UserPrinter();
+        userPrinter.saveUsers(userService.getAllUsers());
     }
 
+    @PostMapping(value = "api/user/userLoading")
     public void loadUsers()
     {
-
+        UserPrinter userPrinter = new UserPrinter();
+        userPrinter.loadUsers(userService.getAllUsers());
     }
 }

@@ -510,3 +510,33 @@ function grantPermissions()
             xhttp.send();
     }
 }
+
+function saveProfiles()
+{
+    var xhttp;
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        }
+    };
+
+    xhttp.open("POST", "http://localhost:8080/api/user/userSaving, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
+}
+
+function loadProfiles()
+{
+     var xhttp;
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                getUsers();
+            }
+            }
+        };
+
+        xhttp.open("POST", "http://localhost:8080/api/user/userLoading, true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send();
+}
