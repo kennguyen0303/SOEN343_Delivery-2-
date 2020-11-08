@@ -31,7 +31,6 @@ function lightAction(debugText)
  * Showing the control for the door
  */
 function showDoorController(){
-    var container = document.createElement("div");
     var door_name_array=["bathroom","bedroom","backyard", "kitchen","garage_inside","entrance","garage_outside"];
     var element = document.getElementById("SHCore");
     var controller = document.createElement("select");
@@ -50,9 +49,9 @@ function showDoorController(){
     controller.id="doorController"// for CSS 
     //at here, having a dropdown box with options corresponding to a door
     element.removeChild(element.lastChild);//remove the old controller
-    container.appendChild(controller);
-    container.appendChild(button);
-    element.appendChild(container);
+    element.removeChild(element.lastChild);//remove the old button
+    element.appendChild(controller);
+    element.appendChild(button)
 }
 
 /**
@@ -60,7 +59,6 @@ function showDoorController(){
  */
 function showWindowController(){
     var window_name_array=["bedroom","kitchen"];
-    var container=document.createElement("div");//container
     var element = document.getElementById("SHCore");
     var controller = document.createElement("select");
     for( var i=0; i< window_array.length; i++) {
@@ -72,7 +70,8 @@ function showWindowController(){
     controller.id="windowController";//for CSS
     //at here, having a dropdown box with options corresponding to a door
     element.removeChild(element.lastChild);//remove the old controller
-    container.appendChild(controller);
+    element.removeChild(element.lastChild);//remove the old button
+    element.appendChild(controller);
     //add function button
     var button = document.createElement("button");
     button.innerHTML="Open/Close";
@@ -80,8 +79,7 @@ function showWindowController(){
     button.onclick=function() {
         controlWindow();
     };
-    container.appendChild(button);
-    element.appendChild(container);
+    element.appendChild(button);
 }
 
 /**
@@ -90,7 +88,6 @@ function showWindowController(){
 function showLightController(){
     var light_name_array=["entrance","backyard","hallway 1","hallway 2", "garage","kitchen","bedroom","bathroom"];
     var element = document.getElementById("SHCore");
-    var container=document.createElement("div");
     var controller = document.createElement("select");
     for( var i=0; i< light_array.length; i++) {
         var option = document.createElement("option");
@@ -102,47 +99,14 @@ function showLightController(){
     element.removeChild(element.lastChild);//remove the old controller
     element.removeChild(element.lastChild);//remove the old button
     //at here, having a dropdown box with options corresponding to a door
-    container.appendChild(controller);
+    element.appendChild(controller);
     var button = document.createElement("button");
     button.innerHTML="ON/OFF";
     button.id="lightControllerButton";
-    button.onclick=()=> {
+    button.onclick=function() {
         switchLight();
     };
-    container.appendChild(button);
-    element.appendChild(container);
-    showLightAutoMode();
-}
-var autoMode=false;//boolean for auto mode
-/**
- * showing button to set lights on Auto mode
- */
-function showLightAutoMode(){
-    var isLightControllerThere;
-    try {
-        isLightControllerThere=document.getElementById("lightController");
-        console.log(isLightControllerThere);
-        if(isLightControllerThere){
-            var autoButton=document.createElement("button");
-            if(!autoMode) autoButton.innerHTML="Click to turn on Auto Mode";
-            else autoButton.innerHTML="Auto Mode is ON";
-            autoButton.onclick=()=>{
-                if(!autoMode){//is Off then On
-                    autoMode=true;//turn on
-                    autoButton.innerHTML="Auto Mode is ON";
-                    console.log("Auto mode: "+autoMode);
-                }
-                else{//is On then Off
-                    autoMode=false;
-                    autoButton.innerHTML="Click to turn on Auto Mode";
-                    console.log("Auto mode: "+autoMode);
-                }
-            }
-            isLightControllerThere.parentNode.appendChild(autoButton);
-        }
-    } catch (error) {
-        console.log(error)
-    }
+    element.appendChild(button);
 }
 /**
  * Function for switching on/off light
@@ -203,6 +167,15 @@ function controlDoor(val){
         option =document.getElementById("doorController").value -1;
     }
     else option = val;
+    if(locked_array_door[option] == "true") //checks if array value is true, if true nothing happens
+    {
+        var consoleNode = document.createElement("p");
+        var alertText = varCurrentTime.toLocaleString("en-US") + " This door is current obstructed";
+        var consoleText = document.createTextNode(alertText);
+        consoleNode.appendChild(consoleText);
+        document.getElementById("outputConsole").appendChild(consoleNode);
+        return;
+    }
     var id = setInterval(moveDoor, 10);
     function moveDoor(){
         myGameArea.clear("door"); 
@@ -271,6 +244,15 @@ function controlWindow(val){
         option =document.getElementById("windowController").value -1;
     }
     else option = val;
+    if(locked_array_window[option] == "true") //checks if array value is true, if true nothing happens
+    {
+        var consoleNode = document.createElement("p");
+        var alertText = varCurrentTime.toLocaleString("en-US") + " This window is current obstructed";
+        var consoleText = document.createTextNode(alertText);
+        consoleNode.appendChild(consoleText);
+        document.getElementById("outputConsole").appendChild(consoleNode);
+        return;
+    }
     var id = setInterval(moveWindow, 10);
     function moveWindow(){
         myGameArea.clear("window"); 

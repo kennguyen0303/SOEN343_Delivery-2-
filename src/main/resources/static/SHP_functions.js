@@ -60,12 +60,17 @@ class TimeObserver{
         //obtain current time
         var currentHour = currentTime.getHours();
 
-        if(currentHour == '0'){
-            currentHour = '00';
+        if(currentHour.length < 10){
+            currentHour = '0' + currentHour;
         }
 
         var currentMinute = currentTime.getMinutes();
+        if (currentMinute < 10) {
+            currentMinute = '0' + currentMinute;
+        }
         var timeString = currentHour + ':' + currentMinute;
+        // console.log(timeString);
+        
 
         //check the on/off of all lights
         for (let i = 0; i < light_array.length; i++) {
@@ -152,7 +157,7 @@ class CurrentTime{
 //
 function setAwayMode(){
 
-    var userDB;
+  var userDB;
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
@@ -166,9 +171,15 @@ function setAwayMode(){
                     userAtHome = userDB[i].role;
                 } 
             }//end of for loop
-
+            
+            var canSetAwayMode = getCurrentUserPermissions().canSetAwayMode;
+          
             if (document.getElementById('awayModeButton').innerHTML == 'ON') {
                 document.getElementById('awayModeButton').innerHTML = 'OFF';
+            }
+          
+            else if(!canSetAwayMode){
+                alert("You do not have this permission");
             }
 
             else if (userAtHome != 'nobody') {
@@ -227,5 +238,4 @@ function writeToFile(msg){
 
     xhttp.open('POST', 'http://localhost:8080/api/user/shpWirter/' + msg, true);
     xhttp.send();
-
 }

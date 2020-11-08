@@ -193,4 +193,9 @@ public class UserDataAccessService implements UserDAO {
         }
         return userPermissions;
     }
+
+    @Override
+    public UserPermissions getCurrentUserPermissions() {
+        return findCurrentLoggedInUser().get().getUserPermissions();
+    }
 }
