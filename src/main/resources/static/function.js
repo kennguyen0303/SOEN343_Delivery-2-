@@ -485,11 +485,6 @@ function resetCoordinates() {
 
 var user_array=[];//an array for controlling the user in the house
 function placeUser(){
-
-    if(document.getElementById('awayModeButton').innerHTML == "ON")
-    {
-        alertConsole("Sec", varCurrentTime.toUTCString());
-    }
     //obtain the user
     var userIndex = document.getElementById('currentUsersList2').selectedIndex;
     var userID = document.getElementById('currentUsersList2').options[userIndex].value;
@@ -519,7 +514,7 @@ function placeUser(){
     var selectedUser = new door(15, 20, "", positionX, positionY, "image");
     user_array.push(selectedUser);//push into the array
 
-    
+    //by Ken
     var temp_element=document.createElement("option");
     var element = document.getElementById("control_option");//access the dropdown box
     temp_element.value=user_array.length;

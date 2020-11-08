@@ -34,14 +34,11 @@ function setLightSchedule(){
             lightSchedule.push(element);        
         }
     }
-    console.log(lightSchedule);
 }
-
 
 //clear all information about light schedule
 function resetLightSchedule(){
 
-    
     while (lightSchedule.length > 0) {
         lightSchedule.pop();
     }
@@ -91,16 +88,12 @@ class TimeObserver{
                 lightScheduleIndex = 4;     //bathroom
             }
 
-
             //within one day
             if (lightSchedule[lightScheduleIndex].startTime < lightSchedule[lightScheduleIndex].endTime) {
                 if(timeString >= lightSchedule[lightScheduleIndex].startTime && timeString <= lightSchedule[lightScheduleIndex].endTime){
-                    //turn on the light
-                    //need to use turnOnLight(index) and turnOffLight(index)
                     turnOnLight(i);
                 }
                 else{
-                    //turn off the light
                     turnOffLight(i);
                 }
             }
@@ -108,23 +101,18 @@ class TimeObserver{
             //overnight
             if (lightSchedule[lightScheduleIndex].startTime > lightSchedule[lightScheduleIndex].endTime) {
                 if(timeString >= lightSchedule[lightScheduleIndex].startTime || timeString <= lightSchedule[lightScheduleIndex].endTime){
-                    //turn on the light
                     turnOnLight(i);
                 }
                 else{
-                    //turn off the light
                     turnOffLight(i);
                 }
             }
 
             //no value
             if (lightSchedule[lightScheduleIndex].startTime == '') {
-                //turn off the light
                 turnOffLight(i);
             }
-            
         }
-
     }
 }
 
@@ -171,7 +159,11 @@ function setAwayMode(){
                 } 
             }//end of for loop
 
-            if (userAtHome != 'nobody') {
+            if (document.getElementById('awayModeButton').innerHTML == 'ON') {
+                document.getElementById('awayModeButton').innerHTML = 'OFF';
+            }
+
+            else if (userAtHome != 'nobody') {
                 alert(userAtHome + ' is at home, the away mode can not be activated');
             }
     
@@ -188,10 +180,6 @@ function setAwayMode(){
                 //check observer
                 UserObserver.update();
             }
-    
-            else if (document.getElementById('awayModeButton').innerHTML == 'ON') {
-                document.getElementById('awayModeButton').innerHTML = 'OFF';
-            }
         }
     }
 
@@ -199,14 +187,13 @@ function setAwayMode(){
     xhttp.send();
 }
 
-function alertConsole(AlertType, timeOfAlert)
-{
+function alertConsole(AlertType, timeOfAlert){
 
     if(AlertType == "Sec")
     {
-        
         var alertText = timeOfAlert +  " An unidentified user has been logged as entering the house. authorities will be notified in " + document.getElementById("authoritiesTime").value + " seconds.";
     }
+
     var consoleNode = document.createElement("p");
     var consoleText = document.createTextNode(alertText);
     consoleNode.appendChild(consoleText);
