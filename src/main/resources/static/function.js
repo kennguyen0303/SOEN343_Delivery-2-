@@ -391,7 +391,6 @@ function updateGameArea() {
                     if(!a_room.get_occupant_list().includes(count)){//first time walk into the room
                         a_room.add_occupant(count);
                         //turn on light in the room on AUTO MODE
-                        console.log("auto mode value in here: "+autoMode);
                         if(autoMode){
                             console.log("turning on light AUTO! ");
                             a_room.light_index_array.forEach(an_index => {
@@ -399,6 +398,8 @@ function updateGameArea() {
                             });
                         }
                     user.location=a_room.getName();//update the location
+                    //update here BACKEND
+                    updateLocationToBackend(user);
                     console.log("New location detected: "+user.location+"New number detected: "+a_room.getNumberOfOccupant());
                     } 
                 }
@@ -406,7 +407,6 @@ function updateGameArea() {
                     if(a_room.get_occupant_list().includes(count)){//not inside the room, but still on the list
                         a_room.remove_occupant(count);//remove the index from the list
                     }
-                    console.log("auto mode value in here: "+autoMode);
                     if(autoMode && a_room.getNumberOfOccupant()==0){//turn off if empty
                         a_room.light_index_array.forEach(an_index => {
                             turnOffLight(an_index);
@@ -548,6 +548,7 @@ function placeUser(){
 
     //place img in the layout
     var selectedUser = new door(15, 20, "", positionX, positionY, "image");
+    selectedUser.id=userID;//store ID 
     user_array.push(selectedUser);//push into the array
 
     //by Ken
@@ -575,8 +576,22 @@ function placeUser(){
     }
     
 }
-
- var varCurrentTime = new Date();
+/**
+ * Update location of a user to the backend
+ * @param {*} user 
+ */
+function updateLocationToBackend(user){
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            getUsers();
+        }
+    };
+    xhttp.open("PUT", "http://localhost:8080/api/user/updateUserLocation/" + user.id + "/" + user.location, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
+}
+var varCurrentTime = new Date();
 
 function refreshTime() {
     setInterval(() => {
