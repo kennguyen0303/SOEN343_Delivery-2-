@@ -440,6 +440,9 @@ function openForm() {
   var xAxis = 0;
   var yAxis = 0;
   var obstacle = null;
+  /**
+   * function for adding obstacle from D1 
+   */
   function onCoordinatesSubmit() {
     xAxis = document.getElementById('xAxis').value;
     yAxis = document.getElementById('yAxis').value;
@@ -458,7 +461,8 @@ function openForm() {
         obstacle = new door(10, 10, "green", xAxis, yAxis, "horizontal");
         obstacle.update();
     }
-
+    //------------------------NOT WORK WITH NEW LAYOUT---------------
+    //HAVING MORE DOORS AND DIFFERENT COORDINATE
     //block the door1
     if(xAxis>40 && xAxis<60 && yAxis>192 && yAxis<207) {
         //change the boundary of door1
