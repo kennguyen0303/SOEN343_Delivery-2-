@@ -2,15 +2,15 @@ package com.soen343.backend.api;
 
 import com.soen343.backend.model.User;
 import com.soen343.backend.service.UserService;
+import com.soen343.backend.utilities.UserLoader;
 import com.soen343.backend.utilities.UserPermissions;
-import com.soen343.backend.utilities.UserPrinter;
+import com.soen343.backend.utilities.UserWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -115,8 +115,8 @@ public class UserController {
     @PostMapping(value = "api/user/userSaving")
     public void saveUsers()
     {
-        UserPrinter userPrinter = new UserPrinter();
-        userPrinter.saveUsers(userService.getAllUsers());
+        UserWriter userWriter = new UserWriter();
+        userWriter.saveUsers(userService.getAllUsers(), "UserProfiles.txt");
     }
 
     /**
@@ -125,8 +125,8 @@ public class UserController {
     @PostMapping(value = "api/user/userLoading")
     public void loadUsers()
     {
-        UserPrinter userPrinter = new UserPrinter();
-        userPrinter.loadUsers(userService.getAllUsers());
+        UserLoader userLoader = new UserLoader();
+        userLoader.loadUsers(userService.getAllUsers(), "UserProfiles.txt");
     }
 
     /**
