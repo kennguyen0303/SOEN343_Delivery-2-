@@ -423,9 +423,11 @@ function updateGameArea() {
                 }
             }
             count++;
+            }
         });
-        
+    
     });
+
 }
 //--------------------------------------
 //alex functions
