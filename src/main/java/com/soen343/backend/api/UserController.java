@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -148,5 +149,15 @@ public class UserController {
     public UserPermissions getCurrentUserPermissions()
     {
         return userService.getCurrentUserPermissions();
+    }
+
+    /**
+     * Return the user that is currently logged in
+     * @return A JSON object of the user
+     */
+    @GetMapping(value="api/user/currentUser")
+    public Optional<User> getCurrentUser()
+    {
+        return userService.findCurrentLoggedInUser();
     }
 }

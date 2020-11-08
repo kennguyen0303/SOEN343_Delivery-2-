@@ -327,21 +327,4 @@ function controlAllDoor(option){
     }
 }
 
-function getCurrentUserPermissions()
-{
-        var xhttp;
-        xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-
-            }
-        };
-
-        xhttp.open("GET", "http://localhost:8080/api/user/currentUserPermissions", false);
-        xhttp.setRequestHeader("Content-type", "application/json");
-        xhttp.send();
-        var userPermissions = JSON.parse(xhttp.responseText);
-        console.log(userPermissions);
-        return userPermissions;
-}
 
