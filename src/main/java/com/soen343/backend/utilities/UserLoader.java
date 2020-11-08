@@ -30,7 +30,8 @@ public class UserLoader {
                 boolean openRestrictedWindow = Boolean.parseBoolean(reader.readLine());
                 boolean openLights= Boolean.parseBoolean(reader.readLine());
                 boolean openRestrictedLights= Boolean.parseBoolean(reader.readLine());
-                UserPermissions userPermissions = new UserPermissions(openAllWindows, lockDoors, openLights, openRestrictedWindow, openRestrictedLights);
+                boolean canSetAwayMode = Boolean.parseBoolean(reader.readLine());
+                UserPermissions userPermissions = new UserPermissions(openAllWindows, lockDoors, openLights, openRestrictedWindow, openRestrictedLights, canSetAwayMode);
 
                 // Create user
                 User user =  userFactory.getUser(id, role);

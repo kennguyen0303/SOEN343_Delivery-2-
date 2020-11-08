@@ -388,24 +388,36 @@ function updateGameArea() {
         room_array.forEach(a_room => {
             if(user.location!= a_room.getName()){
                 if(a_room.insideRoom(user)){//if the user is inside a room
-                    if(!a_room.get_occupant_list().includes(count)) a_room.add_occupant(count);
-                    //turn on light in the room
-                    console.log("turning on light ! ")
-                    a_room.light_index_array.forEach(an_index => {
-                        turnOnLight(an_index);
-                    });
+                    if(!a_room.get_occupant_list().includes(count)){//first time walk into the room
+                        a_room.add_occupant(count);
+                        //turn on light in the room on AUTO MODE
+                        console.log("auto mode value in here: "+autoMode);
+                        if(autoMode){
+                            console.log("turning on light AUTO! ");
+                            a_room.light_index_array.forEach(an_index => {
+                                turnOnLight(an_index);
+                            });
+                        }
                     user.location=a_room.getName();//update the location
                     console.log("New location detected: "+user.location+"New number detected: "+a_room.getNumberOfOccupant());
+                    } 
                 }
-                else{//turn off light
+                else{//not inside the room
                     if(a_room.get_occupant_list().includes(count)){//not inside the room, but still on the list
                         a_room.remove_occupant(count);//remove the index from the list
                     }
-                    if(a_room.getNumberOfOccupant()==0){
+                    console.log("auto mode value in here: "+autoMode);
+                    if(autoMode && a_room.getNumberOfOccupant()==0){//turn off if empty
                         a_room.light_index_array.forEach(an_index => {
                             turnOffLight(an_index);
                         });
                     }
+                }
+            }
+            else{//if the location matches a room, but not inside the room, in transition
+                if(!a_room.insideRoom(user)){
+                    user.location="outside";//update the location
+                    console.log("New location detected: "+user.location);
                 }
             }
             count++;
@@ -432,6 +444,9 @@ function openForm() {
   var xAxis = 0;
   var yAxis = 0;
   var obstacle = null;
+  /**
+   * function for adding obstacle from D1 
+   */
   function onCoordinatesSubmit() {
     xAxis = document.getElementById('xAxis').value;
     yAxis = document.getElementById('yAxis').value;
@@ -450,7 +465,8 @@ function openForm() {
         obstacle = new door(10, 10, "green", xAxis, yAxis, "horizontal");
         obstacle.update();
     }
-
+    //------------------------NOT WORK WITH NEW LAYOUT---------------
+    //HAVING MORE DOORS AND DIFFERENT COORDINATE
     //block the door1
     if(xAxis>40 && xAxis<60 && yAxis>192 && yAxis<207) {
         //change the boundary of door1
@@ -500,6 +516,10 @@ function placeUser(){
     if(roomName == "entrance") {
         positionX = 240;
         positionY = 360;
+    } 
+    if(roomName == "outside") {
+        positionX = 10;
+        positionY = 10;
     } 
     if(roomName == "kitchen") {
         positionX = 350;
