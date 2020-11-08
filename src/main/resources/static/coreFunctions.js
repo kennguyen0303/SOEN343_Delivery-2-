@@ -31,7 +31,6 @@ function lightAction(debugText)
  * Showing the control for the door
  */
 function showDoorController(){
-    var container = document.createElement("div");
     var door_name_array=["bathroom","bedroom","backyard", "kitchen","garage_inside","entrance","garage_outside"];
     var element = document.getElementById("SHCore");
     var controller = document.createElement("select");
@@ -50,9 +49,9 @@ function showDoorController(){
     controller.id="doorController"// for CSS 
     //at here, having a dropdown box with options corresponding to a door
     element.removeChild(element.lastChild);//remove the old controller
-    container.appendChild(controller);
-    container.appendChild(button);
-    element.appendChild(container);
+    element.removeChild(element.lastChild);//remove the old button
+    element.appendChild(controller);
+    element.appendChild(button)
 }
 
 /**
@@ -60,7 +59,6 @@ function showDoorController(){
  */
 function showWindowController(){
     var window_name_array=["bedroom","kitchen"];
-    var container=document.createElement("div");//container
     var element = document.getElementById("SHCore");
     var controller = document.createElement("select");
     for( var i=0; i< window_array.length; i++) {
@@ -72,7 +70,8 @@ function showWindowController(){
     controller.id="windowController";//for CSS
     //at here, having a dropdown box with options corresponding to a door
     element.removeChild(element.lastChild);//remove the old controller
-    container.appendChild(controller);
+    element.removeChild(element.lastChild);//remove the old button
+    element.appendChild(controller);
     //add function button
     var button = document.createElement("button");
     button.innerHTML="Open/Close";
@@ -80,8 +79,7 @@ function showWindowController(){
     button.onclick=function() {
         controlWindow();
     };
-    container.appendChild(button);
-    element.appendChild(container);
+    element.appendChild(button);
 }
 
 /**
@@ -90,7 +88,6 @@ function showWindowController(){
 function showLightController(){
     var light_name_array=["entrance","backyard","hallway 1","hallway 2", "garage","kitchen","bedroom","bathroom"];
     var element = document.getElementById("SHCore");
-    var container=document.createElement("div");
     var controller = document.createElement("select");
     for( var i=0; i< light_array.length; i++) {
         var option = document.createElement("option");
@@ -102,47 +99,14 @@ function showLightController(){
     element.removeChild(element.lastChild);//remove the old controller
     element.removeChild(element.lastChild);//remove the old button
     //at here, having a dropdown box with options corresponding to a door
-    container.appendChild(controller);
+    element.appendChild(controller);
     var button = document.createElement("button");
     button.innerHTML="ON/OFF";
     button.id="lightControllerButton";
-    button.onclick=()=> {
+    button.onclick=function() {
         switchLight();
     };
-    container.appendChild(button);
-    element.appendChild(container);
-    showLightAutoMode();
-}
-var autoMode=false;//boolean for auto mode
-/**
- * showing button to set lights on Auto mode
- */
-function showLightAutoMode(){
-    var isLightControllerThere;
-    try {
-        isLightControllerThere=document.getElementById("lightController");
-        console.log(isLightControllerThere);
-        if(isLightControllerThere){
-            var autoButton=document.createElement("button");
-            if(!autoMode) autoButton.innerHTML="Click to turn on Auto Mode";
-            else autoButton.innerHTML="Auto Mode is ON";
-            autoButton.onclick=()=>{
-                if(!autoMode){//is Off then On
-                    autoMode=true;//turn on
-                    autoButton.innerHTML="Auto Mode is ON";
-                    console.log("Auto mode: "+autoMode);
-                }
-                else{//is On then Off
-                    autoMode=false;
-                    autoButton.innerHTML="Click to turn on Auto Mode";
-                    console.log("Auto mode: "+autoMode);
-                }
-            }
-            isLightControllerThere.parentNode.appendChild(autoButton);
-        }
-    } catch (error) {
-        console.log(error)
-    }
+    element.appendChild(button);
 }
 /**
  * Function for switching on/off light
@@ -150,32 +114,25 @@ function showLightAutoMode(){
  * The integer is a value referencing the index in the light_array
  */
 function switchLight(val){
-    var canControlLights = getCurrentUserPermissions().useAllLights;
-    console.log(canControlLights);
-    if (canControlLights){
-        var option;
-        if(val==null){
-            option =document.getElementById("lightController").value -1;
-        }
-        else option = val;
-        //myGameArea.clear("light"); //clear the old light bulbs
-        if(light_array[option].status=="closed"){
-            light_array[option].image.src = "on_bulb.png";//switch on
-            light_array[option].status="open";
-        }
-        else {
-            light_array[option].status="closed";
-            light_array[option].image.src = "off_bulb.png";//switch off
-        }
-        //update the new pictures
-        light_array.forEach(a_light => {
-            a_light.update();
-        });
-       }
-       else{
-            alert("You do not have this permission");
-       }
+    var option;
+    if(val==null){
+        option =document.getElementById("lightController").value -1;
     }
+    else option = val;
+    //myGameArea.clear("light"); //clear the old light bulbs
+    if(light_array[option].status=="closed"){
+        light_array[option].image.src = "on_bulb.png";//switch on
+        light_array[option].status="open";
+    }
+    else {
+        light_array[option].status="closed";
+        light_array[option].image.src = "off_bulb.png";//switch off
+    }
+    //update the new pictures
+    light_array.forEach(a_light => {
+        a_light.update();
+    });
+}
 
 function turnOnLight(index){
     if(light_array[index].status=="closed"){
@@ -205,74 +162,75 @@ function turnOffLight(index){
  * The integer is a value referencing the index in the door_array
  */
 function controlDoor(val){
-    var canControlAllDoors = getCurrentUserPermissions().lockDoors;
-    if(canControlAllDoors)
+    var option;
+    if(val==null){
+        option =document.getElementById("doorController").value -1;
+    }
+    else option = val;
+    if(locked_array_door[option] == "true") //checks if array value is true, if true nothing happens
     {
-        var option;
-            if(val==null){
-                option =document.getElementById("doorController").value -1;
-            }
-            else option = val;
-            var id = setInterval(moveDoor, 10);
-            function moveDoor(){
-                myGameArea.clear("door");
-                door_array.forEach(a_door => {
-                    a_door.speedX=0;
-                    a_door.speedY=0;
-                });
-                if(door_array[option].status=="closed"){//we need to open it
-                    //move right
-                    if(door_array[option].move_mode=="horizontal")
-                        if(door_array[option].x<door_array[option].boundary[1]) {
-                            door_array[option].speedX = 1;
-                            if(door_array[option].x==door_array[option].boundary[1]-1) {
-                                clearInterval(id);
-                                door_array[option].status="open";//update status, finish opening
-                                if([2,4,5,6].includes(option)) setTimeout(controlDoor,5000,option);//auto close door after 5s
-                            }
-                    }
-                //move down
-                    if(door_array[option].move_mode=="vertical")
-                        if(door_array[option].y<door_array[option].boundary[1]) {
-                            door_array[option].speedY = 1;
-                            if(door_array[option].y==door_array[option].boundary[1]-1){
-                                clearInterval(id);
-                                door_array[option].status="open";//update status, finish opening
-                                if([2,4,5,6].includes(option)) setTimeout(controlDoor,5000,option);//auto close door after 5s
-                            }
-                    }
-                }
-                else{// need to close
-                     //move left
-                    if(door_array[option].move_mode=="horizontal")
-                        if(door_array[option].x>door_array[option].boundary[0]) {
-                            door_array[option].speedX = -1;
-                            if(door_array[option].x==door_array[option].boundary[0]+1){
-                                clearInterval(id);//this is the last movement to open
-                                door_array[option].status="closed";//update status, finish opening
-                            }
-                    }
-
-                    if(door_array[option].move_mode=="vertical")
-                        if(door_array[option].y>door_array[option].boundary[0]) {
-                            door_array[option].speedY = -1;
-                            if(door_array[option].y==door_array[option].boundary[0]+1){
-                                clearInterval(id);//this is the last movement to open
-                                door_array[option].status="closed";//update status, finish opening
-                            }
-                    }
-                }
-                //update new position
-                door_array.forEach(a_door => {
-                    a_door.newPos();
-                    a_door.update();
-                });
-            }
+        var consoleNode = document.createElement("p");
+        var alertText = varCurrentTime.toLocaleString("en-US") + " This door is current obstructed";
+        var consoleText = document.createTextNode(alertText);
+        consoleNode.appendChild(consoleText);
+        document.getElementById("outputConsole").appendChild(consoleNode);
+        return;
     }
-    else{
-       alert("You do not have this permission");
-    }
+    var id = setInterval(moveDoor, 10);
+    function moveDoor(){
+        myGameArea.clear("door"); 
+        door_array.forEach(a_door => {
+            a_door.speedX=0;
+            a_door.speedY=0;
+        });
+        if(door_array[option].status=="closed"){//we need to open it
+            //move right
+            if(door_array[option].move_mode=="horizontal") 
+                if(door_array[option].x<door_array[option].boundary[1]) {
+                    door_array[option].speedX = 1;
+                    if(door_array[option].x==door_array[option].boundary[1]-1) {
+                        clearInterval(id);
+                        door_array[option].status="open";//update status, finish opening
+                        if([2,4,5,6].includes(option)) setTimeout(controlDoor,5000,option);//auto close door after 5s
+                    }
+            }
+        //move down
+            if(door_array[option].move_mode=="vertical") 
+                if(door_array[option].y<door_array[option].boundary[1]) {
+                    door_array[option].speedY = 1;
+                    if(door_array[option].y==door_array[option].boundary[1]-1){
+                        clearInterval(id);
+                        door_array[option].status="open";//update status, finish opening
+                        if([2,4,5,6].includes(option)) setTimeout(controlDoor,5000,option);//auto close door after 5s       
+                    }
+            }
+        }
+        else{// need to close
+             //move left
+            if(door_array[option].move_mode=="horizontal")
+                if(door_array[option].x>door_array[option].boundary[0]) {
+                    door_array[option].speedX = -1;
+                    if(door_array[option].x==door_array[option].boundary[0]+1){
+                        clearInterval(id);//this is the last movement to open
+                        door_array[option].status="closed";//update status, finish opening  
+                    }
+            }
 
+            if(door_array[option].move_mode=="vertical") 
+                if(door_array[option].y>door_array[option].boundary[0]) {
+                    door_array[option].speedY = -1;
+                    if(door_array[option].y==door_array[option].boundary[0]+1){
+                        clearInterval(id);//this is the last movement to open
+                        door_array[option].status="closed";//update status, finish opening  
+                    }
+            }
+        }
+        //update new position
+        door_array.forEach(a_door => {
+            a_door.newPos();    
+            a_door.update();
+        });
+    }
 }
 
 /**
@@ -280,71 +238,73 @@ function controlDoor(val){
  *  Can take an integer (Using as an API) or take the value from the control
  * The integer is a value referencing the index in the window_array
  */
-function controlWindow(val){
-    var canControlAllWindows = getCurrentUserPermissions().OpenAllWindows;
-    if(canControlAllWindows)
-    {
-     var option;
-        if(val==null){
-            option =document.getElementById("windowController").value -1;
-        }
-        else option = val;
-        var id = setInterval(moveWindow, 10);
-        function moveWindow(){
-            myGameArea.clear("window");
-            window_array.forEach(a_door => {
-                a_door.speedX=0;
-                a_door.speedY=0;
-            });
-            if(window_array[option].status=="closed"){//we need to open it
-                //move right
-                if(window_array[option].move_mode=="horizontal")
-                    if(window_array[option].x<window_array[option].boundary[1]) {
-                        window_array[option].speedX = 1;
-                        if(window_array[option].x==window_array[option].boundary[1]-1) {
-                            clearInterval(id);
-                            window_array[option].status="open";//update status, finish opening
-                        }
-                }
-            //move down
-                if(window_array[option].move_mode=="vertical")
-                    if(window_array[option].y<window_array[option].boundary[1]) {
-                        window_array[option].speedY = 1;
-                        if(window_array[option].y==window_array[option].boundary[1]-1){
-                            clearInterval(id);
-                            window_array[option].status="open";//update status, finish opening
-                        }
-                }
-            }
-            else{// need to close
-                 //move left
-                if(window_array[option].move_mode=="horizontal")
-                    if(window_array[option].x>window_array[option].boundary[0]) {
-                        window_array[option].speedX = -1;
-                        if(window_array[option].x==window_array[option].boundary[0]+1){
-                            clearInterval(id);//this is the last movement to open
-                            window_array[option].status="closed";//update status, finish opening
-                        }
-                }
-
-                if(window_array[option].move_mode=="vertical")
-                    if(window_array[option].y>window_array[option].boundary[0]) {
-                        window_array[option].speedY = -1;
-                        if(window_array[option].y==window_array[option].boundary[0]+1){
-                            clearInterval(id);//this is the last movement to open
-                            window_array[option].status="closed";//update status, finish opening
-                        }
-                }
-            }
-            //update new position
-            window_array.forEach(a_door => {
-                a_door.newPos();
-                a_door.update();
-            });
-        }
+function controlWindow(val){ 
+    var option;
+    if(val==null){
+        option =document.getElementById("windowController").value -1;
     }
-    else{
-            alert("You do not have this permission");
+    else option = val;
+    if(locked_array_window[option] == "true") //checks if array value is true, if true nothing happens
+    {
+        var consoleNode = document.createElement("p");
+        var alertText = varCurrentTime.toLocaleString("en-US") + " This window is current obstructed";
+        var consoleText = document.createTextNode(alertText);
+        consoleNode.appendChild(consoleText);
+        document.getElementById("outputConsole").appendChild(consoleNode);
+        return;
+    }
+    var id = setInterval(moveWindow, 10);
+    function moveWindow(){
+        myGameArea.clear("window"); 
+        window_array.forEach(a_door => {
+            a_door.speedX=0;
+            a_door.speedY=0;
+        });
+        if(window_array[option].status=="closed"){//we need to open it
+            //move right
+            if(window_array[option].move_mode=="horizontal") 
+                if(window_array[option].x<window_array[option].boundary[1]) {
+                    window_array[option].speedX = 1;
+                    if(window_array[option].x==window_array[option].boundary[1]-1) {
+                        clearInterval(id);
+                        window_array[option].status="open";//update status, finish opening
+                    }
+            }
+        //move down
+            if(window_array[option].move_mode=="vertical") 
+                if(window_array[option].y<window_array[option].boundary[1]) {
+                    window_array[option].speedY = 1;
+                    if(window_array[option].y==window_array[option].boundary[1]-1){
+                        clearInterval(id);
+                        window_array[option].status="open";//update status, finish opening   
+                    }
+            }
+        }
+        else{// need to close
+             //move left
+            if(window_array[option].move_mode=="horizontal")
+                if(window_array[option].x>window_array[option].boundary[0]) {
+                    window_array[option].speedX = -1;
+                    if(window_array[option].x==window_array[option].boundary[0]+1){
+                        clearInterval(id);//this is the last movement to open
+                        window_array[option].status="closed";//update status, finish opening  
+                    }
+            }
+
+            if(window_array[option].move_mode=="vertical") 
+                if(window_array[option].y>window_array[option].boundary[0]) {
+                    window_array[option].speedY = -1;
+                    if(window_array[option].y==window_array[option].boundary[0]+1){
+                        clearInterval(id);//this is the last movement to open
+                        window_array[option].status="closed";//update status, finish opening  
+                    }
+            }
+        }
+        //update new position
+        window_array.forEach(a_door => {
+            a_door.newPos();    
+            a_door.update();
+        });
     }
 }
 
@@ -370,5 +330,3 @@ function controlAllDoor(option){
                 controlWindow(i);
     }
 }
-
-
