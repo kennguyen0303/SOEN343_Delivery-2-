@@ -60,12 +60,17 @@ class TimeObserver{
         //obtain current time
         var currentHour = currentTime.getHours();
 
-        if(currentHour == '0'){
-            currentHour = '00';
+        if(currentHour.length < 10){
+            currentHour = '0' + currentHour;
         }
 
         var currentMinute = currentTime.getMinutes();
+        if (currentMinute < 10) {
+            currentMinute = '0' + currentMinute;
+        }
         var timeString = currentHour + ':' + currentMinute;
+        // console.log(timeString);
+        
 
         //check the on/off of all lights
         for (let i = 0; i < light_array.length; i++) {

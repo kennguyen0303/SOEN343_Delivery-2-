@@ -552,8 +552,7 @@ function placeUser(){
     //observe the location
     if (document.getElementById('awayModeButton').innerHTML == 'ON') {
         UserObserver.update();
-    }
-    
+    }   
 }
 
  var varCurrentTime = new Date();
@@ -575,7 +574,7 @@ function tikTok() {
     var second = varCurrentTime.getSeconds() + 1;
     varCurrentTime.setSeconds(second);
     document.getElementById('time').innerHTML = varCurrentTime.toLocaleString("en-US");
-
+    
     if (document.getElementById('awayModeButton').innerHTML == 'ON') {
         if (lightSchedule.length == 0) {
             return;
@@ -586,10 +585,7 @@ function tikTok() {
             timeNow.addObserver(timeObserver)
             timeNow.setCurrentTime();
         }
-        
     }
-    
-
 }
 
 // CONFLICT RESOLVED !
@@ -604,9 +600,7 @@ function setEclipseTime(){
 
 //obversers classes here
 class UserObserver {
-    constructor(){
-        // this.eclipsedTime = eclipsedTime;
-    }
+    constructor(){}
 
     static update(){
 
@@ -622,15 +616,12 @@ class UserObserver {
                 userDB = JSON.parse(this.responseText);
                 
                 for (let i = 0; i < userDB.length; i++) {
-                    if (userDB[i].location != "none" && userDB[i].location != "entrance" && userDB[i].location != "backyard") {
+                    if (userDB[i].location != "none" && userDB[i].location != "entrance" && userDB[i].location != "backyard" && userDB[i].location != "outdoor") {
                         //generate information
                         var info = timeInfo + "\tNotification to Parent: " + userDB[i].role + " is in the house's " + userDB[i].location;
 
                         //TODO obtain user eclipsed time
                         while(new Date() - currentTime < eclipsedTime);
-
-                        //notify the user
-                        alert(info);
 
                         //append info to output console
                         var outputConsole = document.getElementById('outputConsole');
@@ -638,7 +629,6 @@ class UserObserver {
                         var contents = document.createTextNode(info);
                         pTag.appendChild(contents);
                         outputConsole.appendChild(pTag);
-                        
                     }
                 }
             }
