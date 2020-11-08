@@ -380,21 +380,35 @@ function updateGameArea() {
         
     //key in control is the update function
     //update the now position for every door, otherwise it will not be shown
+    var count=0;
     user_array.forEach(user => {
         user.newPos();    
         user.update();
         //update location ?
         room_array.forEach(a_room => {
-            if(a_room.insideRoom(user)){//if the user is inside a room
-                // //turn on light in the room
-                a_room.light_index_array.forEach(an_index => {
-                    console.log(an_index);
-                    turnOnLight(an_index);
-                });
-                user.location=a_room.getName();//update the location
-                console.log("Current location: "+user.location);
+            if(user.location!= a_room.getName()){
+                if(a_room.insideRoom(user)){//if the user is inside a room
+                    if(!a_room.get_occupant_list().includes(count)) a_room.add_occupant(count);
+                    //turn on light in the room
+                    console.log("turning on light ! ")
+                    a_room.light_index_array.forEach(an_index => {
+                        turnOnLight(an_index);
+                    });
+                    user.location=a_room.getName();//update the location
+                    console.log("New location detected: "+user.location+"New number detected: "+a_room.getNumberOfOccupant());
+                }
+                else{//turn off light
+                    if(a_room.get_occupant_list().includes(count)){//not inside the room, but still on the list
+                        a_room.remove_occupant(count);//remove the index from the list
+                    }
+                    if(a_room.getNumberOfOccupant()==0){
+                        a_room.light_index_array.forEach(an_index => {
+                            turnOffLight(an_index);
+                        });
+                    }
+                }
             }
-
+            count++;
         });
         
     });
