@@ -39,6 +39,7 @@ class UserWriterTest {
             assertEquals(Boolean.parseBoolean(reader.readLine()), false);
             assertEquals(Boolean.parseBoolean(reader.readLine()), false);
             assertEquals(Boolean.parseBoolean(reader.readLine()), false);
+            assertEquals(Boolean.parseBoolean(reader.readLine()), false);
 
             reader.close();
         }
