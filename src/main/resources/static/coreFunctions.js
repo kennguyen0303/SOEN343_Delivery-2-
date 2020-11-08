@@ -167,6 +167,15 @@ function controlDoor(val){
         option =document.getElementById("doorController").value -1;
     }
     else option = val;
+    if(locked_array_door[option] == "true") //checks if array value is true, if true nothing happens
+    {
+        var consoleNode = document.createElement("p");
+        var alertText = varCurrentTime.toLocaleString("en-US") + " This door is current obstructed";
+        var consoleText = document.createTextNode(alertText);
+        consoleNode.appendChild(consoleText);
+        document.getElementById("outputConsole").appendChild(consoleNode);
+        return;
+    }
     var id = setInterval(moveDoor, 10);
     function moveDoor(){
         myGameArea.clear("door"); 
@@ -235,6 +244,15 @@ function controlWindow(val){
         option =document.getElementById("windowController").value -1;
     }
     else option = val;
+    if(locked_array_window[option] == "true") //checks if array value is true, if true nothing happens
+    {
+        var consoleNode = document.createElement("p");
+        var alertText = varCurrentTime.toLocaleString("en-US") + " This window is current obstructed";
+        var consoleText = document.createTextNode(alertText);
+        consoleNode.appendChild(consoleText);
+        document.getElementById("outputConsole").appendChild(consoleNode);
+        return;
+    }
     var id = setInterval(moveWindow, 10);
     function moveWindow(){
         myGameArea.clear("window"); 

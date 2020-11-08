@@ -243,6 +243,8 @@ function changeTabs(evt, SmartHomeTab) {
 
 //Ken function for layout
 var door_array=[];//the array for doors !
+var locked_array_door= [ "false", "false", "false","false", "false","false", "false","false"];
+var locked_array_window=["false", "false"];
 var light_array=[];//array for lights
 var window_array=[];//array for window
 var room_array=[];//array for the rooms
@@ -451,21 +453,53 @@ function openForm() {
         obstacle.update();
     }
 
-    //block the door1
-    if(xAxis>40 && xAxis<60 && yAxis>192 && yAxis<207) {
-        //change the boundary of door1
-        door_array[0].boundary = [door_array[0].x, xAxis-20];
+    
+    if(xAxis>360 && xAxis<390 && yAxis>40 && yAxis<60) {
+        //change the boundary of bathroom
+        //door_array[0].boundary = [door_array[0].x, xAxis-20];
+        locked_array_door[0] = "true";
     }
-    if(xAxis>133 && xAxis<148 && yAxis>40 && yAxis<60){
-        //change the boundary of door2
-        door_array[1].boundary = [door_array[1].y, yAxis-20];
+    if(xAxis>285 && xAxis<310 && yAxis>60 && yAxis<100) {
+        //change the boundary of bedroom
+        //door_array[1].boundary = [door_array[1].y, yAxis-20];
+        locked_array_door[1] = "true";
+    }
+    if(xAxis>205 && xAxis<230 && yAxis>60 && yAxis<100) {
+        //change the boundary of backyard
+       // door_array[3].boundary = [door_array[3].y, yAxis-20];
+        locked_array_door[2] = "true";
+    }
+    if(xAxis>285 && xAxis<310 && yAxis>260 && yAxis<315) {
+        //change the boundary of kitchen
+        //door_array[3].boundary = [door_array[3].y, yAxis-20];
+        locked_array_door[3] = "true";
+    }
+    if(xAxis>210 && xAxis<225 && yAxis>260 && yAxis<300) {
+        //change the boundary of garage inside
+        //door_array[3].boundary = [door_array[3].y, yAxis-20];
+        locked_array_door[4] = "true";
+    }
+    if(xAxis>235 && xAxis<255 && yAxis>340 && yAxis<360) {
+        //change the boundary of entrance
+        //door_array[3].boundary = [door_array[3].y, yAxis-20];
+        locked_array_door[5] = "true";
+    }
+    if(xAxis>135 && xAxis<155 && yAxis>340 && yAxis<360) {
+        //change the boundary of garage outside
+        //door_array[3].boundary = [door_array[3].y, yAxis-20];
+        locked_array_door[6] = "true";
+    }
+    if(xAxis>390 && xAxis<410 && yAxis>60 && yAxis<115){
+        //change the boundary of window room
+        //door_array[1].boundary = [door_array[1].y, yAxis-20];
+        locked_array_window[0] = "true";
 
     }
-    if(xAxis>283 && xAxis<298 && yAxis>80 && yAxis<100) {
-        door_array[2].boundary = [door_array[2].y, yAxis-20];
-    }
-    if(xAxis>283 && xAxis<298 && yAxis>280 && yAxis<300) {
-        door_array[3].boundary = [door_array[3].y, yAxis-20];
+    if(xAxis>390 && xAxis<410 && yAxis>260 && yAxis<315){
+        //change the boundary of window room
+        //door_array[1].boundary = [door_array[1].y, yAxis-20];
+        locked_array_window[1] = "true";
+
     }
 
 }
