@@ -121,4 +121,6 @@ public class UserService {
     public UserPermissions getUserPermissions(UUID id) {
         return userDAO.getUserPermissions(id);
     }
+
+    public UserPermissions getCurrentUserPermissions() { return userDAO.getCurrentUserPermissions(); }
 }
