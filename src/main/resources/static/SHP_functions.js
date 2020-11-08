@@ -162,7 +162,7 @@ function setAwayMode(){
 
             for (let i = 0; i < userDB.length; i++) {
                 var userLocation = userDB[i].location;
-                if (userLocation != 'none' && userLocation != 'entrance' && userLocation != 'backyard') {
+                if (userLocation != 'none' && userLocation != 'entrance' && userLocation != 'outside') {
                     userAtHome = userDB[i].role;
                 } 
             }//end of for loop

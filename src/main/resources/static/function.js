@@ -417,6 +417,7 @@ function updateGameArea() {
             else{//if the location matches a room, but not inside the room, in transition
                 if(!a_room.insideRoom(user)){
                     user.location="outside";//update the location
+                    updateLocationToBackend(user);
                     console.log("New location detected: "+user.location);
                 }
             }
@@ -590,6 +591,7 @@ function updateLocationToBackend(user){
     xhttp.open("PUT", "http://localhost:8080/api/user/updateUserLocation/" + user.id + "/" + user.location, true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send();
+    UserObserver.update();
 }
 var varCurrentTime = new Date();
 
@@ -657,7 +659,7 @@ class UserObserver {
                 userDB = JSON.parse(this.responseText);
                 
                 for (let i = 0; i < userDB.length; i++) {
-                    if (userDB[i].location != "none" && userDB[i].location != "entrance" && userDB[i].location != "backyard") {
+                    if (userDB[i].location != "none" && userDB[i].location != "entrance" && userDB[i].location != "outside") {
                         //generate information
                         var info = timeInfo + "\tNotification to Parent: " + userDB[i].role + " is in the house's " + userDB[i].location;
 
@@ -665,7 +667,7 @@ class UserObserver {
                         while(new Date() - currentTime < eclipsedTime);
 
                         //notify the user
-                        alert(info);
+                        // alert(info);
 
                         //append info to output console
                         var outputConsole = document.getElementById('outputConsole');

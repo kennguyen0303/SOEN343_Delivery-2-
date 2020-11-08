@@ -3,7 +3,7 @@ package com.soen343.backend.utilities;
 
 import java.io.*;
 
-public class SHPWriter {
+public class FileWriter {
 
     public void saveMsg(String msg, String filepath) {
         try {

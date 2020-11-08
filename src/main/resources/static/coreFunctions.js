@@ -348,3 +348,20 @@ function controlAllDoor(option){
                 controlWindow(i);
     }
 }
+
+
+//This method will write msg to the SHC log file
+function writeToSHCFile(msg){
+
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            alert('Log information has been saved to the SHC_command.txt');
+        }
+    }
+
+    xhttp.open('POST', 'http://localhost:8080/api/user/shcWirter/' + msg, true);
+    xhttp.send();
+
+}
