@@ -509,6 +509,10 @@ function placeUser(){
         positionX = 240;
         positionY = 360;
     } 
+    if(roomName == "outside") {
+        positionX = 10;
+        positionY = 10;
+    } 
     if(roomName == "kitchen") {
         positionX = 350;
         positionY = 300;
@@ -535,7 +539,7 @@ function placeUser(){
     }
 
     //place img in the layout
-    var selectedUser = new door(15, 20, "", positionX, positionY, "image");
+    var selectedUser = new door(20, 20, "", positionX, positionY, "image");
     user_array.push(selectedUser);//push into the array
 
     //by Ken
