@@ -148,6 +148,7 @@ function setAwayMode(){
             }
         }
     }
+<<<<<<< HEAD
 
     xhttp.open("GET", "http://localhost:8080/api/user/allUserRetrieval", true);
     xhttp.send();
@@ -170,4 +171,6 @@ function alertConsole(AlertType, timeOfAlert)
 //This method will write msg to a give log file
 function writeToFile(msg){
 
+=======
+>>>>>>> 2dcc9510b0f671b202d7c47418ee3bd7279f02b9
 }
