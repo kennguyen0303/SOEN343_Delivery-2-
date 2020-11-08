@@ -399,6 +399,11 @@ function updateGameArea() {
                             });
                         }
                     user.location=a_room.getName();//update the location
+                    
+                    //update the backend
+
+
+
                     console.log("New location detected: "+user.location+"New number detected: "+a_room.getNumberOfOccupant());
                     } 
                 }

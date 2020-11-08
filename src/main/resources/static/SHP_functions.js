@@ -179,8 +179,8 @@ function setAwayMode(){
             }
           
             else if(!canSetAwayMode){
-              alert("You do not have this permission");
-                    }
+                alert("You do not have this permission");
+            }
 
             else if (userAtHome != 'nobody') {
                 alert(userAtHome + ' is at home, the away mode can not be activated');
