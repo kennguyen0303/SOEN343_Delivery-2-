@@ -388,24 +388,32 @@ function updateGameArea() {
         room_array.forEach(a_room => {
             if(user.location!= a_room.getName()){
                 if(a_room.insideRoom(user)){//if the user is inside a room
-                    if(!a_room.get_occupant_list().includes(count)) a_room.add_occupant(count);
-                    //turn on light in the room
-                    console.log("turning on light ! ")
-                    a_room.light_index_array.forEach(an_index => {
-                        turnOnLight(an_index);
-                    });
+                    if(!a_room.get_occupant_list().includes(count)){//first time walk into the room
+                        a_room.add_occupant(count);
+                        //turn on light in the room
+                        console.log("turning on light ! ");
+                        a_room.light_index_array.forEach(an_index => {
+                            turnOnLight(an_index);
+                        });
                     user.location=a_room.getName();//update the location
                     console.log("New location detected: "+user.location+"New number detected: "+a_room.getNumberOfOccupant());
+                    } 
                 }
-                else{//turn off light
+                else{//not inside the room
                     if(a_room.get_occupant_list().includes(count)){//not inside the room, but still on the list
                         a_room.remove_occupant(count);//remove the index from the list
                     }
-                    if(a_room.getNumberOfOccupant()==0){
+                    if(a_room.getNumberOfOccupant()==0){//turn off if empty
                         a_room.light_index_array.forEach(an_index => {
                             turnOffLight(an_index);
                         });
                     }
+                }
+            }
+            else{//if the location matches a room, but not inside the room, in transition
+                if(!a_room.insideRoom(user)){
+                    user.location="outside";//update the location
+                    console.log("New location detected: "+user.location);
                 }
             }
             count++;
