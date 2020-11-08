@@ -493,7 +493,6 @@ function resetCoordinates() {
 
 var user_array=[];//an array for controlling the user in the house
 function placeUser(){
-
     //obtain the user
     var userIndex = document.getElementById('currentUsersList2').selectedIndex;
     var userID = document.getElementById('currentUsersList2').options[userIndex].value;
@@ -506,24 +505,40 @@ function placeUser(){
     var positionX = 0;
     var positionY = 0;
     //NEED TO UPDATE FOR THE NEW LAYOUT !
-    if(roomName == "living_room") {
-        positionX = 35;
-        positionY = 75;
+    if(roomName == "entrance") {
+        positionX = 240;
+        positionY = 360;
     } 
     if(roomName == "kitchen") {
-        positionX = 185;
-        positionY = 75;
+        positionX = 350;
+        positionY = 300;
     }
-    if(roomName == "outdoor") {
-        positionX = 385;
-        positionY = 225;
+    if(roomName == "hallway") {
+        positionX = 250;
+        positionY = 200;
+    }
+    if(roomName == "garage") {
+        positionX = 160;
+        positionY = 250;
+    }
+    if(roomName == "backyard") {
+        positionX = 120;
+        positionY = 100;
+    }
+    if(roomName == "bedroom") {
+        positionX = 350;
+        positionY = 100;
+    }
+    if(roomName == "bathroom") {
+        positionX = 375;
+        positionY = 28;
     }
 
     //place img in the layout
     var selectedUser = new door(15, 20, "", positionX, positionY, "image");
     user_array.push(selectedUser);//push into the array
 
-    
+    //by Ken
     var temp_element=document.createElement("option");
     var element = document.getElementById("control_option");//access the dropdown box
     temp_element.value=user_array.length;
@@ -549,7 +564,7 @@ function placeUser(){
     
 }
 
-var currentTime = new Date();
+ var varCurrentTime = new Date();
 
 function refreshTime() {
     setInterval(() => {
@@ -560,13 +575,29 @@ function refreshTime() {
 
 function newTime() {
 	var y = prompt("enter a year (October 13, 2014 11:13:00)", 0);
-	currentTime = new Date(y);
+	varCurrentTime = new Date(y);
 }
 
 function tikTok() {
-    var second = currentTime.getSeconds() + 1;
-    currentTime.setSeconds(second);
-    document.getElementById('time').innerHTML = currentTime.toLocaleString("en-US");
+
+    var second = varCurrentTime.getSeconds() + 1;
+    varCurrentTime.setSeconds(second);
+    document.getElementById('time').innerHTML = varCurrentTime.toLocaleString("en-US");
+
+    if (document.getElementById('awayModeButton').innerHTML == 'ON') {
+        if (lightSchedule.length == 0) {
+            return;
+        }
+        else{
+            var timeNow = new CurrentTime();
+            var timeObserver = new TimeObserver();
+            timeNow.addObserver(timeObserver)
+            timeNow.setCurrentTime();
+        }
+        
+    }
+    
+
 }
 
 // CONFLICT RESOLVED !
