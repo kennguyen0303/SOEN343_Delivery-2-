@@ -27,15 +27,18 @@ function getProfile() {
   };
   }
   xhttp.open("GET", "http://localhost:8080/api/user", true);
-xhttp.setRequestHeader("Content-type", "application/json");
-xhttp.send();
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send();
 
 }
 
 function removeAllChildNodes(element) {
-  while(element.firstChild) {
-    element.removeChild(element.lastChild);
-  }
+if(element){
+while(element.firstChild) {
+     element.removeChild(element.lastChild);
+   }
+}
+
 }
 
 function getUserById(id) {
@@ -468,6 +471,11 @@ function resetCoordinates() {
 
 var user_array=[];//an array for controlling the user in the house
 function placeUser(){
+
+    if(document.getElementById('awayModeButton').innerHTML == "ON")
+    {
+        alertConsole("Sec", currentTime.toUTCString());
+    }
     //obtain the user
     var userIndex = document.getElementById('currentUsersList2').selectedIndex;
     var userID = document.getElementById('currentUsersList2').options[userIndex].value;
@@ -575,7 +583,7 @@ class UserObserver {
                 for (let i = 0; i < userDB.length; i++) {
                     if (userDB[i].location != "none" && userDB[i].location != "entrance" && userDB[i].location != "backyard") {
                         //generate information
-                        var info = timeInfo + "\t" + userDB[i].role + " is in the house's " + userDB[i].location;
+                        var info = timeInfo + "\tNotification to Parent: " + userDB[i].role + " is in the house's " + userDB[i].location;
 
                         //TODO obtain user eclipsed time
                         while(new Date() - currentTime < eclipsedTime);

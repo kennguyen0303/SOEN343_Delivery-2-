@@ -152,3 +152,22 @@ function setAwayMode(){
     xhttp.open("GET", "http://localhost:8080/api/user/allUserRetrieval", true);
     xhttp.send();
 }
+
+function alertConsole(AlertType, timeOfAlert)
+{
+
+    if(AlertType == "Sec")
+    {
+        
+        var alertText = timeOfAlert +  " An unidentified user has been logged as entering the house. authorities will be notified in " + document.getElementById("authoritiesTime").value + " seconds.";
+    }
+    var consoleNode = document.createElement("p");
+    var consoleText = document.createTextNode(alertText);
+    consoleNode.appendChild(consoleText);
+    document.getElementById("outputConsole").appendChild(consoleNode);
+}
+
+//This method will write msg to a give log file
+function writeToFile(msg){
+
+}

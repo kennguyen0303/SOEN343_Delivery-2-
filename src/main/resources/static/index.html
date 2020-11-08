@@ -131,8 +131,12 @@
 
                 </div>
                 <br>
+                Enter how long before the authorities are alerted (in seconds): 
+                <input type="number" id="authoritiesTime" value="30">
                 <div id="GrantPermissions">
-                    <select id="currentUsersList3"></select>
+                    <div id="availableUsers3">
+                        <select id="currentUsersList3"></select>
+                    </div>
                     <br>
                     <select id="permissionName">
                         <option value="openAllWindows">Open/Close All Windows</option>
@@ -292,7 +296,7 @@
             </form>
         </div>
         <!-- Popup form -->
-        <div class="console" id="outputConsole">Console Here</div>
+        <div class="console" id="outputConsole">Console:</div>
 
     </div>
 
