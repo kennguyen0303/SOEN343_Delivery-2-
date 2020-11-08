@@ -14,7 +14,7 @@ function door(width, height, color, x, y,move_mode) {//in case of human-stick, c
         this.image = new Image();
         this.image.src = "human_stick.png";
         this.name=color;//set the name
-        this.location="";//set the location
+        this.location="outside";//Initialize at outside
         this.image.onload=()=>{
             ctx.drawImage(this.image, 
                 this.x, 
@@ -82,7 +82,7 @@ function room(){
     this.door_index_array=[];
     this.window_index_array=[];
     this.light_index_array=[];
-    this.numberOfPeopleInside=0;
+    this.occupant=[];//array of indexes of user_array
     //methods 
     //check if a person is inside the room
     this.inside=(a_person)=>{
@@ -124,6 +124,20 @@ function room(){
         this.door_index_array.push(index);
         return index;
     }
+    this.add_occupant=(index)=>{
+        this.occupant.push(index);
+        return this.occupant.length;
+    }
+    this.get_occupant_list=()=>{
+        return this.occupant;
+    }
+    this.getNumberOfOccupant=()=>{
+        return this.occupant.length;
+    }
+    this.remove_occupant=(val)=>{
+        var index=this.occupant.indexOf(val);
+        this.occupant.splice(index,1);//remove
+    }
     this.add_light=(index)=>{
         this.light_index_array.push(index);
         return this.light_index_array.length;
@@ -136,6 +150,7 @@ function room(){
         return false;
         //wait need to turn on the light and update location    
     }
+
     
 
 } 

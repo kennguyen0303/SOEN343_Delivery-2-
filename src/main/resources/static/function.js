@@ -27,15 +27,18 @@ function getProfile() {
   };
   }
   xhttp.open("GET", "http://localhost:8080/api/user", true);
-xhttp.setRequestHeader("Content-type", "application/json");
-xhttp.send();
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send();
 
 }
 
 function removeAllChildNodes(element) {
-  while(element.firstChild) {
-    element.removeChild(element.lastChild);
-  }
+if(element){
+while(element.firstChild) {
+     element.removeChild(element.lastChild);
+   }
+}
+
 }
 
 function getUserById(id) {
@@ -377,21 +380,47 @@ function updateGameArea() {
         
     //key in control is the update function
     //update the now position for every door, otherwise it will not be shown
+    var count=0;
     user_array.forEach(user => {
         user.newPos();    
         user.update();
         //update location ?
         room_array.forEach(a_room => {
-            if(a_room.insideRoom(user)){//if the user is inside a room
-                // //turn on light in the room
-                a_room.light_index_array.forEach(an_index => {
-                    console.log(an_index);
-                    turnOnLight(an_index);
-                });
-                user.location=a_room.getName();//update the location
-                console.log("Current location: "+user.location);
+            if(user.location!= a_room.getName()){
+                if(a_room.insideRoom(user)){//if the user is inside a room
+                    if(!a_room.get_occupant_list().includes(count)){//first time walk into the room
+                        a_room.add_occupant(count);
+                        //turn on light in the room on AUTO MODE
+                        console.log("auto mode value in here: "+autoMode);
+                        if(autoMode){
+                            console.log("turning on light AUTO! ");
+                            a_room.light_index_array.forEach(an_index => {
+                                turnOnLight(an_index);
+                            });
+                        }
+                    user.location=a_room.getName();//update the location
+                    console.log("New location detected: "+user.location+"New number detected: "+a_room.getNumberOfOccupant());
+                    } 
+                }
+                else{//not inside the room
+                    if(a_room.get_occupant_list().includes(count)){//not inside the room, but still on the list
+                        a_room.remove_occupant(count);//remove the index from the list
+                    }
+                    console.log("auto mode value in here: "+autoMode);
+                    if(autoMode && a_room.getNumberOfOccupant()==0){//turn off if empty
+                        a_room.light_index_array.forEach(an_index => {
+                            turnOffLight(an_index);
+                        });
+                    }
+                }
             }
-
+            else{//if the location matches a room, but not inside the room, in transition
+                if(!a_room.insideRoom(user)){
+                    user.location="outside";//update the location
+                    console.log("New location detected: "+user.location);
+                }
+            }
+            count++;
         });
         
     });
@@ -415,6 +444,9 @@ function openForm() {
   var xAxis = 0;
   var yAxis = 0;
   var obstacle = null;
+  /**
+   * function for adding obstacle from D1 
+   */
   function onCoordinatesSubmit() {
     xAxis = document.getElementById('xAxis').value;
     yAxis = document.getElementById('yAxis').value;
@@ -433,7 +465,8 @@ function openForm() {
         obstacle = new door(10, 10, "green", xAxis, yAxis, "horizontal");
         obstacle.update();
     }
-
+    //------------------------NOT WORK WITH NEW LAYOUT---------------
+    //HAVING MORE DOORS AND DIFFERENT COORDINATE
     //block the door1
     if(xAxis>40 && xAxis<60 && yAxis>192 && yAxis<207) {
         //change the boundary of door1
@@ -480,24 +513,44 @@ function placeUser(){
     var positionX = 0;
     var positionY = 0;
     //NEED TO UPDATE FOR THE NEW LAYOUT !
-    if(roomName == "living_room") {
-        positionX = 35;
-        positionY = 75;
+    if(roomName == "entrance") {
+        positionX = 240;
+        positionY = 360;
+    } 
+    if(roomName == "outside") {
+        positionX = 10;
+        positionY = 10;
     } 
     if(roomName == "kitchen") {
-        positionX = 185;
-        positionY = 75;
+        positionX = 350;
+        positionY = 300;
     }
-    if(roomName == "outdoor") {
-        positionX = 385;
-        positionY = 225;
+    if(roomName == "hallway") {
+        positionX = 250;
+        positionY = 200;
+    }
+    if(roomName == "garage") {
+        positionX = 160;
+        positionY = 250;
+    }
+    if(roomName == "backyard") {
+        positionX = 120;
+        positionY = 100;
+    }
+    if(roomName == "bedroom") {
+        positionX = 350;
+        positionY = 100;
+    }
+    if(roomName == "bathroom") {
+        positionX = 375;
+        positionY = 28;
     }
 
     //place img in the layout
     var selectedUser = new door(15, 20, "", positionX, positionY, "image");
     user_array.push(selectedUser);//push into the array
 
-    
+    //by Ken
     var temp_element=document.createElement("option");
     var element = document.getElementById("control_option");//access the dropdown box
     temp_element.value=user_array.length;
@@ -519,11 +572,10 @@ function placeUser(){
     //observe the location
     if (document.getElementById('awayModeButton').innerHTML == 'ON') {
         UserObserver.update();
-    }
-    
+    }   
 }
 
-var currentTime = new Date();
+ var varCurrentTime = new Date();
 
 function refreshTime() {
     setInterval(() => {
@@ -534,13 +586,26 @@ function refreshTime() {
 
 function newTime() {
 	var y = prompt("enter a year (October 13, 2014 11:13:00)", 0);
-	currentTime = new Date(y);
+	varCurrentTime = new Date(y);
 }
 
 function tikTok() {
-    var second = currentTime.getSeconds() + 1;
-    currentTime.setSeconds(second);
-    document.getElementById('time').innerHTML = currentTime.toLocaleString("en-US");
+
+    var second = varCurrentTime.getSeconds() + 1;
+    varCurrentTime.setSeconds(second);
+    document.getElementById('time').innerHTML = varCurrentTime.toLocaleString("en-US");
+    
+    if (document.getElementById('awayModeButton').innerHTML == 'ON') {
+        if (lightSchedule.length == 0) {
+            return;
+        }
+        else{
+            var timeNow = new CurrentTime();
+            var timeObserver = new TimeObserver();
+            timeNow.addObserver(timeObserver)
+            timeNow.setCurrentTime();
+        }
+    }
 }
 
 // CONFLICT RESOLVED !
@@ -555,9 +620,7 @@ function setEclipseTime(){
 
 //obversers classes here
 class UserObserver {
-    constructor(){
-        // this.eclipsedTime = eclipsedTime;
-    }
+    constructor(){}
 
     static update(){
 
@@ -573,15 +636,12 @@ class UserObserver {
                 userDB = JSON.parse(this.responseText);
                 
                 for (let i = 0; i < userDB.length; i++) {
-                    if (userDB[i].location != "none" && userDB[i].location != "outdoor") {
+                    if (userDB[i].location != "none" && userDB[i].location != "entrance" && userDB[i].location != "backyard" && userDB[i].location != "outdoor") {
                         //generate information
-                        var info = timeInfo + "\t" + userDB[i].role + " is in the house's " + userDB[i].location;
+                        var info = timeInfo + "\tNotification to Parent: " + userDB[i].role + " is in the house's " + userDB[i].location;
 
                         //TODO obtain user eclipsed time
                         while(new Date() - currentTime < eclipsedTime);
-
-                        //notify the user
-                        alert(info);
 
                         //append info to output console
                         var outputConsole = document.getElementById('outputConsole');
@@ -589,7 +649,6 @@ class UserObserver {
                         var contents = document.createTextNode(info);
                         pTag.appendChild(contents);
                         outputConsole.appendChild(pTag);
-                        
                     }
                 }
             }

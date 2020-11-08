@@ -1,22 +1,18 @@
 package com.soen343.backend.utilities;
 
-import com.soen343.backend.factory.UserTypeFactory;
 import com.soen343.backend.model.User;
 
 import java.io.*;
 import java.util.List;
-import java.util.UUID;
 
 public class UserWriter {
 
-    public void saveUsers(List<User> userDB, String filepath)
-    {
-        try
-        {
-            FileOutputStream fos = new FileOutputStream(filepath,false);
+    public void saveUsers(List<User> userDB, String filepath) {
+        try {
+            FileOutputStream fos = new FileOutputStream(filepath, false);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
             System.out.print(userDB.size());
-            for (int i=0; i < userDB.size(); i++) {
+            for (int i = 0; i < userDB.size(); i++) {
                 User user = userDB.get(i);
                 bw.write(user.getRole());
                 bw.newLine();
@@ -38,9 +34,7 @@ public class UserWriter {
             }
 
             bw.close();
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace(System.out);
         }
     }

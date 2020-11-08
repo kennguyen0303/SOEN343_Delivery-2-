@@ -132,7 +132,9 @@
                 </div>
                 <br>
                 <div id="GrantPermissions">
-                    <select id="currentUsersList3"></select>
+                    <div id="availableUsers3">
+                        <select id="currentUsersList3"></select>
+                    </div>
                     <br>
                     <select id="permissionName">
                         <option value="openAllWindows">Open/Close All Windows</option>
@@ -140,7 +142,7 @@
                         <option value="useAllLights">Open/Close All Lights</option>
                         <option value="restrictedWindow">Use Windows in Same Room</option>
                         <option value="restrictedLights">Use Lights in Same Room</option>
-                     </select>
+                    </select>
                     <select id="permissionValue">
                         <option value="true">Enabled</option>
                         <option value="false">Disabled</option>
@@ -269,9 +271,14 @@
                     <select id="currentUsersList2"></select>
                 </div>
                 <select name="availableRooms" id="availableRooms">
-                    <option value="living_room">Living Room</option>
+                    <option value="bathroom">Bathroom</option>
+                    <option value="bedroom">Bedroom</option>
+                    <option value="backyard">Backyard</option>
                     <option value="kitchen">Kitchen</option>
-                    <option value="outdoor">Outdoor</option>
+                    <option value="garage">Garage</option>
+                    <option value="entrance">Entrance</option>
+                    <option value="hallway">Hallway</option>
+                    <option value="outside">Outside</option>
                 </select>
                 <button type="button" class="btn" onclick="placeUser()">Place</button>
                 <h2>Add obstacle</h2>
@@ -289,7 +296,7 @@
             </form>
         </div>
         <!-- Popup form -->
-        <div class="console" id="outputConsole">Console Here</div>
+        <div class="console" id="outputConsole">Console:</div>
 
     </div>
 

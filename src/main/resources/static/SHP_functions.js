@@ -12,16 +12,18 @@ function setLightSchedule(){
     
     for (let i = 0; i < rooms.length; i++) {
         time1[i] = document.getElementById(rooms[i]+1).value;
-        time2[i] = document.getElementById(rooms[i]+2).value;
+        time2[i] = document.getElementById(rooms[i]+2).value;        
+
+        //validate the user input
         if ((time1[i] == '' && time2[i] != '') || (time1[i] != '' && time2[i] == '')) {
             pass = false;
             break;
         }
     }
-    //validate the data
     if (!pass) {
-        alert("Please make sure you enter both times or none of the times for each room");
-    } else {
+        alert("invalid light schedule, please check and enter again");
+    } 
+    else {
         while (lightSchedule.length >0) {
             lightSchedule.pop();
         }
@@ -33,14 +35,11 @@ function setLightSchedule(){
             lightSchedule.push(element);        
         }
     }
-    console.log(lightSchedule);
 }
-
 
 //clear all information about light schedule
 function resetLightSchedule(){
 
-    
     while (lightSchedule.length > 0) {
         lightSchedule.pop();
     }
@@ -49,7 +48,6 @@ function resetLightSchedule(){
         document.getElementById(rooms[i]+1).value = '';     
         document.getElementById(rooms[i]+2).value = '';    
     }
-    console.log(lightSchedule);
 }
 
 
@@ -59,35 +57,77 @@ class TimeObserver{
     }
 
     update(currentTime){
+        //obtain current time
+        var currentHour = currentTime.getHours();
+
+        if(currentHour.length < 10){
+            currentHour = '0' + currentHour;
+        }
+
+        var currentMinute = currentTime.getMinutes();
+        if (currentMinute < 10) {
+            currentMinute = '0' + currentMinute;
+        }
+        var timeString = currentHour + ':' + currentMinute;
+        // console.log(timeString);
+        
+
         //check the on/off of all lights
-        for (let i = 0; i < rooms.length; i++) {
+        for (let i = 0; i < light_array.length; i++) {
+            //convert the index of light_array to the corresponding index of lightSchedule
+            var lightScheduleIndex;
+            if (i == 0) {
+                lightScheduleIndex = i;     //entrance
+            }
+            if(i == 1){
+                lightScheduleIndex = 6;     //backyard
+            }
+            if (i == 2 || i == 3) {
+                lightScheduleIndex = 1;     //hallway
+            }
+            if (i == 4) {
+                lightScheduleIndex = 5;     //garage
+            }
+            if (i == 5) {
+                lightScheduleIndex = 2;     //kitchen
+            }
+            if (i == 6) {
+                lightScheduleIndex = 3;     //bedroom
+            }
+            if (i == 7) {
+                lightScheduleIndex = 4;     //bathroom
+            }
+
             //within one day
-            if (lightSchedule[i].startTime < lightSchedule[i].endTime) {
-                if(currentTime > lightSchedule[i].startTime && lightSchedule[i].endTime){
-                    //turn on the light
+            if (lightSchedule[lightScheduleIndex].startTime < lightSchedule[lightScheduleIndex].endTime) {
+                if(timeString >= lightSchedule[lightScheduleIndex].startTime && timeString < lightSchedule[lightScheduleIndex].endTime){
+                    turnOnLight(i);
                 }
                 else{
-                    //turn off the light
+                    turnOffLight(i);
                 }
             }
 
             //overnight
-            if (lightSchedule[i].startTime > lightSchedule[i].endTime) {
-                if(currentTime > lightSchedule[i].startTime || lightSchedule[i].endTime){
-                    //turn on the light
+            if (lightSchedule[lightScheduleIndex].startTime > lightSchedule[lightScheduleIndex].endTime) {
+                if(timeString >= lightSchedule[lightScheduleIndex].startTime || timeString < lightSchedule[lightScheduleIndex].endTime){
+                    turnOnLight(i);
                 }
                 else{
-                    //turn off the light
+                    turnOffLight(i);
                 }
             }
 
             //no value
-            if (lightSchedule[i].startTime == '') {
-                //turn off the light
+            if (lightSchedule[lightScheduleIndex].startTime == '') {
+                turnOffLight(i);
             }
-            
-        }
 
+            //all day long
+            if (lightSchedule[lightScheduleIndex].startTime != '' && lightSchedule[lightScheduleIndex].startTime == lightSchedule[lightScheduleIndex].endTime) {
+                turnOnLight(i);
+            }
+        }
     }
 }
 
@@ -108,28 +148,94 @@ class CurrentTime{
     }
 
     setCurrentTime(){
-        this.currentTime = document.getElementById('time').innerHTML;
-        this.observers.notifyAll()
+        this.currentTime = varCurrentTime;
+        this.notifyAll()
     }
 
 }
 
 //
 function setAwayMode(){
-    var canSetAwayMode = getCurrentUserPermissions().canSetAwayMode;
-    if(canSetAwayMode)
-    {
-        if (document.getElementById('awayModeButton').innerHTML == 'OFF') {
-                document.getElementById('awayModeButton').innerHTML = 'ON';
-                controlAllDoor('close');
-                UserObserver.update();
-            }
-            else if (document.getElementById('awayModeButton').innerHTML == 'ON') {
+
+  var userDB;
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var userAtHome = 'nobody';
+            userDB = JSON.parse(this.responseText);
+
+            for (let i = 0; i < userDB.length; i++) {
+                var userLocation = userDB[i].location;
+                if (userLocation != 'none' && userLocation != 'entrance' && userLocation != 'backyard') {
+                    userAtHome = userDB[i].role;
+                } 
+            }//end of for loop
+            
+            var canSetAwayMode = getCurrentUserPermissions().canSetAwayMode;
+          
+            if (document.getElementById('awayModeButton').innerHTML == 'ON') {
                 document.getElementById('awayModeButton').innerHTML = 'OFF';
             }
-    }
-    else{
-           alert("You do not have this permission");
+          
+            else if(!canSetAwayMode){
+              alert("You do not have this permission");
+                    }
+
+            else if (userAtHome != 'nobody') {
+                alert(userAtHome + ' is at home, the away mode can not be activated');
+            }
+    
+            else if (document.getElementById('awayModeButton').innerHTML == 'OFF') {
+    
+                document.getElementById('awayModeButton').innerHTML = 'ON';
+                controlAllDoor('close');
+
+                //save information to SHP log file
+                var date = new Date();
+                var msg = date + "\tAll doors and windows are closed because the away mode has been turned on.";
+                writeToFile(msg);
+
+                //record to the console
+                var consoleNode = document.createElement("p");
+                var consoleText = document.createTextNode(msg);
+                consoleNode.appendChild(consoleText);
+                document.getElementById("outputConsole").appendChild(consoleNode);
+
+                //check observer
+                UserObserver.update();
+            }
+        }
     }
 
+    xhttp.open("GET", "http://localhost:8080/api/user/allUserRetrieval", true);
+    xhttp.send();
+}
+
+function alertConsole(AlertType, timeOfAlert){
+
+    if(AlertType == "Sec")
+    {
+        var alertText = timeOfAlert +  " An unidentified user has been logged as entering the house. authorities will be notified in " + document.getElementById("authoritiesTime").value + " seconds.";
+    }
+
+    var consoleNode = document.createElement("p");
+    var consoleText = document.createTextNode(alertText);
+    consoleNode.appendChild(consoleText);
+    document.getElementById("outputConsole").appendChild(consoleNode);
+}
+
+//This method will write msg to a give log file
+function writeToFile(msg){
+
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            alert('Log information has been saved to the SHP_command.txt');
+        }
+    }
+
+    xhttp.open('POST', 'http://localhost:8080/api/user/shpWirter/' + msg, true);
+    xhttp.send();
 }
