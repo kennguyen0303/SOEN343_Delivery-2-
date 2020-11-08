@@ -23,9 +23,13 @@ public class UserPermissions {
     @JsonProperty("useRestrictedWindows")
     private boolean canOpenRestrictedWindow;
 
-    // // Access to open/close lights in same room
+    // Access to open/close lights in same room
     @JsonProperty("useRestrictedLights")
     private boolean canUseRestrictedLights;
+
+    // Access to set away mode on and off
+    @JsonProperty("canSetAwayMode")
+    private boolean canSetAwayMode;
 
     /**
      * Constructor to initialize user permissions to default
@@ -36,6 +40,7 @@ public class UserPermissions {
         canUseLights = false;
         canOpenRestrictedWindow = false;
         canUseRestrictedLights = false;
+        canSetAwayMode = false;
     }
 
     /**
@@ -45,13 +50,15 @@ public class UserPermissions {
      * @param canUseLights
      * @param canOpenRestrictedWindow
      * @param canUseRestrictedLights
+     * @param canSetAwayMode
      */
-    public UserPermissions(boolean canOpenAllWindows, boolean canLockDoors, boolean canUseLights, boolean canOpenRestrictedWindow, boolean canUseRestrictedLights) {
+    public UserPermissions(boolean canOpenAllWindows, boolean canLockDoors, boolean canUseLights, boolean canOpenRestrictedWindow, boolean canUseRestrictedLights, boolean canSetAwayMode) {
         this.canOpenAllWindows = canOpenAllWindows;
         this.canLockDoors = canLockDoors;
         this.canUseLights = canUseLights;
         this.canOpenRestrictedWindow = canOpenRestrictedWindow;
         this.canUseRestrictedLights = canUseRestrictedLights;
+        this.canSetAwayMode = canSetAwayMode;
     }
 
     /**
@@ -132,6 +139,14 @@ public class UserPermissions {
      */
     public void setCanUseRestrictedLights(boolean canUseRestrictedLights) {
         this.canUseRestrictedLights = canUseRestrictedLights;
+    }
+
+    public boolean getCanSetAwayMode() {
+        return canSetAwayMode;
+    }
+
+    public void setCanSetAwayMode(boolean canSetAwayMode) {
+        this.canSetAwayMode = canSetAwayMode;
     }
 
 }

@@ -27,5 +27,6 @@ class UserLoaderTest {
         assertEquals(userPermissions.getCanOpenRestrictedWindow(), false);
         assertEquals(userPermissions.getCanUseLights(), true);
         assertEquals(userPermissions.getCanUseRestrictedLights(), false);
+        assertEquals(userPermissions.getCanSetAwayMode(), false);
     }
 }
