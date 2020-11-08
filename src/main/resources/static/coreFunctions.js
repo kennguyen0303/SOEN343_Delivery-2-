@@ -31,6 +31,7 @@ function lightAction(debugText)
  * Showing the control for the door
  */
 function showDoorController(){
+    var container = document.createElement("div");
     var door_name_array=["bathroom","bedroom","backyard", "kitchen","garage_inside","entrance","garage_outside"];
     var element = document.getElementById("SHCore");
     var controller = document.createElement("select");
@@ -49,9 +50,9 @@ function showDoorController(){
     controller.id="doorController"// for CSS 
     //at here, having a dropdown box with options corresponding to a door
     element.removeChild(element.lastChild);//remove the old controller
-    element.removeChild(element.lastChild);//remove the old button
-    element.appendChild(controller);
-    element.appendChild(button)
+    container.appendChild(controller);
+    container.appendChild(button);
+    element.appendChild(container);
 }
 
 /**
@@ -59,6 +60,7 @@ function showDoorController(){
  */
 function showWindowController(){
     var window_name_array=["bedroom","kitchen"];
+    var container=document.createElement("div");//container
     var element = document.getElementById("SHCore");
     var controller = document.createElement("select");
     for( var i=0; i< window_array.length; i++) {
@@ -70,8 +72,7 @@ function showWindowController(){
     controller.id="windowController";//for CSS
     //at here, having a dropdown box with options corresponding to a door
     element.removeChild(element.lastChild);//remove the old controller
-    element.removeChild(element.lastChild);//remove the old button
-    element.appendChild(controller);
+    container.appendChild(controller);
     //add function button
     var button = document.createElement("button");
     button.innerHTML="Open/Close";
@@ -79,7 +80,8 @@ function showWindowController(){
     button.onclick=function() {
         controlWindow();
     };
-    element.appendChild(button);
+    container.appendChild(button);
+    element.appendChild(container);
 }
 
 /**
