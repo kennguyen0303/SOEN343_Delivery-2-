@@ -28,6 +28,8 @@ public class UserWriter {
                 bw.newLine();
                 bw.write(Boolean.toString(user.getUserPermissions().getCanUseRestrictedLights()));
                 bw.newLine();
+                bw.write(Boolean.toString(user.getUserPermissions().getCanSetAwayMode()));
+                bw.newLine();
                 bw.newLine();
             }
 

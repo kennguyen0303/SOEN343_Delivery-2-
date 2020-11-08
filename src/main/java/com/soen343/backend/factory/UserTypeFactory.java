@@ -24,6 +24,5 @@ public class UserTypeFactory {
             return new Stranger(id, roleType);
         }
 
-        return null;
-    }
+        return null;    }
 }
