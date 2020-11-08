@@ -15,6 +15,7 @@ function door(width, height, color, x, y,move_mode) {//in case of human-stick, c
         this.image.src = "human_stick.png";
         this.name=color;//set the name
         this.location="outside";//Initialize at outside
+        this.id="";//user id
         this.image.onload=()=>{
             ctx.drawImage(this.image, 
                 this.x, 

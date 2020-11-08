@@ -390,29 +390,36 @@ function updateGameArea() {
         room_array.forEach(a_room => {
             if(user.location!= a_room.getName()){
                 if(a_room.insideRoom(user)){//if the user is inside a room
-                    if(!a_room.get_occupant_list().includes(count)) a_room.add_occupant(count);
-                    //turn on light in the room
-                    console.log("turning on light ! ")
-                    a_room.light_index_array.forEach(an_index => {
-                        turnOnLight(an_index);
-                    });
+                    if(!a_room.get_occupant_list().includes(count)){//first time walk into the room
+                        a_room.add_occupant(count);
+                        //turn on light in the room on AUTO MODE
+                        if(autoMode){
+                            console.log("turning on light AUTO! ");
+                            a_room.light_index_array.forEach(an_index => {
+                                turnOnLight(an_index);
+                            });
+                        }
                     user.location=a_room.getName();//update the location
-                    
-                    //update the backend
-
-
-
+                    //update here BACKEND
+                    updateLocationToBackend(user);
                     console.log("New location detected: "+user.location+"New number detected: "+a_room.getNumberOfOccupant());
                 }
                 else{//turn off light
                     if(a_room.get_occupant_list().includes(count)){//not inside the room, but still on the list
                         a_room.remove_occupant(count);//remove the index from the list
                     }
-                    if(a_room.getNumberOfOccupant()==0){
+                    if(autoMode && a_room.getNumberOfOccupant()==0){//turn off if empty
                         a_room.light_index_array.forEach(an_index => {
                             turnOffLight(an_index);
                         });
                     }
+                }
+            }
+            else{//if the location matches a room, but not inside the room, in transition
+                if(!a_room.insideRoom(user)){
+                    user.location="outside";//update the location
+                    updateLocationToBackend(user);
+                    console.log("New location detected: "+user.location);
                 }
             }
             count++;
@@ -567,6 +574,7 @@ function placeUser(){
 
     //place img in the layout
     var selectedUser = new door(15, 20, "", positionX, positionY, "image");
+    selectedUser.id=userID;//store ID 
     user_array.push(selectedUser);//push into the array
 
     //by Ken
@@ -594,8 +602,23 @@ function placeUser(){
     }
     
 }
-
- var varCurrentTime = new Date();
+/**
+ * Update location of a user to the backend
+ * @param {*} user 
+ */
+function updateLocationToBackend(user){
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            getUsers();
+        }
+    };
+    xhttp.open("PUT", "http://localhost:8080/api/user/updateUserLocation/" + user.id + "/" + user.location, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
+    UserObserver.update();
+}
+var varCurrentTime = new Date();
 
 function refreshTime() {
     setInterval(() => {
@@ -661,7 +684,7 @@ class UserObserver {
                 userDB = JSON.parse(this.responseText);
                 
                 for (let i = 0; i < userDB.length; i++) {
-                    if (userDB[i].location != "none" && userDB[i].location != "entrance" && userDB[i].location != "backyard") {
+                    if (userDB[i].location != "none" && userDB[i].location != "entrance" && userDB[i].location != "outside") {
                         //generate information
                         var info = timeInfo + "\tNotification to Parent: " + userDB[i].role + " is in the house's " + userDB[i].location;
 
@@ -669,7 +692,7 @@ class UserObserver {
                         while(new Date() - currentTime < eclipsedTime);
 
                         //notify the user
-                        alert(info);
+                        // alert(info);
 
                         //append info to output console
                         var outputConsole = document.getElementById('outputConsole');
