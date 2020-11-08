@@ -414,6 +414,7 @@ function updateGameArea() {
                         });
                     }
                 }
+                }
             }
             else{//if the location matches a room, but not inside the room, in transition
                 if(!a_room.insideRoom(user)){
@@ -423,7 +424,7 @@ function updateGameArea() {
                 }
             }
             count++;
-            }
+            
         });
     
     });
