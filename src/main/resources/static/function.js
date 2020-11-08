@@ -400,11 +400,11 @@ function updateGameArea() {
                             });
                         }
                     user.location=a_room.getName();//update the location
-                    //update here BACKEND
                     updateLocationToBackend(user);
                     console.log("New location detected: "+user.location+"New number detected: "+a_room.getNumberOfOccupant());
+                    } 
                 }
-                else{//turn off light
+                else{//not inside the room
                     if(a_room.get_occupant_list().includes(count)){//not inside the room, but still on the list
                         a_room.remove_occupant(count);//remove the index from the list
                     }
@@ -413,7 +413,6 @@ function updateGameArea() {
                             turnOffLight(an_index);
                         });
                     }
-                }
                 }
             }
             else{//if the location matches a room, but not inside the room, in transition
@@ -424,11 +423,9 @@ function updateGameArea() {
                 }
             }
             count++;
-            
         });
-    
+        
     });
-
 }
 //--------------------------------------
 //alex functions
