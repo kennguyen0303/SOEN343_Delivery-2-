@@ -136,6 +136,9 @@ function switchLight(val){
             a_light.update();
         });
        }
+       else{
+            alert("You do not have this permission");
+       }
     }
 
 function turnOnLight(index){
@@ -230,6 +233,9 @@ function controlDoor(val){
                 });
             }
     }
+    else{
+       alert("You do not have this permission");
+    }
 
 }
 
@@ -301,7 +307,9 @@ function controlWindow(val){
             });
         }
     }
-
+    else{
+            alert("You do not have this permission");
+    }
 }
 
 /**

@@ -128,5 +128,8 @@ function setAwayMode(){
                 document.getElementById('awayModeButton').innerHTML = 'OFF';
             }
     }
+    else{
+           alert("You do not have this permission");
+    }
 
 }
