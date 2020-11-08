@@ -15,7 +15,7 @@ class UserLoaderTest {
     {
         List<User> userDB = new ArrayList<>();
         UserLoader userLoader = new UserLoader();
-        userLoader.loadUsers(userDB, "UserProfilesTest.txt");
+        userLoader.loadUsers(userDB, "UserProfilesLoaderTest.txt");
 
         User user = userDB.get(0);
         UserPermissions userPermissions = user.getUserPermissions();

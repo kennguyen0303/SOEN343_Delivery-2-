@@ -9,8 +9,6 @@ import java.util.UUID;
 
 public class UserWriter {
 
-    private UserTypeFactory userFactory =  new UserTypeFactory();
-
     public void saveUsers(List<User> userDB, String filepath)
     {
         try
@@ -44,6 +42,4 @@ public class UserWriter {
             e.printStackTrace(System.out);
         }
     }
-
-
 }
