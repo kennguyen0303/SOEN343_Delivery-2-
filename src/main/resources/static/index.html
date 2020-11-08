@@ -149,10 +149,24 @@
                     </select>
                     <input type="button" value="Update Permission" onclick="grantPermissions()">
                 </div>
+                <br>
                 <div id="Save and Load UserProfiles">
                     <input type="button" value="Save Profiles" onclick="saveProfiles()">
                     <input type="button" value="Load Profiles" onclick="loadProfiles()">
+                    <input type="button" value="Display Current Permissions" onclick="writePermissions()">
+                    <input type="button" value="Hide Current Permissions" onclick="hidePermissions()">
                 </div>
+                <br>
+                <div id="UserPermissionsList">
+                    <div id="PermissionsTitle"></div>
+                    <div id="AllDoors"></div>
+                    <div id="AllWindows"></div>
+                    <div id="RestrictedWindows"></div>
+                    <div id="AllLights"></div>
+                    <div id="RestrictedLights"></div>
+                    <div id="SetAwayMode"></div>
+                </div>
+
             </div>
 
             <div id="SHCore" class="tabcontent">

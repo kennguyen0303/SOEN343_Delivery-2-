@@ -110,3 +110,26 @@ function getCurrentUserRole()
         var role = JSON.parse(xhttp.responseText).role;
         return role;
 }
+
+function writePermissions()
+{
+    var userPermissions = getCurrentUserPermissions();
+    document.getElementById("PermissionsTitle").innerHTML = "Current Permissions for Logged In Profile"
+    document.getElementById("AllDoors").innerHTML = "Can lock and unlock all doors: " + userPermissions.lockDoors;
+    document.getElementById("AllWindows").innerHTML = "Can open/close all windows: " + userPermissions.openAllWindows;
+    document.getElementById("RestrictedWindows").innerHTML = "Can open close windows if in the same room: " + userPermissions.useRestrictedWindows;
+    document.getElementById("AllLights").innerHTML = "Can open all lights: " +  userPermissions.useAllLights;
+    document.getElementById("RestrictedLights").innerHTML = "Can open lights if in the same room: " + userPermissions.useRestrictedLights;
+    document.getElementById("SetAwayMode").innerHTML = "Can set the simulation to away mode: " + userPermissions.canSetAwayMode;
+}
+
+function hidePermissions()
+{
+   document.getElementById("AllDoors").innerHTML = "";
+   document.getElementById("AllWindows").innerHTML = "";
+   document.getElementById("RestrictedWindows").innerHTML = "";
+   document.getElementById("AllLights").innerHTML = "";
+   document.getElementById("RestrictedLights").innerHTML = "";
+   document.getElementById("SetAwayMode").innerHTML = "";
+
+}
