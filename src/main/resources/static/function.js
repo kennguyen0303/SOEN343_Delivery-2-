@@ -576,8 +576,6 @@ function tikTok() {
     varCurrentTime.setSeconds(second);
     document.getElementById('time').innerHTML = varCurrentTime.toLocaleString("en-US");
 
-    
-
     if (document.getElementById('awayModeButton').innerHTML == 'ON') {
         if (lightSchedule.length == 0) {
             return;

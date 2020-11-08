@@ -12,13 +12,14 @@ function setLightSchedule(){
     
     for (let i = 0; i < rooms.length; i++) {
         time1[i] = document.getElementById(rooms[i]+1).value;
-        time2[i] = document.getElementById(rooms[i]+2).value;
-        if ((time1[i] == '' && time2[i] != '') || (time1[i] != '' && time2[i] == '') || (time1[i] != '' && time2[i] == time1[i])) {
+        time2[i] = document.getElementById(rooms[i]+2).value;        
+
+        //validate the user input
+        if ((time1[i] == '' && time2[i] != '') || (time1[i] != '' && time2[i] == '')) {
             pass = false;
             break;
         }
     }
-    //validate the data
     if (!pass) {
         alert("invalid light schedule, please check and enter again");
     } 
@@ -47,7 +48,6 @@ function resetLightSchedule(){
         document.getElementById(rooms[i]+1).value = '';     
         document.getElementById(rooms[i]+2).value = '';    
     }
-    console.log(lightSchedule);
 }
 
 
@@ -59,6 +59,11 @@ class TimeObserver{
     update(currentTime){
         //obtain current time
         var currentHour = currentTime.getHours();
+
+        if(currentHour == '0'){
+            currentHour = '00';
+        }
+
         var currentMinute = currentTime.getMinutes();
         var timeString = currentHour + ':' + currentMinute;
 
@@ -90,7 +95,7 @@ class TimeObserver{
 
             //within one day
             if (lightSchedule[lightScheduleIndex].startTime < lightSchedule[lightScheduleIndex].endTime) {
-                if(timeString >= lightSchedule[lightScheduleIndex].startTime && timeString <= lightSchedule[lightScheduleIndex].endTime){
+                if(timeString >= lightSchedule[lightScheduleIndex].startTime && timeString < lightSchedule[lightScheduleIndex].endTime){
                     turnOnLight(i);
                 }
                 else{
@@ -100,7 +105,7 @@ class TimeObserver{
 
             //overnight
             if (lightSchedule[lightScheduleIndex].startTime > lightSchedule[lightScheduleIndex].endTime) {
-                if(timeString >= lightSchedule[lightScheduleIndex].startTime || timeString <= lightSchedule[lightScheduleIndex].endTime){
+                if(timeString >= lightSchedule[lightScheduleIndex].startTime || timeString < lightSchedule[lightScheduleIndex].endTime){
                     turnOnLight(i);
                 }
                 else{
@@ -112,13 +117,18 @@ class TimeObserver{
             if (lightSchedule[lightScheduleIndex].startTime == '') {
                 turnOffLight(i);
             }
+
+            //all day long
+            if (lightSchedule[lightScheduleIndex].startTime != '' && lightSchedule[lightScheduleIndex].startTime == lightSchedule[lightScheduleIndex].endTime) {
+                turnOnLight(i);
+            }
         }
     }
 }
 
 class CurrentTime{
     constructor(){
-        this.currentTim;
+        this.currentTime;
         this.observers = [];
     }
 
@@ -127,9 +137,7 @@ class CurrentTime{
     }
 
     notifyAll(){
-
         for (let observer of this.observers) {
-            
             observer.update(this.currentTime);
         }
     }
@@ -176,6 +184,12 @@ function setAwayMode(){
                 var date = new Date();
                 var msg = date + "\tAll doors and windows are closed because the away mode has been turned on.";
                 writeToFile(msg);
+
+                //record to the console
+                var consoleNode = document.createElement("p");
+                var consoleText = document.createTextNode(msg);
+                consoleNode.appendChild(consoleText);
+                document.getElementById("outputConsole").appendChild(consoleNode);
 
                 //check observer
                 UserObserver.update();
