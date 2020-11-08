@@ -139,4 +139,14 @@ public class UserController {
     {
         return userService.getUserPermissions(id);
     }
+
+    /**
+     *
+     * @return
+     */
+    @GetMapping(value="api/user/currentUserPermissions")
+    public UserPermissions getCurrentUserPermissions()
+    {
+        return userService.getCurrentUserPermissions();
+    }
 }

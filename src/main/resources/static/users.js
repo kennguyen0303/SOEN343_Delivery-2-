@@ -1,4 +1,3 @@
-// DANIELA MOVE TO ANOTHER FILE PLZ THANKS
 function grantPermissions()
 {
     if(true)
@@ -62,7 +61,7 @@ function getUserPermissions(id)
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                  userPermissions = JSON.parse(this.responseText);
-                 console.log(userPermissions.lockDoors);
+                 return userPermissions;
             }
         };
 

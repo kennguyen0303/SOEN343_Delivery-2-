@@ -116,13 +116,17 @@ class CurrentTime{
 
 //
 function setAwayMode(){
+    var canSetAwayMode = getCurrentUserPermissions().canSetAwayMode;
+    if(canSetAwayMode)
+    {
+        if (document.getElementById('awayModeButton').innerHTML == 'OFF') {
+                document.getElementById('awayModeButton').innerHTML = 'ON';
+                controlAllDoor('close');
+                UserObserver.update();
+            }
+            else if (document.getElementById('awayModeButton').innerHTML == 'ON') {
+                document.getElementById('awayModeButton').innerHTML = 'OFF';
+            }
+    }
 
-    if (document.getElementById('awayModeButton').innerHTML == 'OFF') {
-        document.getElementById('awayModeButton').innerHTML = 'ON';
-        controlAllDoor('close');
-        UserObserver.update();
-    }
-    else if (document.getElementById('awayModeButton').innerHTML == 'ON') {
-        document.getElementById('awayModeButton').innerHTML = 'OFF';
-    }
 }
