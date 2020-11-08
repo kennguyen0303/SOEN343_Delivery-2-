@@ -13,15 +13,16 @@ function setLightSchedule(){
     for (let i = 0; i < rooms.length; i++) {
         time1[i] = document.getElementById(rooms[i]+1).value;
         time2[i] = document.getElementById(rooms[i]+2).value;
-        if ((time1[i] == '' && time2[i] != '') || (time1[i] != '' && time2[i] == '')) {
+        if ((time1[i] == '' && time2[i] != '') || (time1[i] != '' && time2[i] == '') || (time1[i] != '' && time2[i] == time1[i])) {
             pass = false;
             break;
         }
     }
     //validate the data
     if (!pass) {
-        alert("Please make sure you enter both times or none of the times for each room");
-    } else {
+        alert("invalid light schedule, please check and enter again");
+    } 
+    else {
         while (lightSchedule.length >0) {
             lightSchedule.pop();
         }
@@ -59,31 +60,67 @@ class TimeObserver{
     }
 
     update(currentTime){
+        //obtain current time
+        var currentHour = currentTime.getHours();
+        var currentMinute = currentTime.getMinutes();
+        var timeString = currentHour + ':' + currentMinute;
+
         //check the on/off of all lights
-        for (let i = 0; i < rooms.length; i++) {
+        for (let i = 0; i < light_array.length; i++) {
+            //convert the index of light_array to the corresponding index of lightSchedule
+            var lightScheduleIndex;
+            if (i == 0) {
+                lightScheduleIndex = i;     //entrance
+            }
+            if(i == 1){
+                lightScheduleIndex = 6;     //backyard
+            }
+            if (i == 2 || i == 3) {
+                lightScheduleIndex = 1;     //hallway
+            }
+            if (i == 4) {
+                lightScheduleIndex = 5;     //garage
+            }
+            if (i == 5) {
+                lightScheduleIndex = 2;     //kitchen
+            }
+            if (i == 6) {
+                lightScheduleIndex = 3;     //bedroom
+            }
+            if (i == 7) {
+                lightScheduleIndex = 4;     //bathroom
+            }
+
+
             //within one day
-            if (lightSchedule[i].startTime < lightSchedule[i].endTime) {
-                if(currentTime > lightSchedule[i].startTime && lightSchedule[i].endTime){
+            if (lightSchedule[lightScheduleIndex].startTime < lightSchedule[lightScheduleIndex].endTime) {
+                if(timeString >= lightSchedule[lightScheduleIndex].startTime && timeString <= lightSchedule[lightScheduleIndex].endTime){
                     //turn on the light
+                    //need to use turnOnLight(index) and turnOffLight(index)
+                    turnOnLight(i);
                 }
                 else{
                     //turn off the light
+                    turnOffLight(i);
                 }
             }
 
             //overnight
-            if (lightSchedule[i].startTime > lightSchedule[i].endTime) {
-                if(currentTime > lightSchedule[i].startTime || lightSchedule[i].endTime){
+            if (lightSchedule[lightScheduleIndex].startTime > lightSchedule[lightScheduleIndex].endTime) {
+                if(timeString >= lightSchedule[lightScheduleIndex].startTime || timeString <= lightSchedule[lightScheduleIndex].endTime){
                     //turn on the light
+                    turnOnLight(i);
                 }
                 else{
                     //turn off the light
+                    turnOffLight(i);
                 }
             }
 
             //no value
-            if (lightSchedule[i].startTime == '') {
+            if (lightSchedule[lightScheduleIndex].startTime == '') {
                 //turn off the light
+                turnOffLight(i);
             }
             
         }
@@ -93,7 +130,7 @@ class TimeObserver{
 
 class CurrentTime{
     constructor(){
-        this.currentTime;
+        this.currentTim;
         this.observers = [];
     }
 
@@ -102,14 +139,16 @@ class CurrentTime{
     }
 
     notifyAll(){
+
         for (let observer of this.observers) {
+            
             observer.update(this.currentTime);
         }
     }
 
     setCurrentTime(){
-        this.currentTime = document.getElementById('time').innerHTML;
-        this.observers.notifyAll()
+        this.currentTime = varCurrentTime;
+        this.notifyAll()
     }
 
 }
@@ -140,6 +179,13 @@ function setAwayMode(){
     
                 document.getElementById('awayModeButton').innerHTML = 'ON';
                 controlAllDoor('close');
+
+                //save information to SHP log file
+                var date = new Date();
+                var msg = date + "\tAll doors and windows are closed because the away mode has been turned on.";
+                writeToFile(msg);
+
+                //check observer
                 UserObserver.update();
             }
     
@@ -169,5 +215,16 @@ function alertConsole(AlertType, timeOfAlert)
 
 //This method will write msg to a give log file
 function writeToFile(msg){
+
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            alert('Log information has been saved to the SHP_command.txt');
+        }
+    }
+
+    xhttp.open('POST', 'http://localhost:8080/api/user/shpWirter/' + msg, true);
+    xhttp.send();
 
 }

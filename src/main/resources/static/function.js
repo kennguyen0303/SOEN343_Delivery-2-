@@ -472,6 +472,10 @@ function resetCoordinates() {
 var user_array=[];//an array for controlling the user in the house
 function placeUser(){
 
+    if(document.getElementById('awayModeButton').innerHTML == "ON")
+    {
+        alertConsole("Sec", varCurrentTime.toUTCString());
+    }
     //obtain the user
     var userIndex = document.getElementById('currentUsersList2').selectedIndex;
     var userID = document.getElementById('currentUsersList2').options[userIndex].value;
@@ -527,7 +531,7 @@ function placeUser(){
     
 }
 
-var currentTime = new Date();
+ var varCurrentTime = new Date();
 
 function refreshTime() {
     setInterval(() => {
@@ -538,13 +542,31 @@ function refreshTime() {
 
 function newTime() {
 	var y = prompt("enter a year (October 13, 2014 11:13:00)", 0);
-	currentTime = new Date(y);
+	varCurrentTime = new Date(y);
 }
 
 function tikTok() {
-    var second = currentTime.getSeconds() + 1;
-    currentTime.setSeconds(second);
-    document.getElementById('time').innerHTML = currentTime.toLocaleString("en-US");
+
+    var second = varCurrentTime.getSeconds() + 1;
+    varCurrentTime.setSeconds(second);
+    document.getElementById('time').innerHTML = varCurrentTime.toLocaleString("en-US");
+
+    
+
+    if (document.getElementById('awayModeButton').innerHTML == 'ON') {
+        if (lightSchedule.length == 0) {
+            return;
+        }
+        else{
+            var timeNow = new CurrentTime();
+            var timeObserver = new TimeObserver();
+            timeNow.addObserver(timeObserver)
+            timeNow.setCurrentTime();
+        }
+        
+    }
+    
+
 }
 
 // CONFLICT RESOLVED !
