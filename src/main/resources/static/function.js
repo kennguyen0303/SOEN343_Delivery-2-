@@ -469,10 +469,6 @@ function resetCoordinates() {
 var user_array=[];//an array for controlling the user in the house
 function placeUser(){
 
-    if(document.getElementById('awayModeButton').innerHTML == "ON")
-    {
-        alertConsole("Sec", currentTime.toUTCString());
-    }
     //obtain the user
     var userIndex = document.getElementById('currentUsersList2').selectedIndex;
     var userID = document.getElementById('currentUsersList2').options[userIndex].value;
