@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"com.soen343.backend"},{"l":"com.soen343.backend.api"},{"l":"com.soen343.backend.dao"},{"l":"com.soen343.backend.model"},{"l":"com.soen343.backend.service"},{"l":"com.soen343.backend.utilities"}]

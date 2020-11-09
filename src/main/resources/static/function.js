@@ -27,30 +27,33 @@ function getProfile() {
   };
   }
   xhttp.open("GET", "http://localhost:8080/api/user", true);
-xhttp.setRequestHeader("Content-type", "application/json");
-xhttp.send();
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send();
 
 }
 
 function removeAllChildNodes(element) {
+if(element){
 while(element.firstChild) {
-element.removeChild(element.lastChild);
+     element.removeChild(element.lastChild);
+   }
 }
+
 }
 
 function getUserById(id) {
-var xhttp;
-var user;
-xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
-if (this.readyState == 4 && this.status == 200) {
-    return user = JSON.parse(this.responseText);
-}
-};
+    var xhttp;
+    var user;
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        return user = JSON.parse(this.responseText);
+    }
+    };
 
-xhttp.open("GET", "http://localhost:8080/api/user/userRetrieval/" + id, true);
-xhttp.setRequestHeader("Content-type", "application/json");
-xhttp.send();
+    xhttp.open("GET", "http://localhost:8080/api/user/userRetrieval/" + id, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
 }
 
 // Retrieves users from backend as they are added and displays them in a dropdown list
@@ -65,10 +68,14 @@ function getUsers() {
 
             var select = document.getElementById("currentUsersList");
             removeAllChildNodes(select);
+
             //alex attempt
             var select2 = document.getElementById("currentUsersList2");
             removeAllChildNodes(select2);
             //end
+
+            var select3 = document.getElementById("currentUsersList3");
+            removeAllChildNodes(select3);
 
             for( var i=0; i< userArray.length; i++) {
                 var option = document.createElement("option");
@@ -85,6 +92,13 @@ function getUsers() {
                 select2.appendChild(option);
             }//end
 
+           for( var i=0; i< userArray.length; i++) {
+              var option = document.createElement("option");
+                option.value = userArray[i].id;
+                option.innerHTML = userArray[i].role;
+                select3.appendChild(option);
+              }
+
             var item = document.getElementById("availableUsers");
 
             removeAllChildNodes(item);
@@ -95,6 +109,10 @@ function getUsers() {
             removeAllChildNodes(item2);
             item2.appendChild(select2);
             //attempt end
+
+            var item3 = document.getElementById("availableUsers3");
+            removeAllChildNodes(item3);
+            item3.appendChild(select3);
         }
     };
 
@@ -225,6 +243,11 @@ function changeTabs(evt, SmartHomeTab) {
 
 //Ken function for layout
 var door_array=[];//the array for doors !
+var locked_array_door= [ "false", "false", "false","false", "false","false", "false","false"];
+var locked_array_window=["false", "false"];
+var light_array=[];//array for lights
+var window_array=[];//array for window
+var room_array=[];//array for the rooms
    function renderLayout()//a function for rendering the layout of the house
    {
         var xmlhttp = new XMLHttpRequest();//creating a request for AJAX to load the layout
@@ -238,23 +261,66 @@ var door_array=[];//the array for doors !
                     for (var key2 of Object.keys(myObj[key1])) {//loop over each element of a room
                         //print room_name p/s: hardcode name position need to fix later
                         if(key2=="name"){//if the element is "name", need to print out
+                            var temp_room=new room();//initialize a room
+                            temp_room.setName(myObj[key1][key2][0]);//set the name for the room
                             ctx.font = "15px Arial";//set the font
                             ctx.fillText(myObj[key1][key2][0],myObj[key1][key2][1],myObj[key1][key2][2]);//format: [0]=room name, [1]: width, [2]: height
+                            continue;//move on the other keys
                         }
                         //print the door
                         if(key1=="door"){
                             //each [key2] is an object of a door
                             var temp_door = new door(myObj[key1][key2][0], myObj[key1][key2][1], myObj[key1][key2][2], myObj[key1][key2][3], myObj[key1][key2][4],myObj[key1][key2][5]);
-                            door_array.push(temp_door);
+                            if( myObj[key1][key2][2]=="red") {
+                                door_array.push(temp_door);//add door
+                                room_array.forEach(a_room => {
+                                    var room_name=a_room.getName();
+                                    if(key2.includes(room_name))
+                                        a_room.add_door(door_array.length-1);//take the index of the door
+                                });
+                            }
+                            if( myObj[key1][key2][2]=="blue") {
+                                window_array.push(temp_door);//add window 
+                            }
+                            continue;
+                        }
+                        //print the door
+                        if(key1=="light"){
+                            //each [key2] is an object of a door
+                            var temp_door = new door(myObj[key1][key2][0], myObj[key1][key2][1], myObj[key1][key2][2], myObj[key1][key2][3], myObj[key1][key2][4],myObj[key1][key2][5]);
+                            light_array.push(temp_door);
+                            room_array.forEach(a_room => {
+                                var room_name=a_room.getName();
+                                if(key2.includes(room_name))
+                                    a_room.add_light(light_array.length-1);//take the index of the door
+                            });
                             continue;
                         }
                         //draw the wall for a room
                         for(var i=0;i<myObj[key1][key2].length;i=i+4){
+                            //store the height and width of a room
+                            if(key2=="top"){
+                                temp_room.set_min_height(myObj[key1][key2][1]);//the first point
+                                temp_room.set_min_width(myObj[key1][key2][0]);//the first point
+                                var last_index=myObj[key1][key2].length-1;
+                                temp_room.set_max_width(myObj[key1][key2][last_index-1]);//consult the layout.json to know why -1
+                            }
+                            if(key2=="left"){
+                                var last_index=myObj[key1][key2].length-1;
+                                temp_room.set_max_height(myObj[key1][key2][last_index]);
+                            }
                             ctx.moveTo(myObj[key1][key2][i],myObj[key1][key2][i+1]);
                             ctx.lineTo(myObj[key1][key2][i+2],myObj[key1][key2][i+3]);
                             ctx.stroke();
+                            
                         }
                     };//finish rendering a room
+                    if(key1!=="door"&&key1!=="light") {
+
+                        room_array.push(temp_room);//add the room to the array
+                       
+
+                    }
                 };
                 startGame();//start the movement, challenge: Need to click to render door
             }
@@ -271,81 +337,97 @@ function startGame() {
 }
 
 
-//a constructor
-function door(width, height, color, x, y,move_mode) {//in case of human-stick, color=name
-    this.gamearea = document.getElementById("myCanvas");
-    this.move_mode=move_mode;
-    this.width = width;
-    this.height = height;
-    this.speedX = 0;
-    this.speedY = 0;    
-    this.x = x;
-    this.y = y;
-    if (move_mode == "image") {
-        this.image = new Image();
-        this.image.src = "human_stick.png";
-        this.name=color;//set the name
-    }
-    if(this.move_mode=="horizontal"){//make a boundary for movement
-        this.boundary=[this.x,(this.x+this.width)];//inital point + width
-    }
-    if(this.move_mode=="vertical"){//make a boundary for movement
-        this.boundary=[this.y,(this.y+this.height)]
-    }        
-    this.update = function() {
-        ctx = myGameArea.canvas.getContext("2d");
-        if (move_mode == "image") {
-            //display the human stick
-            ctx.drawImage(this.image, 
-                this.x, 
-                this.y,
-                this.width, this.height);
-            //display the name or role
-            ctx.fillText(color,this.x+15,this.y+50);//format: [0]=room name, [1]: width, [2]: height
-        } else {
-            ctx.fillStyle = color;
-            ctx.fillRect(this.x, this.y, this.width, this.height);
-        }
-    }
-    this.newPos = function() {
-        this.x += this.speedX;
-        this.y += this.speedY;        
-    }
-}
-
 function updateGameArea() {
-    myGameArea.clear(); 
-    door_array.forEach(a_door => {
-        a_door.speedX=0;
-        a_door.speedY=0;
+    myGameArea.clear("image"); 
+    // myGameArea.clear("door"); 
+    // myGameArea.clear("light"); 
+    user_array.forEach(user => {
+        user.speedX=0;
+        user.speedY=0;
     });
+    // window_array.forEach(a_window => {
+    //     a_window.speedX=0;
+    //     a_window.speedY=0;
+    // });
     var option = document.getElementById("control_option").value - 1;//minus 1 since array start from 0
     if (myGameArea.key && myGameArea.key == 37) {//move left
-        if(door_array[option].move_mode=="horizontal")
-            if(door_array[option].x>door_array[option].boundary[0]) door_array[option].speedX = -1;
-         }
+        user_array[option].speedX = -1;
+    }
     if (myGameArea.key && myGameArea.key == 38) {//move up
-        if(door_array[option].move_mode=="vertical") 
-        if(door_array[option].y>door_array[option].boundary[0]) door_array[option].speedY = -1;
-        }  
+        user_array[option].speedY = -1;
+    }
     if (myGameArea.key && myGameArea.key == 39) {//move right
-        if(door_array[option].move_mode=="horizontal") 
-        if(door_array[option].x<door_array[option].boundary[1]) door_array[option].speedX = 1;
+        user_array[option].speedX = 1;
     }
     if (myGameArea.key && myGameArea.key == 40) {//move down
-        if(door_array[option].move_mode=="vertical") 
-        if(door_array[option].y<door_array[option].boundary[1]) door_array[option].speedY = 1;
-    
+        user_array[option].speedY = 1;
     }
+    // if (myGameArea.key && myGameArea.key == 37) {//move left
+    //     if(door_array[option].move_mode=="horizontal")
+    //         if(door_array[option].x>door_array[option].boundary[0]) door_array[option].speedX = -1;
+    //      }
+    // if (myGameArea.key && myGameArea.key == 38) {//move up
+    //     if(door_array[option].move_mode=="vertical") 
+    //     if(door_array[option].y>door_array[option].boundary[0]) door_array[option].speedY = -1;
+    //     }  
+    // if (myGameArea.key && myGameArea.key == 39) {//move right
+    //     if(door_array[option].move_mode=="horizontal") 
+    //     if(door_array[option].x<door_array[option].boundary[1]) door_array[option].speedX = 1;
+    // }
+    // if (myGameArea.key && myGameArea.key == 40) {//move down
+    //     if(door_array[option].move_mode=="vertical") 
+    //     if(door_array[option].y<door_array[option].boundary[1]) door_array[option].speedY = 1;
+    
+    // }
         
     //key in control is the update function
     //update the now position for every door, otherwise it will not be shown
-    door_array.forEach(a_door => {
-        a_door.newPos();    
-        a_door.update();
+    var count=0;
+    user_array.forEach(user => {
+        user.newPos();    
+        user.update();
+        //update location ?
+        room_array.forEach(a_room => {
+            if(user.location!= a_room.getName()){
+                if(a_room.insideRoom(user)){//if the user is inside a room
+                    if(!a_room.get_occupant_list().includes(count)){//first time walk into the room
+                        a_room.add_occupant(count);
+                        //turn on light in the room on AUTO MODE
+                        if(autoMode){
+                            console.log("turning on light AUTO! ");
+                            a_room.light_index_array.forEach(an_index => {
+                                turnOnLight(an_index);
+                            });
+                        }
+                    user.location=a_room.getName();//update the location
+                    updateLocationToBackend(user);
+                    console.log("New location detected: "+user.location+"New number detected: "+a_room.getNumberOfOccupant());
+                    } 
+                }
+                else{//not inside the room
+                    if(a_room.get_occupant_list().includes(count)){//not inside the room, but still on the list
+                        a_room.remove_occupant(count);//remove the index from the list
+                    }
+                    if(autoMode && a_room.getNumberOfOccupant()==0){//turn off if empty
+                        a_room.light_index_array.forEach(an_index => {
+                            turnOffLight(an_index);
+                        });
+                    }
+                }
+            }
+            else{//if the location matches a room, but not inside the room, in transition
+                if(!a_room.insideRoom(user)){
+                    user.location="outside";//update the location
+                    updateLocationToBackend(user);
+                    console.log("New location detected: "+user.location);
+                }
+            }
+            count++;
+        });
+        
     });
 }
-
+//--------------------------------------
 //alex functions
 function showContext() {
     document.getElementById('SHSystem').style.display = 'none';
@@ -383,21 +465,53 @@ function openForm() {
         obstacle.update();
     }
 
-    //block the door1
-    if(xAxis>40 && xAxis<60 && yAxis>192 && yAxis<207) {
-        //change the boundary of door1
-        door_array[0].boundary = [door_array[0].x, xAxis-20];
+    
+    if(xAxis>360 && xAxis<390 && yAxis>40 && yAxis<60) {
+        //change the boundary of bathroom
+        //door_array[0].boundary = [door_array[0].x, xAxis-20];
+        locked_array_door[0] = "true";
     }
-    if(xAxis>133 && xAxis<148 && yAxis>40 && yAxis<60){
-        //change the boundary of door2
-        door_array[1].boundary = [door_array[1].y, yAxis-20];
+    if(xAxis>285 && xAxis<310 && yAxis>60 && yAxis<100) {
+        //change the boundary of bedroom
+        //door_array[1].boundary = [door_array[1].y, yAxis-20];
+        locked_array_door[1] = "true";
+    }
+    if(xAxis>205 && xAxis<230 && yAxis>60 && yAxis<100) {
+        //change the boundary of backyard
+       // door_array[3].boundary = [door_array[3].y, yAxis-20];
+        locked_array_door[2] = "true";
+    }
+    if(xAxis>285 && xAxis<310 && yAxis>260 && yAxis<315) {
+        //change the boundary of kitchen
+        //door_array[3].boundary = [door_array[3].y, yAxis-20];
+        locked_array_door[3] = "true";
+    }
+    if(xAxis>210 && xAxis<225 && yAxis>260 && yAxis<300) {
+        //change the boundary of garage inside
+        //door_array[3].boundary = [door_array[3].y, yAxis-20];
+        locked_array_door[4] = "true";
+    }
+    if(xAxis>235 && xAxis<255 && yAxis>340 && yAxis<360) {
+        //change the boundary of entrance
+        //door_array[3].boundary = [door_array[3].y, yAxis-20];
+        locked_array_door[5] = "true";
+    }
+    if(xAxis>135 && xAxis<155 && yAxis>340 && yAxis<360) {
+        //change the boundary of garage outside
+        //door_array[3].boundary = [door_array[3].y, yAxis-20];
+        locked_array_door[6] = "true";
+    }
+    if(xAxis>390 && xAxis<410 && yAxis>60 && yAxis<115){
+        //change the boundary of window room
+        //door_array[1].boundary = [door_array[1].y, yAxis-20];
+        locked_array_window[0] = "true";
 
     }
-    if(xAxis>283 && xAxis<298 && yAxis>80 && yAxis<100) {
-        door_array[2].boundary = [door_array[2].y, yAxis-20];
-    }
-    if(xAxis>283 && xAxis<298 && yAxis>280 && yAxis<300) {
-        door_array[3].boundary = [door_array[3].y, yAxis-20];
+    if(xAxis>390 && xAxis<410 && yAxis>260 && yAxis<315){
+        //change the boundary of window room
+        //door_array[1].boundary = [door_array[1].y, yAxis-20];
+        locked_array_window[1] = "true";
+
     }
 
 }
@@ -415,42 +529,98 @@ function resetCoordinates() {
     renderLayout();
 }
 
+var user_array=[];//an array for controlling the user in the house
 function placeUser(){
     //obtain the user
     var userIndex = document.getElementById('currentUsersList2').selectedIndex;
-    var userName = document.getElementById('currentUsersList2').options[userIndex].text;
+    var userID = document.getElementById('currentUsersList2').options[userIndex].value;
+    var userName = document.getElementById('currentUsersList2').options[userIndex].innerHTML;
     
     //obtain the room
     var roomName = document.getElementById('availableRooms').value;
 
     //determine the coordinates of the user for each room
     var positionX = 0;
-    var positionY = 0
-    if(roomName == "living_room") {
-        positionX = 35;
-        positionY = 75;
+    var positionY = 0;
+    //NEED TO UPDATE FOR THE NEW LAYOUT !
+    if(roomName == "entrance") {
+        positionX = 240;
+        positionY = 360;
     } 
     if(roomName == "kitchen") {
-        positionX = 185;
-        positionY = 75;
+        positionX = 350;
+        positionY = 300;
     }
-    if(roomName == "outdoor") {
-        positionX = 385;
-        positionY = 225;
+    if(roomName == "hallway") {
+        positionX = 250;
+        positionY = 200;
+    }
+    if(roomName == "garage") {
+        positionX = 160;
+        positionY = 250;
+    }
+    if(roomName == "backyard") {
+        positionX = 120;
+        positionY = 100;
+    }
+    if(roomName == "bedroom") {
+        positionX = 350;
+        positionY = 100;
+    }
+    if(roomName == "bathroom") {
+        positionX = 375;
+        positionY = 28;
     }
 
     //place img in the layout
-    var selectedUser = new door(30, 50, "", positionX, positionY, "image")
-    selectedUser.update();
-}
+    var selectedUser = new door(15, 20, "", positionX, positionY, "image");
+    selectedUser.id=userID;//store ID 
+    user_array.push(selectedUser);//push into the array
 
-var currentTime = new Date();
-// function startTime() {
-// 	currentTime = new Date();
-// }
+    //by Ken
+    var temp_element=document.createElement("option");
+    var element = document.getElementById("control_option");//access the dropdown box
+    temp_element.value=user_array.length;
+    temp_element.innerHTML=userName;
+    element.appendChild(temp_element);//add to the dropdown
+    selectedUser.update();
+
+    //store user location into backend
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            getUsers();
+        }
+    };
+    xhttp.open("PUT", "http://localhost:8080/api/user/updateUserLocation/" + userID + "/" + roomName, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
+
+    //observe the location
+    if (document.getElementById('awayModeButton').innerHTML == 'ON') {
+        UserObserver.update();
+    }
+    
+}
+/**
+ * Update location of a user to the backend
+ * @param {*} user 
+ */
+function updateLocationToBackend(user){
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            getUsers();
+        }
+    };
+    xhttp.open("PUT", "http://localhost:8080/api/user/updateUserLocation/" + user.id + "/" + user.location, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
+    UserObserver.update();
+}
+var varCurrentTime = new Date();
 
 function refreshTime() {
-    // currentTime = new Date();
     setInterval(() => {
         //currentTime + 1
         tikTok();
@@ -459,11 +629,84 @@ function refreshTime() {
 
 function newTime() {
 	var y = prompt("enter a year (October 13, 2014 11:13:00)", 0);
-	currentTime = new Date(y);
+	varCurrentTime = new Date(y);
 }
 
 function tikTok() {
-    var second = currentTime.getSeconds() + 1;
-    currentTime.setSeconds(second);
-    document.getElementById('time').innerHTML = currentTime.toLocaleString("en-US");
+
+    var second = varCurrentTime.getSeconds() + 1;
+    varCurrentTime.setSeconds(second);
+    document.getElementById('time').innerHTML = varCurrentTime.toLocaleString("en-US");
+
+    if (document.getElementById('awayModeButton').innerHTML == 'ON') {
+        if (lightSchedule.length == 0) {
+            return;
+        }
+        else{
+            var timeNow = new CurrentTime();
+            var timeObserver = new TimeObserver();
+            timeNow.addObserver(timeObserver)
+            timeNow.setCurrentTime();
+        }
+        
+    }
+    
+
+}
+
+// CONFLICT RESOLVED !
+
+//user should be able to set the time to pass before sending notification
+var eclipsedTime = 0;
+function setEclipseTime(){
+    eclipsedTime = document.getElementById('eclipseTime').value;
+}
+
+
+
+//obversers classes here
+class UserObserver {
+    constructor(){
+        // this.eclipsedTime = eclipsedTime;
+    }
+
+    static update(){
+
+        const currentTime = new Date();
+        var timeInfo = currentTime.toUTCString();
+
+        //obtain the users
+        var xhttp = new XMLHttpRequest();
+        var userDB;
+
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                userDB = JSON.parse(this.responseText);
+                
+                for (let i = 0; i < userDB.length; i++) {
+                    if (userDB[i].location != "none" && userDB[i].location != "entrance" && userDB[i].location != "outside") {
+                        //generate information
+                        var info = timeInfo + "\tNotification to Parent: " + userDB[i].role + " is in the house's " + userDB[i].location;
+
+                        //TODO obtain user eclipsed time
+                        while(new Date() - currentTime < eclipsedTime);
+
+                        //notify the user
+                        // alert(info);
+
+                        //append info to output console
+                        var outputConsole = document.getElementById('outputConsole');
+                        var pTag = document.createElement('P');
+                        var contents = document.createTextNode(info);
+                        pTag.appendChild(contents);
+                        outputConsole.appendChild(pTag);
+                        
+                    }
+                }
+            }
+        }
+
+        xhttp.open("GET", "http://localhost:8080/api/user/allUserRetrieval", true);
+        xhttp.send();
+    }
 }

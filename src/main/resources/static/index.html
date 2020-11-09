@@ -9,7 +9,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="coreFunctions.js"> </script>
+    <script src="SHP_functions.js"></script>
     <script src="function.js"></script>
+    <script src="users.js"> </script>
+    <script src="classes.js"></script>
     <title>Smart Home Simulator</title>
     <!-- Custom styles for this template -->
     <link href="style.css" rel="stylesheet">
@@ -83,7 +87,6 @@
             </div>
 
             <div id="SHSystem" class="tabcontent">
-                Smart Home System Components
                 <h2>User Management</h2>
 
                 <!--Add a user profile-->
@@ -120,7 +123,7 @@
                     <br>
                     <input type="button" value="Edit Selected User" onclick="onSubmitEditForm()">
                     <input type="button" value="Delete Selected User" onclick="onSubmitDeleteUser()">
-                    <input input type="button" value="Login Selected User" onclick="onLoginSubmit()">
+                    <input type="button" value="Login Selected User" onclick="onLoginSubmit()">
                 </div>
 
                 <!--Delete a user profile-->
@@ -128,14 +131,130 @@
 
                 </div>
                 <br>
+                <div id="GrantPermissions">
+                    <div id="availableUsers3">
+                        <select id="currentUsersList3"></select>
+                    </div>
+                    <br>
+                    <select id="permissionName">
+                        <option value="openAllWindows">Open/Close All Windows</option>
+                        <option value="lockDoors">Lock/Unlock Doors</option>
+                        <option value="useAllLights">Open/Close All Lights</option>
+                        <option value="restrictedWindow">Use Windows in Same Room</option>
+                        <option value="restrictedLights">Use Lights in Same Room</option>
+                    </select>
+                    <select id="permissionValue">
+                        <option value="true">Enabled</option>
+                        <option value="false">Disabled</option>
+                    </select>
+                    <input type="button" value="Update Permission" onclick="grantPermissions()">
+                </div>
+                <br>
+                <div id="Save and Load UserProfiles">
+                    <input type="button" value="Save Profiles" onclick="saveProfiles()">
+                    <input type="button" value="Load Profiles" onclick="loadProfiles()">
+                    <input type="button" value="Display Current Permissions" onclick="writePermissions()">
+                    <input type="button" value="Hide Current Permissions" onclick="hidePermissions()">
+                </div>
+                <br>
+                <div id="UserPermissionsList">
+                    <div id="PermissionsTitle"></div>
+                    <div id="AllDoors"></div>
+                    <div id="AllWindows"></div>
+                    <div id="RestrictedWindows"></div>
+                    <div id="AllLights"></div>
+                    <div id="RestrictedLights"></div>
+                    <div id="SetAwayMode"></div>
+                </div>
+
             </div>
 
             <div id="SHCore" class="tabcontent">
-                Smart Home Core Components
+                Click the button to select controller:
+                <br>
+                <button onclick="showWindowController()">Windows</button>
+
+                <button onclick="showDoorController()">Doors</button>
+
+                <button onclick="showLightController()">Lights</button>
+                <br>
+                <button onclick="controlAllDoor('close')">Close All !</button>
+                <br>
+                <button onclick="controlAllDoor('open')">Open All !</button>
+                <br>
+
             </div>
 
             <div id="SHProtection" class="tabcontent">
-                Smart Home Protection Components
+                <br>
+                <h2>Away Mode</h2>
+                <button type="button" onclick="setAwayMode()" id="awayModeButton">OFF</button>
+                <br><br>
+
+                <!--accept user setting for eclipse time-->
+                <div>
+                    <label>The eclipse time</label>
+                    <input type="number" id="eclipseTime">
+                    <label>ms</label><br>
+                    <button type="submit" onclick="setEclipseTime()">SUBMIT</button>
+                </div>
+                <br><br>
+                <div>
+                    <h4>Please choose the schedule for the lights</h4>
+                    <!--entrance-->
+                    <label>Entrance: from</label>
+                    <input id="entrance1" type="time">
+                    <label> to </label>
+                    <input id="entrance2" type="time">
+                    <br>
+
+                    <!--hallway-->
+                    <label>Hallway: from</label>
+                    <input id="hallway1" type="time">
+                    <label> to </label>
+                    <input id="hallway2" type="time">
+                    <br>
+
+                    <!--kitchen-->
+                    <label>Kitchen: from</label>
+                    <input id="kitchen1" type="time">
+                    <label> to </label>
+                    <input id="kitchen2" type="time">
+                    <br>
+
+                    <!--bedroom-->
+                    <label>Bedroom: from</label>
+                    <input id="bedroom1" type="time">
+                    <label> to </label>
+                    <input id="bedroom2" type="time">
+                    <br>
+
+                    <!--bathroom-->
+                    <label>Bathroom: from</label>
+                    <input id="bathroom1" type="time">
+                    <label> to </label>
+                    <input id="bathroom2" type="time">
+                    <br>
+
+                    <!--garage-->
+                    <label>Garage: from</label>
+                    <input id="garage1" type="time">
+                    <label> to </label>
+                    <input id="garage2" type="time">
+                    <br>
+
+                    <!--backyard-->
+                    <label>Backyard: from</label>
+                    <input id="backyard1" type="time">
+                    <label> to </label>
+                    <input id="backyard2" type="time">
+                    <br>
+
+                    <!--submit all-->
+                    <button type="submit" onclick="setLightSchedule()">SUBMIT</button>
+                    <button type="reset" onclick="resetLightSchedule()">RESET</button>
+
+                </div>
             </div>
 
             <div id="SHHeating" class="tabcontent">
@@ -144,17 +263,15 @@
 
         </div>
         <div class="house-diagram">
-            <button onclick="renderLayout()">Click to render the layout</button>
 
             <canvas id="myCanvas" width="500" height="400" style="border:1px solid black;">
                 Your browser does not support the canvas element.
             </canvas>
+            </br>
+            <button onclick="renderLayout()">Click to render the layout</button>
             <h3>Controlling: </h3>
             <select name="" id="control_option">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+
             </select>
             <h4>Use arrow button to move </h4>
         </div>
@@ -168,19 +285,24 @@
                     <select id="currentUsersList2"></select>
                 </div>
                 <select name="availableRooms" id="availableRooms">
-                    <option value="living_room">Living Room</option>
+                    <option value="bathroom">Bathroom</option>
+                    <option value="bedroom">Bedroom</option>
+                    <option value="backyard">Backyard</option>
                     <option value="kitchen">Kitchen</option>
-                    <option value="outdoor">Outdoor</option>
+                    <option value="garage">Garage</option>
+                    <option value="entrance">Entrance</option>
+                    <option value="hallway">Hallway</option>
+                    <option value="outside">Outside</option>
                 </select>
                 <button type="button" class="btn" onclick="placeUser()">Place</button>
                 <h2>Add obstacle</h2>
                 <div id="showCreatedUsers"></div>
                 <div id="addObstacles"></div>
                 <label for="email"><b>X: </b></label>
-                <input type="number" id="xAxis" placeholder="Try 50" name="email" required>
+                <input type="number" id="xAxis" placeholder="Try 370" name="email" required>
                 <br>
                 <label for="psw"><b>Y: </b></label>
-                <input type="number" id="yAxis" placeholder="Try 200" name="psw" required>
+                <input type="number" id="yAxis" placeholder="Try 50" name="psw" required>
                 <br>
                 <button type="button" class="btn" onclick="onCoordinatesSubmit()">Add obstacle</button>
                 <button type="button" class="btn" onclick="resetCoordinates()">Reset obstacle</button>
@@ -188,8 +310,7 @@
             </form>
         </div>
         <!-- Popup form -->
-        <div class="console">Console Here</div>
-        =======
+        <div class="console" id="outputConsole">Console:</div>
 
     </div>
 
@@ -204,7 +325,18 @@
             start: function () {
                 this.context = this.canvas.getContext("2d");
                 this.interval;
-                updateGameArea();
+                //load all element once
+                light_array.forEach(a_light => {
+                    a_light.update();
+                });
+                door_array.forEach(a_door => {
+                    a_door.newPos();
+                    a_door.update();
+                });
+                window_array.forEach(a_window => {
+                    a_window.newPos();
+                    a_window.update();
+                });
                 window.addEventListener('keydown', function (e) {
                     isOn = document.getElementById("slider").checked;
                     myGameArea.key = e.keyCode;
@@ -215,11 +347,31 @@
                     clearInterval(this.interval);//let's try
                 })
             },
-            clear: function () {
-                door_array.forEach(a_door => {
-                    if (a_door.move_mode == "horizontal") this.context.clearRect((a_door.x - 40), a_door.y, 60, 5);
-                    if (a_door.move_mode == "vertical") this.context.clearRect(a_door.x, (a_door.y - 40), 5, 60);
-                });
+            clear: function (name) {
+                if (name == "door") {
+                    door_array.forEach(a_door => {
+                        if (a_door.move_mode == "horizontal") this.context.clearRect((a_door.x - 40), a_door.y, 60, 5);
+                        if (a_door.move_mode == "vertical") this.context.clearRect(a_door.x, (a_door.y - 30), 5, 60);
+                    });
+                }
+                else if (name == "window") {
+                    window_array.forEach(a_window => {
+                        if (a_window.move_mode == "horizontal") this.context.clearRect((a_window.x - 40), a_window.y, 60, 5);
+                        if (a_window.move_mode == "vertical") this.context.clearRect(a_window.x, (a_window.y - 30), 5, 60);
+                    });
+                }
+                else if (name == "light") {
+                    light_array.forEach(a_light => {
+                        //do something to remove the old light ? 
+                        this.context.clearRect((a_light.x), a_light.y, 20, 20);
+                    });
+                }
+                else if (name == "image") {
+                    //clear human stick
+                    user_array.forEach(user => {
+                        this.context.clearRect(user.x, user.y, 15, 20);
+                    });
+                }
             }
         }
 

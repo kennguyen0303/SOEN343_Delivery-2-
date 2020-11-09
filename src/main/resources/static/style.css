@@ -2,6 +2,7 @@ header{
   margin: 50px;
 }
 body{
+  background-color: antiquewhite;
   font-size: 14px;
 
 }
@@ -12,7 +13,7 @@ body{
 
 #simulationTab{
   height: 600px;
-  width: 200px;
+  background-color: white;
   border: 1px solid black;
   border-radius: 10px;
   padding: 20px 20px 50px 20px;
@@ -24,8 +25,6 @@ body{
   color: white;
   padding: 5px 10px 5px 5px;
 }
-
-
 
 /* The switch - the box around the slider */
 .switch {
@@ -116,7 +115,11 @@ input:checked + .slider:before {
   border: 1px solid black;
 }
 
+/* Style settings for the grid  containing all the elements*/
 .layout-container {
+  border-radius: 10px;
+  border-width: 4px;
+  border-color: #555;
   height: 90%;
   margin-left: 5%;
   margin-right: 5%;
@@ -130,41 +133,59 @@ input:checked + .slider:before {
 } */
 
 .sidebar{
+  border-radius: 10px;
   grid-row-start: 1;
   grid-row-end: 4;
   grid-column-start: 1;
   grid-column-end: 2;
+  box-shadow: 5px 10px 15px #888888;
 }
 
 
 .console{
+  border-radius: 10px;
+  background-color: white;
   grid-column-start: 2;
-  grid-column-end: 8;
-
+  grid-column-end: 7;
+  box-shadow: 5px 10px 15px #888888;
 }
 
 .house-diagram{
+  border-radius: 10px;
+  background-color: white;
   grid-row-start: 1;
   grid-row-end: 3;
-  grid-column-start: 5;
-  grid-column-end: 8;
+  grid-column-start: 3;
+  grid-column-end: 7;
+  box-shadow: 5px 10px 15px #888888;
 }
 
 .tab-items{
+  border-radius: 10px;
+  background-color: white;
   grid-row-start: 1;
   grid-row-end: 3;
   grid-column-start: 2;
-  grid-column-end: 5;
+  grid-column-end: 3;
+  box-shadow: 5px 10px 15px #888888;
 }
+
+/* End of grid styles */
+
+/* Style for Tabbed items */
 
 .tabLink{
-  border-color: #2196F3; 
-  border-width: 3px;
-  border-radius: 0px 0px 5px 5px;
+  background-color: #2196F3; 
+  color: white;
+  font-weight: bold;
+  min-width: 65px;
+  min-height: 25px;
+  border-width: 0px;
+  border-radius: 5px 5px 5px 5px;
 }
 
-.tabStyle {
-  width: 50%; 
+
+.tabContainer {
   height: 500px; 
   margin-left: 25%;
   border-style: solid;
@@ -174,6 +195,8 @@ input:checked + .slider:before {
   padding-right: 15px;
   border-color: #2196F3;
 }
+
+/* end of styling for tabbed items*/
 
 /* -----------Style for popup form ----------------------------*/
 /* Button used to open the contact form - fixed at the bottom of the page */
