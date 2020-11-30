@@ -1,6 +1,7 @@
 # SOEN343_Delivery-2-
 D2_soen343_fall 2020
 
+    Link to D1: https://github.com/kennguyen0303/SOEN343_delivery-1-
 <h1> Prepared by: </h1>
 
 1.The Kien Nguyen – Kennguyen0303
